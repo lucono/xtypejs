@@ -1,0 +1,1254 @@
+(function() {
+
+    'use strict';
+    
+    function specs(xtype) {
+        
+        xtype = (xtype || require('../xtype'));
+        
+        
+        /*
+         * --------------------
+         * TEST HELPERS
+         * --------------------
+         */
+        
+        
+        function subtractList(fullList, subtractionList) {
+            return fullList.slice().filter(function(entry) {
+                return (subtractionList.indexOf(entry) < 0);
+            });
+        }
+        
+        
+        function toCapitalizedCamelCase(str) { 
+            return str.toLowerCase().replace(/(^|[^a-z0-9])(.)/g, function(match, segmenterChar, camelChar) {
+                return camelChar.toUpperCase();
+            });
+        }
+        
+        
+        function msg(str) {
+            return '\n' + str + '\n';
+        }
+        
+        
+        function str(item) {
+            var itemString = '',
+                itemType = Object.prototype.toString.call(item).match(/^\[object\s(.*)\]$/)[1];
+            
+            switch (itemType) {
+                case 'String': itemString = '\'' + item + '\'';  // jshint ignore:line
+                case 'Boolean':
+                case 'Date':
+                case 'Number': return (typeof item === 'object' ? 
+                        itemType + '(' + (itemString || item) + ')' : itemString || ('' + item));
+                case 'Symbol': return item.toString();
+                case 'Function': return 'function:' + (('name' in item ? item.name 
+                        : (/function ([^(]*)/.exec('' + item)[1])) || '<Anonymous>');
+                case 'Object': return JSON.stringify(item);
+                case 'Array': item.forEach(function(elem, index) {
+                        itemString += ((index > 0 ? ',' : '') + str(elem));
+                    });
+                    return '[' + itemString + ']';
+            }
+            return '' + item;
+        }
+        
+        
+        /*
+         * --------------------
+         * TEST DATA
+         * --------------------
+         */
+        
+        
+        var CustomInstanceParentType = function CustomInstanceParentType(param) {
+            this.singleProp = param;
+        };
+        
+        var CustomInstanceChildType = function CustomInstanceChildType() {};
+        CustomInstanceChildType.prototype = Object.create(CustomInstanceParentType.prototype);
+        CustomInstanceChildType.prototype.constructor = CustomInstanceChildType;
+        
+        
+        var expectedNamedCompositeTypes = [    // Must include all the composite types
+                'blank_string', 'non_empty_string', 'non_blank_string',
+                'float', 'integer', 'infinite_number', 'non_infinite_number', 'positive_number', 'negative_number', 'non_zero_number', 'non_positive_number', 'non_negative_number',
+                'non_empty_array', 'non_empty_object',
+                'primitive', 'nothing', 'any', 'none'
+            ],
+            
+            
+            expectedNamedTypes = [    // Must include all the simple and extended (non-composite) types
+                'null', 'undefined', 'nan', 'symbol', 'function', 'date', 'error', 'regexp', 
+                'string', 'empty_string', 'whitespace', 'single_char_string', 'multi_char_string', 
+                'number', 'zero', 'positive_integer', 'positive_float', 'positive_infinity', 'negative_integer', 'negative_float', 'negative_infinity',
+                'boolean', 'true', 'false',
+                'array', 'empty_array', 'non_empty_array', 'single_elem_array', 
+                'object', 'empty_object', 'non_empty_object', 'single_prop_object'
+            ].concat(expectedNamedCompositeTypes),
+            
+            
+            testInstanceTypes = [
+                (typeof Symbol === 'function' ? Symbol : function(){}),     // Add Symbol if implemented in test VM
+                String, Number, Boolean, Function, Object,
+                Array, Date, Error, RegExp,
+                CustomInstanceParentType, CustomInstanceChildType
+            ],
+            
+            
+            allTestTypes = expectedNamedTypes.concat(testInstanceTypes),    
+            
+
+            testData = [
+                
+                /* NULL */            
+                {
+                    description: 'the null value',
+                    testValue: null,
+                    simpleType: 'null',
+                    extendedType: 'null',
+                    matchingTypes: ['null', 'nothing', 'any']
+                },
+                        
+                /* UNDEFINED */            
+                {
+                    description: 'the undefined value',
+                    testValue: undefined,
+                    simpleType: 'undefined',
+                    extendedType: 'undefined',
+                    matchingTypes: ['undefined', 'nothing', 'any']
+                },
+                        
+                /* BOOLEAN */
+                {
+                    description: 'boolean true primitive',
+                    testValue: true,
+                    simpleType: 'boolean',
+                    extendedType: 'true',
+                    matchingTypes: ['boolean', 'true', 'primitive', 'any']
+                },
+                {
+                    description: 'boolean false primitive',
+                    testValue: false,
+                    simpleType: 'boolean',
+                    extendedType: 'false',
+                    matchingTypes: ['boolean', 'false', 'primitive', 'any']
+                },
+                /* Boolean Objects */
+                {
+                    description: 'boolean true object',
+                    testValue: new Boolean(true),  // jshint ignore:line
+                    simpleType: 'boolean',
+                    extendedType: 'true',
+                    matchingTypes: ['boolean', 'true', 'primitive', 'any', Boolean, Object]
+                },
+                {
+                    description: 'boolean false object',
+                    testValue: new Boolean(false),  // jshint ignore:line
+                    simpleType: 'boolean',
+                    extendedType: 'false',
+                    matchingTypes: ['boolean', 'false', 'primitive', 'any', Boolean, Object]
+                },
+                
+                /* STRING */
+                {
+                    description: 'empty string',
+                    testValue: '',
+                    simpleType: 'string',
+                    extendedType: 'empty_string',
+                    matchingTypes: ['string', 'empty_string', 'blank_string', 'primitive', 'any']
+                },
+                {
+                    description: 'blank non-empty string',
+                    testValue: '   ',
+                    simpleType: 'string',
+                    extendedType: 'whitespace',
+                    matchingTypes: ['string', 'whitespace', 'blank_string', 'non_empty_string', 'primitive', 'any']
+                },
+                {
+                    description: 'multi non-white-character string',
+                    testValue: '  foo ',
+                    simpleType: 'string',
+                    extendedType: 'multi_char_string',
+                    matchingTypes: ['string', 'multi_char_string', 'non_empty_string', 
+                                    'non_blank_string', 'primitive', 'any']
+                },
+                {
+                    description: 'single character string',
+                    testValue: 't',
+                    simpleType: 'string',
+                    extendedType: 'single_char_string',
+                    matchingTypes: ['string', 'single_char_string', 'non_blank_string', 
+                                    'non_empty_string', 'primitive', 'any']
+                },
+                {
+                    description: 'white-padded single non-white-character string',
+                    testValue: '  L ',
+                    simpleType: 'string',
+                    extendedType: 'single_char_string',
+                    matchingTypes: ['string', 'single_char_string', 'non_blank_string', 
+                                    'non_empty_string', 'primitive', 'any']
+                },
+                /* String Objects */
+                {
+                    description: 'empty string object',
+                    testValue: new String(''),  // jshint ignore:line
+                    simpleType: 'string',
+                    extendedType: 'empty_string',
+                    matchingTypes: ['string', 'empty_string', 'blank_string', 'primitive', 
+                                    'any', String, Object]
+                },
+                {
+                    description: 'blank string object',
+                    testValue: new String('   '),  // jshint ignore:line
+                    simpleType: 'string',
+                    extendedType: 'whitespace',
+                    matchingTypes: ['string', 'whitespace', 'blank_string', 'non_empty_string', 
+                                    'primitive', 'any', String, Object]
+                },
+                {
+                    description: 'white-padded single non-white-character string object',
+                    testValue: new String('  Y '),  // jshint ignore:line
+                    simpleType: 'string',
+                    extendedType: 'single_char_string',
+                    matchingTypes: ['string', 'single_char_string', 'non_empty_string', 'non_blank_string', 
+                                    'primitive', 'any', String, Object]
+                },
+                {
+                    description: 'multi non-white-character string object',
+                    testValue: new String(' foo  '),  // jshint ignore:line
+                    simpleType: 'string',
+                    extendedType: 'multi_char_string',
+                    matchingTypes: ['string', 'multi_char_string', 'non_empty_string', 'non_blank_string', 
+                                    'primitive', 'any', String, Object]
+                },
+                
+                /* NUMBER */
+                {
+                    description: 'the number zero',
+                    testValue: 0,
+                    simpleType: 'number',
+                    extendedType: 'zero',
+                    matchingTypes: ['number', 'integer', 'zero', 'non_negative_number', 
+                                    'non_positive_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'positive integer number',
+                    testValue: 5,
+                    simpleType: 'number',
+                    extendedType: 'positive_integer',
+                    matchingTypes: ['number', 'integer', 'positive_integer', 'positive_number', 
+                                    'non_negative_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },         
+                {
+                    description: 'negative integer number',
+                    testValue: -1,
+                    simpleType: 'number',
+                    extendedType: 'negative_integer',
+                    matchingTypes: ['number', 'integer', 'negative_integer', 'negative_number', 
+                                    'non_positive_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'very large positive integer',
+                    testValue: 9007199254740992,
+                    simpleType: 'number',
+                    extendedType: 'positive_integer',
+                    matchingTypes: ['number', 'integer', 'positive_integer', 'positive_number', 
+                                    'non_negative_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'very large negative integer',
+                    testValue: -9007199254740992,
+                    simpleType: 'number',
+                    extendedType: 'negative_integer',
+                    matchingTypes: ['number', 'integer', 'negative_integer', 'negative_number', 
+                                    'non_positive_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'positive float number',
+                    testValue: 0.15,
+                    simpleType: 'number',
+                    extendedType: 'positive_float',
+                    matchingTypes: ['number', 'float', 'positive_float', 'positive_number', 
+                                    'non_negative_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'negative float number',
+                    testValue: -79.291,
+                    simpleType: 'number',
+                    extendedType: 'negative_float',
+                    matchingTypes: ['number', 'float', 'negative_float', 'negative_number', 
+                                    'non_positive_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },   
+                {
+                    description: 'very large positive float',
+                    testValue: 900719925474099.2,
+                    simpleType: 'number',
+                    extendedType: 'positive_float',
+                    matchingTypes: ['number', 'float', 'positive_float', 'positive_number', 
+                                    'non_negative_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'very large negative float',
+                    testValue: -900719925474099.2,
+                    simpleType: 'number',
+                    extendedType: 'negative_float',
+                    matchingTypes: ['number', 'float', 'negative_float', 'negative_number', 
+                                    'non_positive_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'positive Number.MAX_VALUE',
+                    testValue: Number.MAX_VALUE,
+                    simpleType: 'number',
+                    extendedType: 'positive_integer',
+                    matchingTypes: ['number', 'integer', 'positive_integer', 'positive_number', 
+                                    'non_negative_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'negative Number.MAX_VALUE',
+                    testValue: -Number.MAX_VALUE,
+                    simpleType: 'number',
+                    extendedType: 'negative_integer',
+                    matchingTypes: ['number', 'integer', 'negative_integer', 'negative_number', 
+                                    'non_positive_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'positive Number.MIN_VALUE',
+                    testValue: Number.MIN_VALUE,
+                    simpleType: 'number',
+                    extendedType: 'positive_float',
+                    matchingTypes: ['number', 'float', 'positive_float', 'positive_number', 
+                                    'non_negative_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'negative Number.MIN_VALUE',
+                    testValue: -Number.MIN_VALUE,
+                    simpleType: 'number',
+                    extendedType: 'negative_float',
+                    matchingTypes: ['number', 'float', 'negative_float', 'negative_number', 
+                                    'non_positive_number', 'non_zero_number', 'non_infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'positive Infinity',
+                    testValue: Infinity,
+                    simpleType: 'number',
+                    extendedType: 'positive_infinity',
+                    matchingTypes: ['number', 'positive_infinity', 'positive_number', 
+                                    'non_negative_number', 'non_zero_number', 'infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'negative Infinity',
+                    testValue: -Infinity,
+                    simpleType: 'number',
+                    extendedType: 'negative_infinity',
+                    matchingTypes: ['number', 'negative_infinity', 'negative_number', 
+                                    'non_positive_number', 'non_zero_number', 'infinite_number', 'primitive', 'any']
+                },
+                {
+                    description: 'the NaN value',
+                    testValue: NaN,
+                    simpleType: 'nan',
+                    extendedType: 'nan',
+                    matchingTypes: ['nan', 'any']
+                },
+                /* Number Objects */
+                {
+                    description: 'positive integer number object',
+                    testValue: new Number(56),  // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'positive_integer',
+                    matchingTypes: ['number', 'integer', 'positive_integer', 'positive_number', 'non_negative_number', 
+                                    'non_zero_number', 'non_infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'negative float number object',
+                    testValue: new Number(-4067.78),  // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'negative_float',
+                    matchingTypes: ['number', 'float', 'negative_float', 'negative_number', 'non_positive_number', 
+                                    'non_zero_number', 'non_infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'number object with value of zero',
+                    testValue: new Number(0),  // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'zero',
+                    matchingTypes: ['number', 'integer', 'zero', 'non_negative_number', 'non_positive_number', 
+                                    'non_infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'number object with value of positive Number.MAX_VALUE',
+                    testValue: new Number(Number.MAX_VALUE),  // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'positive_integer',
+                    matchingTypes: ['number', 'integer', 'positive_integer', 'positive_number', 'non_negative_number', 
+                                    'non_zero_number', 'non_infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'number object with value of negative Number.MAX_VALUE',
+                    testValue: new Number(-Number.MAX_VALUE),  // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'negative_integer',
+                    matchingTypes: ['number', 'integer', 'negative_integer', 'negative_number', 'non_positive_number', 
+                                    'non_zero_number', 'non_infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'number object with value of positive Number.MIN_VALUE',
+                    testValue: new Number(Number.MIN_VALUE),  // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'positive_float',
+                    matchingTypes: ['number', 'float', 'positive_float', 'positive_number', 'non_negative_number', 
+                                    'non_zero_number', 'non_infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'number object with value of negative Number.MIN_VALUE',
+                    testValue: new Number(-Number.MIN_VALUE),  // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'negative_float',
+                    matchingTypes: ['number', 'float', 'negative_float', 'negative_number', 'non_positive_number', 
+                                    'non_zero_number', 'non_infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'positive Infinity number object',
+                    testValue: new Number(Infinity),  // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'positive_infinity',
+                    matchingTypes: ['number', 'positive_infinity', 'positive_number', 'non_negative_number', 
+                                    'non_zero_number', 'infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'negative Infinity number object',
+                    testValue: new Number(-Infinity),   // jshint ignore:line
+                    simpleType: 'number',
+                    extendedType: 'negative_infinity',
+                    matchingTypes: ['number', 'negative_infinity', 'negative_number', 'non_positive_number', 
+                                    'non_zero_number', 'infinite_number', 'primitive', 'any', Number, Object]
+                },
+                {
+                    description: 'NaN number object',
+                    testValue: new Number(NaN),  // jshint ignore:line
+                    simpleType: 'nan',
+                    extendedType: 'nan',
+                    matchingTypes: ['nan', 'any', Number, Object]
+                },
+                        
+                /* ARRAY */
+                {
+                    description: 'empty array',
+                    testValue: [],
+                    simpleType: 'array',
+                    extendedType: 'empty_array',
+                    matchingTypes: ['array', 'empty_array', 'any', Array, Object]
+                },
+                {
+                    description: 'single element array',
+                    testValue: ['foo'],
+                    simpleType: 'array',
+                    extendedType: 'single_elem_array',
+                    matchingTypes: ['array', 'single_elem_array', 'non_empty_array', 'any', Array, Object]
+                },
+                {
+                    description: 'multi-element array',
+                    testValue: ['foo', -12.5],
+                    simpleType: 'array',
+                    extendedType: 'multi_elem_array',
+                    matchingTypes: ['array', 'multi_elem_array', 'non_empty_array', 'any', Array, Object]
+                },
+                {
+                    description: 'empty array created using Array constructor',
+                    testValue: new Array(),  // jshint ignore:line
+                    simpleType: 'array',
+                    extendedType: 'empty_array',
+                    matchingTypes: ['array', 'empty_array', 'any', Array, Object]
+                },
+                        
+                /* OBJECT */
+                {
+                    description: 'empty object',
+                    testValue: {},
+                    simpleType: 'object',
+                    extendedType: 'empty_object',
+                    matchingTypes: ['object', 'empty_object', 'any', Object]
+                },
+                {
+                    description: 'single element array',
+                    testValue: {foo: 'foo'},
+                    simpleType: 'object',
+                    extendedType: 'single_prop_object',
+                    matchingTypes: ['object', 'single_prop_object', 'non_empty_object', 'any', Object]
+                },
+                {
+                    description: 'non-empty object',
+                    testValue: {foo: 'foo', bar: -12.5},
+                    simpleType: 'object',
+                    extendedType: 'multi_prop_object',
+                    matchingTypes: ['object', 'multi_prop_object', 'non_empty_object', 'any', Object]
+                },
+                {
+                    description: 'empty object created using Object constructor',
+                    testValue: new Object(),  // jshint ignore:line
+                    simpleType: 'object',
+                    extendedType: 'empty_object',
+                    matchingTypes: ['object', 'empty_object', 'any', Object]
+                },
+                {
+                    description: 'object of custom instance type CustomInstanceParentType having single property',
+                    testValue: new CustomInstanceParentType('myProp'),
+                    simpleType: 'object',
+                    extendedType: 'single_prop_object',
+                    matchingTypes: ['object', 'single_prop_object', 'non_empty_object', 'any', 
+                                    Object, CustomInstanceParentType]
+                },
+                {
+                    description: 'object of custom instance type CustomInstanceChildType having no properties',
+                    testValue: new CustomInstanceChildType(),
+                    simpleType: 'object',
+                    extendedType: 'empty_object',
+                    matchingTypes: ['object', 'empty_object', 'any', 
+                                    Object, CustomInstanceChildType, CustomInstanceParentType]
+                },
+                        
+                /* FUNCTION */
+                {
+                    description: 'declared function',
+                    testValue: CustomInstanceParentType,
+                    simpleType: 'function',
+                    extendedType: 'function',
+                    matchingTypes: ['function', 'any', Function, Object]
+                },
+                {
+                    description: 'named function expression',
+                    testValue: function fooFunction() {},
+                    simpleType: 'function',
+                    extendedType: 'function',
+                    matchingTypes: ['function', 'any', Function, Object]
+                },
+                {
+                    description: 'anonymous function expression',
+                    testValue: function () {},
+                    simpleType: 'function',
+                    extendedType: 'function',
+                    matchingTypes: ['function', 'any', Function, Object]
+                },
+                {
+                    description: 'function created using Function constructor',
+                    testValue: new Function(''),  // jshint ignore:line
+                    simpleType: 'function',
+                    extendedType: 'function',
+                    matchingTypes: ['function', 'any', Function, Object]
+                },
+                        
+                /* DATE */
+                {
+                    description: 'date object constructed with a date string argument',
+                    testValue: new Date('April 9, 1988 03:29:00'),
+                    simpleType: 'date',
+                    extendedType: 'date',
+                    matchingTypes: ['date', 'any', Date, Object]
+                },
+                {
+                    description: 'date object constructed without a date string argument',
+                    testValue: new Date(),
+                    simpleType: 'date',
+                    extendedType: 'date',
+                    matchingTypes: ['date', 'any', Date, Object]
+                },
+                        
+                /* ERROR */
+                {
+                    description: 'error object',
+                    testValue: new Error('Foo test error object message'),
+                    simpleType: 'error',
+                    extendedType: 'error',
+                    matchingTypes: ['error', 'any', Error, Object]
+                },
+                        
+                /* REGEXP */
+                {
+                    description: 'regular expression literal',
+                    testValue: /foo/g,
+                    simpleType: 'regexp',
+                    extendedType: 'regexp',
+                    matchingTypes: ['regexp', 'any', RegExp, Object]
+                },
+                {
+                    description: 'reguar expression object created with RegExp constructor',
+                    testValue: new RegExp('bar', 'g'),
+                    simpleType: 'regexp',
+                    extendedType: 'regexp',
+                    matchingTypes: ['regexp', 'any', RegExp, Object]
+                }
+        ];
+        
+        if (typeof Symbol === 'function') {     // Add test data for Symbol type if implemented in test VM
+            
+            testData.push(
+                    
+                /* SYMBOL */
+                {
+                    description: 'symbol having description string',
+                    testValue: Symbol('foo'),   //jshint ignore:line
+                    simpleType: 'symbol',
+                    extendedType: 'symbol',
+                    matchingTypes: ['symbol', 'primitive', 'any']
+                },
+                {
+                    description: 'symbol having no description string',
+                    testValue: Symbol(),        //jshint ignore:line
+                    simpleType: 'symbol',
+                    extendedType: 'symbol',
+                    matchingTypes: ['symbol', 'primitive', 'any']
+                });
+        }
+        
+        
+        testData.forEach(function(data) {
+            data.nonMatchingTypes = subtractList(allTestTypes, data.matchingTypes);
+            data.discreteMatchingTypes = subtractList(data.matchingTypes, expectedNamedCompositeTypes);
+        });
+        
+        
+        /*
+         * --------------------
+         * TESTS
+         * --------------------
+         */
+        
+        
+        describe('xtypejs', function() {
+            
+            describe('Named types', function() {
+                
+                describe('Type Id module property definitions', function() {
+                    
+                    expectedNamedTypes.forEach(function(testType) {
+                        var expectedTypeIdProperty = testType.toUpperCase();
+                        
+                        it('should define type Id property: ' + str(expectedTypeIdProperty), function() {
+                            
+                            expect(typeof xtype[expectedTypeIdProperty]).toBe('number',
+                                    
+                            msg('Expected type of property xtype[' + str(expectedTypeIdProperty) + '] to be "number"' +
+                                ' because a property with matching but uppercased name should be defined for type ' + 
+                                str(testType) + ' and must be numeric for typeId bitwise OR\'ing support'));
+                        });
+                    });
+                });
+                
+                
+                describe('Individual type-checking module method definitions', function() {
+                    
+                    expectedNamedTypes.forEach(function(testType) {
+                        
+                        var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(testType)),
+                            propertyType = (typeof xtype[expectedMatchingMethodForType]);
+                        
+                        it('should define type-checking method: ' + str(expectedMatchingMethodForType), function() {                        
+                            
+                            expect(propertyType).toBe('function',
+                                    
+                            msg('Expected type of xtype[' + str(expectedMatchingMethodForType) + '] to be "function"' +
+                                ' because ' + str(expectedMatchingMethodForType) + ' should be a callable method' + 
+                                ' used in checking for type ' + str(testType) +
+                                ' but the result was ' + str(propertyType)));
+                        });
+                    });
+                });
+                
+                
+                describe('Type name to type Id conversion', function() {
+                    
+                    expectedNamedTypes.forEach(function(testType) {
+                        var expectedTypeIdProperty = testType.toUpperCase(),
+                            expectedTypeId = xtype[expectedTypeIdProperty];
+                        
+                        it('should convert type: ' + str(testType), function() {
+                            
+                            expect(xtype.nameToId(testType)).toBe(expectedTypeId,
+                            
+                            msg('Expected xtype.nameToId(' + str(testType) + ')' +
+                                ' to be ' + str(expectedTypeId) +
+                                ' because it is the value exposed as the type Id for type ' + str(testType)));
+                        });
+                    });
+                    
+                    
+                    it('should convert to themselves for instance types', function() {
+                        
+                        testInstanceTypes.forEach(function(instanceType) {
+                            var result = xtype.nameToId(instanceType);
+                            
+                            expect(result).toBe(instanceType,
+                                    
+                            msg('Expected xtype.nameToId(' + str(instanceType) + ')' +
+                                ' to be ' + str(instanceType) +
+                                ' because instance types should convert to themselves,' +
+                                ' but the result was ' + str(result)));
+                        });
+                        
+                    });
+                });
+                
+                
+                describe('Type Id to type name conversion', function() {
+
+                    expectedNamedTypes.forEach(function(testType) {
+                        
+                        var expectedTypeIdProperty = testType.toUpperCase(),
+                            definedTypeId = xtype[expectedTypeIdProperty];
+
+                        it('should convert back from type Id: ' + str(testType), function() {
+                            
+                            expect(xtype.idToName(definedTypeId)).toBe(testType,
+                                    
+                            msg('Expected xtype.idToName(xtype[' + str(expectedTypeIdProperty) + '])' +
+                                ' to be ' + str(testType) +
+                                ' because it is the corersponding type for the defined type' +
+                                ' id property xtype[' + str(expectedTypeIdProperty) + ']'));
+                        });
+                    });
+                    
+                    
+                    it('should convert to themselves for instance types', function() {
+                        
+                        testInstanceTypes.forEach(function(instanceType) {                        
+                            var result = xtype.idToName(instanceType);
+                            
+                            expect(result).toBe(instanceType,
+                                    
+                            msg('Expected xtype.idToName(' + str(instanceType) + ')' +
+                                ' to be the same instance type ' + str(instanceType) +
+                                ' because instance types should convert to themselves,' +
+                                ' but the result was ' + str(result)));
+                        });
+                    });
+                });
+            });
+            
+            
+            describe('Getting extended type', function() {
+
+                testData.forEach(function(data) {
+                    
+                    var item = data.testValue,
+                        description = data.description,
+                        extendedType = data.extendedType;
+                
+                    
+                    it('should get extended type for sample: ' + description, function() {
+                        
+                        expect(xtype(item)).toBe(extendedType,
+                                
+                        msg('Expected xtype(' + str(item) + ')' +
+                            ' to be ' + str(extendedType) + 
+                            ' because it is the expected extended type for the value: ' + str(item)));
+                    });
+                });
+            });
+            
+            
+            describe('Getting simple type', function() {
+
+                testData.forEach(function(data) {
+                    
+                    var item = data.testValue,
+                        description = data.description,
+                        simpleType = data.simpleType;
+                    
+                    
+                    it('should get simple type for sample: ' + description, function() {
+                        
+                        expect(xtype.type(item)).toBe(simpleType,
+                                
+                        msg('Expected xtype.type(' + str(item) + ')' +
+                            ' to be ' + str(simpleType) + 
+                            ' because it is the expected simple type for the value ' + str(item)));
+                    });
+                });
+            });
+            
+            
+            describe('Individual type matching', function() {
+                
+                describe('For matching types', function() {
+                
+                    testData.forEach(function(data) {
+                        
+                        var item = data.testValue,
+                            description = data.description,
+                            matchingTypes = data.matchingTypes;
+                        
+                        
+                        it('should match all matching types for sample: ' + description, function() {
+                            matchingTypes.forEach(function(matchingType) {
+                                
+                                expect(xtype.is(item, matchingType)).toBe(true,
+                                        
+                                msg('Expected xtype.is(' + str(item) + ', ' + str(matchingType) + ')' +
+                                    ' to be true' +
+                                    ' because ' + str(matchingType) + ' is a matching type for ' + str(item)));
+                                
+                                var typeId = xtype.nameToId(matchingType);
+                                
+                                expect(xtype.is(item, typeId)).toBe(true,
+        
+                                msg('Expected xtype.is(' + str(item) + ', <typeId of ' + str(matchingType) + '>)' +
+                                    ' to be true' +
+                                    ' because ' + str(matchingType) + ' is a matching type for ' + str(item)));
+                            });
+                        });
+                    });
+                });
+                
+                
+                describe('For non-matching types', function() {
+
+                    testData.forEach(function(data) {
+                        
+                        var item = data.testValue,
+                            description = data.description,
+                            nonMatchingTypes = data.nonMatchingTypes;
+                        
+                        
+                        it('should not match any non-matching type for sample: ' + description, function() {
+                            nonMatchingTypes.forEach(function(nonMatchingType) {
+                                
+                                expect(xtype.is(item, nonMatchingType)).toBe(false,
+                                        
+                                msg('Expected xtype.is(' + str(item) + ', ' + str(nonMatchingType) + ')' +
+                                    ' to be false' +
+                                    ' because ' + str(nonMatchingType) + ' is not a matching type for ' + str(item)));
+
+                                var typeId = xtype.nameToId(nonMatchingType);
+                                
+                                expect(xtype.is(item, typeId)).toBe(false,
+
+                                msg('Expected xtype.is(' + str(item) + ', <typeId of ' + str(nonMatchingType) + '>)' +
+                                    ' to be false' +
+                                    ' because ' + str(nonMatchingType) + ' is not a matching type for ' + str(item)));
+                            });
+                        });
+                    });
+                });
+            });
+            
+            
+            describe('Type matching against several types', function() {
+                
+                describe('With at least one matching type', function() {
+
+                    testData.forEach(function(data) {
+                        
+                        var item = data.testValue,
+                            description = data.description,
+                            matchingTypes = data.matchingTypes,
+                            nonMatchingTypes = data.nonMatchingTypes;
+                        
+                        
+                        it('should match for sample: ' + description, function() {
+                            matchingTypes.forEach(function(matchingType) {
+                                
+                                var matchingList = nonMatchingTypes.concat(matchingType);
+                                
+                                expect(xtype.is(item, matchingList)).toBe(true,
+        
+                                msg('Expected xtype.is(' + str(item) + ', ' + str(matchingList) + ')' +
+                                    ' to be true' +
+                                    ' because matching type ' + str(matchingType) + ' is in the list of types'));
+                            });
+                        });
+                    });
+                });
+                
+                
+                describe('With no matching types', function() {
+                
+                    testData.forEach(function(data) {
+                        
+                        var item = data.testValue,
+                            description = data.description,
+                            matchingTypes = data.matchingTypes,
+                            nonMatchingTypes = data.nonMatchingTypes;
+                        
+                        
+                        it('should not match for sample: ' + description, function() {
+                            
+                            expect(xtype.is(item, nonMatchingTypes)).toBe(false,
+                            
+                            msg('Expected xtype.is(' + str(item) + ', ' + str(nonMatchingTypes) + ')' +
+                                ' to be false' +
+                                ' because there are no matching types for ' + str(item) + ' in the list of types'));
+                        });
+                    });
+                });
+            });
+            
+            
+            describe('Type matching using the is-methods', function() {
+
+                describe('For a matching type', function() {
+                
+                    testData.forEach(function(data) {
+                        
+                        var item = data.testValue,
+                            description = data.description,
+                            matchingTypes = data.matchingTypes;
+                        
+                        
+                        it('should match for sample: ' + description, function() {
+                            // there are no is-methods for instance types
+                            subtractList(matchingTypes, testInstanceTypes).forEach(function(matchingType) {
+                                
+                                var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(matchingType));
+                                
+                                expect(xtype[expectedMatchingMethodForType](item)).toBe(true,
+                                        
+                                msg('Expected xtype.' + expectedMatchingMethodForType + '(' + str(item) + ') to be true' +
+                                    ' because ' + str(expectedMatchingMethodForType) + ' is the corresponding matching' + 
+                                    ' method for matching type ' + str(matchingType)));
+                            });
+                        });
+                    });
+                });
+                
+                
+                describe('For a non-matching type', function() {
+                
+                    testData.forEach(function(data) {
+                        
+                        var item = data.testValue,
+                            description = data.description,
+                            nonMatchingTypes = data.nonMatchingTypes;
+                        
+                        
+                        it('should not match for sample: ' + description, function() {
+                            // there are no is-methods for instance types
+                            subtractList(nonMatchingTypes, testInstanceTypes).forEach(function(nonMatchingType) {
+                                
+                                var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(nonMatchingType));
+                                
+                                expect(xtype[expectedMatchingMethodForType](item)).toBe(false,
+                                        
+                                msg('Expected xtype.' + expectedMatchingMethodForType + '(' + str(item) + ') to be false' +
+                                    ' because ' + str(expectedMatchingMethodForType) + ' is the corresponding matching' + 
+                                    ' method for non-matching type ' + str(nonMatchingType)));
+                            });
+                        });
+                    });
+                });
+            });
+            
+            
+            describe('Type Identification from a list', function() {
+
+                describe('With at least one matching type', function() {
+
+                    testData.forEach(function(data) {
+                        
+                        var item = data.testValue,
+                            description = data.description,
+                            nonMatchingTypes = data.nonMatchingTypes,
+                            discreteMatchingTypes = data.discreteMatchingTypes;
+                        
+                        
+                        it('should identify item type for sample: ' + description, function() {
+                            
+                            discreteMatchingTypes.forEach(function(matchingType) {
+                                
+                                var matchingList = nonMatchingTypes.concat(matchingType),
+                                    reportedTypeId = xtype.nameToId(matchingType),
+                                    result = xtype.which(item, matchingList);
+                                
+                                expect(result).toBe(matchingType,
+        
+                                msg('Expected xtype.which(' + str(item) + ', ' + str(matchingList) + ')' +
+                                    ' to be ' + str(matchingType) +
+                                    ' because it is the only matching type for value ' + str(item) + ' in the list of types,' +
+                                    ' but result was ' + str(result)));
+                            });
+                        });
+                    });
+                });
+                
+                
+                describe('With no matching types', function() {
+
+                    testData.forEach(function(data) {
+                        
+                        var item = data.testValue,
+                            description = data.description,
+                            nonMatchingTypes = data.nonMatchingTypes;
+                        
+        
+                        it('should identify type of item as "none" for sample: ' + description, function() {
+                            
+                            var result = xtype.which(item, nonMatchingTypes);
+                            
+                            expect(result).toBe(xtype.idToName(xtype.NONE),
+                                    
+                            msg('Expected xtype.which(' + str(item) + ', ' + str(nonMatchingTypes) + ')' +
+                                ' to be <type name of ' + str(xtype.NONE) + '>' +
+                                ' there are no matching types for ' + str(item) + ' in the list of types,' +
+                                ' but result was ' + str(result) + ' which it reports to be type ' + str(result)));
+                        });
+                    });
+                });
+            });
+            
+            
+            describe('Testing for NaN', function() {
+               
+                it('should report NaN for bad numeric values', function() {
+                    
+                    expect(xtype.isNan(5 / 'a')).toBe(true,
+                    
+                    msg('Expected xtype.isNan(5 / "a") to be true' +
+                        ' because (5 / "a") is of type "number" but without a valid numeric value'));
+                    
+                    expect(xtype.isNan(new Number(5 / 'a'))).toBe(true,          //jshint ignore:line
+                            
+                    msg('Expected xtype.isNan(new Number(5 / "a")) to be true' +
+                        ' because new Number(5 / "a") is of type "number" but without a valid numeric value'));
+                });
+                
+                
+                it('should not report NaN for non-numeric values with or without valid numeric value equivalents', function() {
+                    
+                    expect(xtype.isNan('5')).toBe(false,
+                    
+                    msg('Expected xtype.isNan("5") to be false' +
+                        ' because "5" is of type "string" and so does not represent a failed/bad number'));
+                    
+                    expect(xtype.isNan('5a')).toBe(false,
+                    
+                    msg('Expected xtype.isNan("5a") to be false' +
+                        ' because "5a" is of type "string" and so does not represent a failed/bad number'));
+                    
+                    expect(xtype.isNan(new Number('5a'))).toBe(true,     //jshint ignore:line
+                            
+                    msg('Expected xtype.isNan(new Number("5a")) to be true' +
+                        ' because new Number("5a") is of type "number" but without a valid numeric value'));
+                });
+            });
+            
+            
+            if (xtype.setOptions) {   // Tests for only if options feature is bundled
+                
+                describe('Changing the name scheme', function() {
+                    
+                    afterEach(function() {
+                        xtype.setOptions({
+                            nameScheme: 'default'
+                        });
+                    });
+                    
+                    
+                    it('should change to the compact name scheme using the string "compact"', function() {
+                        
+                        var stringCompactName = 'str',
+                            positiveIntCompactName = 'int+';
+                        
+                        xtype.setOptions({
+                            nameScheme: 'compact'
+                        });
+                        
+                        expect(xtype.type('some string')).toBe(stringCompactName,
+                        
+                        msg('Expected xtype.type("some string") to be ' + str(stringCompactName) +
+                            ' because that is the type name for the string type in the compact name scheme'));
+                        
+                        expect(xtype(5)).toBe(positiveIntCompactName,
+                        
+                        msg('Expected xtype(5) to be ' + str(positiveIntCompactName) +
+                            ' because that is the type name for the positive integer type in the compact name scheme'));
+                    });
+                    
+                   
+                    it('should change to a custom name scheme using a passed object', function() {
+                        
+                        // Name of negative int type before applying custom name scheme
+                        var defaultNegativeIntName = xtype(-5);
+                        
+                        var customStringName = 'myString',
+                            customPositiveIntName = 'posInt';
+                        
+                        xtype.setOptions({
+                            nameScheme: {
+                                string: 'myString',
+                                positive_integer: 'posInt'
+                            }
+                        });
+                        
+                        expect(xtype.type('some string')).toBe(customStringName,
+                        
+                        msg('Expected xtype.type("some string") to be ' + str(customStringName) +
+                            ' because that is the name for the string type in the' + 
+                            ' custom name scheme that has been applied'));
+                        
+                        expect(xtype(5)).toBe(customPositiveIntName,
+                        
+                        msg('Expected xtype(5) to be ' + str(customPositiveIntName) +
+                            ' because that is the name for the positive integer type' +
+                            ' in the custom name scheme that has been applied'));
+                        
+                        expect(xtype(-5)).toBe(defaultNegativeIntName,
+                        
+                        msg('Expected xtype(-5) not have changed from ' + str(defaultNegativeIntName) +
+                            ' because that is the name for the negative integer type which was not' +
+                            ' changed in the custom name scheme that has been applied'));
+                    });
+                    
+                    
+                    it('should throw an exception if a custom name scheme causes a name conflict with an existing type', function() {
+                        
+                        expect(function() {
+                            xtype.setOptions({ nameScheme: { number: 'integer' } });
+                        }).toThrow();
+                    });
+                    
+                    
+                    it('should switch back to the default name scheme using the string "default"', function() {
+                        
+                        xtype.setOptions({ nameScheme: 'compact' });
+                        expect(xtype.type(5)).toBe('num');                    // Confirm successful switch to compact scheme
+                        
+                        var stringDefaultName = 'string',
+                            positiveIntDefaultName = 'positive_integer';
+                        
+                        xtype.setOptions({ nameScheme: 'default' });   // Switch back to default scheme
+                        
+                        expect(xtype.type('some string')).toBe(stringDefaultName,
+                        
+                        msg('Expected xtype.type("some string") to be ' + str(stringDefaultName) +
+                            ' because that is the type name for the string type in the default name scheme'));
+                        
+                        expect(xtype(5)).toBe(positiveIntDefaultName,
+                        
+                        msg('Expected xtype(5) to be ' + str(positiveIntDefaultName) +
+                            ' because that is the type name for the positive integer type in the default name scheme'));
+                    });
+                });
+                
+                
+                describe('Changing the type string delimiter pattern', function() {
+                    
+                    afterEach(function() {
+                        xtype.setOptions({ delimiterPattern: null });
+                    });
+
+                    
+                    it('should take null and empty string to mean a reset to default', function() {
+                        
+                        xtype.setOptions({ delimiterPattern: null });
+                        
+                        expect(xtype.which(5, 'string, integer, boolean')).toBe('integer',
+                                
+                        msg('Expected xtype.which(5, "string, integer, boolean") to be "integer"' +
+                            ' because "integer" is the type of the value 5, and the attempt to change' +
+                            ' the delimiter to null should still result in using the default delimiter'));
+                        
+                        xtype.setOptions({ delimiterPattern: '' });
+                        
+                        expect(xtype.which(5, 'string, integer, boolean')).toBe('integer',
+                                
+                        msg('Expected xtype.which(5, "string, integer, boolean") to be "integer"' +
+                            ' because "integer" is the type of the value 5, and the attempt to change' +
+                            ' the delimiter to the empty string should still result in using the default delimiter'));
+                    });
+                    
+                    
+                    it('should change how individual types are identified in a type expression string', function() {
+                        
+                        xtype.setOptions({ delimiterPattern: '[\\s/]+' });
+                        
+                        expect(xtype.which(5, 'string / integer / boolean')).toBe('integer',
+                                
+                        msg('Expected xtype.which(5, "string, integer, boolean") to be "integer"' +
+                            ' because "integer" is the type of the value 5, and the delimiter change to' +
+                            ' "[\\s/]+" should cause it to be identified from within the type expression string'));
+                    });
+                });
+            }
+            
+            
+            if (xtype.registerTypes) {   // Tests for only if custom type registration is bundled
+
+                describe('Registering a custom type', function() {
+                    
+                    afterEach(function() {
+                        xtype.setOptions({
+                            nameScheme: 'default'
+                        });
+                    });
+                    
+                    xtype.registerTypes(
+                            { non_negative_integer: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER) },
+                            { non_negative_integer: '-int-' });
+                    
+                    it('should create a type Id constant for the registered type', function() {
+                        
+                        expect(xtype.NON_NEGATIVE_INTEGER).toBeDefined(
+                                
+                        msg('Expected xtype.NON_NEGATIVE_INTEGER to be defined' +
+                            ' because that is the uppercased name of the custom type that has been registered'));
+                    });
+                    
+                    
+                    it('should recognize the new type in relevant API calls', function() {
+                        
+                        expect(xtype.which(5, 'negative_integer, string, non_negative_integer')).toBe('non_negative_integer',
+                                
+                        msg('Expected xtype.which(5, "negative_integer, string, non_negative_integer")' +
+                            ' to be non_negative_integer' +
+                            ' because that is the name of the custom type that is the only matching' +
+                            ' type for value 5 in the list of provided types in the xtype.which call'));
+                    });
+                    
+                    
+                    it('should recognize the compact name of the new type', function() {
+                        
+                        xtype.setOptions({nameScheme: 'compact'});
+                        
+                        expect(xtype.which(5, 'int- str -int-')).toBe('-int-',
+                                
+                        msg('Expected xtype.which(5, "int- str -int-") to be -int-' +
+                            ' because that is the compact name of the custom type that is the only matching' +
+                            ' type for value 5 in the list of provided types in the xtype.which call'));
+                    });
+                    
+                    
+                    it('should throw an exception if the name of the custom type conflicts with that of an existing type', function() {
+                        
+                        expect(function() {
+                            xtype.registerTypes({ number: (xtype.NON_POSITIVE_NUMBER & xtype.INTEGER) });
+                        }).toThrow();
+                    });
+                    
+                    
+                    it('should throw an exception if the compact name of the custom type conflicts that of an existing type', function() {
+                        
+                        expect(function() {
+                            xtype.registerTypes({ non_neg_int: (xtype.NON_POSITIVE_NUMBER & xtype.INTEGER) }, { non_neg_int: 'int+' });
+                        }).toThrow();
+                    });
+                });
+            }
+        });
+    }
+    
+    
+    if (typeof exports !== 'undefined') {
+        if (typeof module !== 'undefined' && module.exports) {      // Return tests as module (node)
+            exports = module.exports = specs;
+        }
+    } else if (typeof define === 'function' && define.amd) {        // Return tests as module (RequireJS)
+        define(function() {
+            return specs;
+        });
+    } else {                                                        // Otherwise, execute tests in browser
+        specs(typeof xtype !== 'undefined' ? xtype : undefined);
+    }
+})();
+

@@ -1,0 +1,7 @@
+/spec/
+/node_modules/
+/build/
+/lab/
+/.idea/
+/.project
+/.settings/
