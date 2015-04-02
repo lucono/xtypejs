@@ -10,7 +10,7 @@ To build the project, clone the project locally and run the following command to
 npm install
 ```
 
-Then run the following command to build the project:
+Then run the following command to build the project: 
 
 ```js
 grunt build
