@@ -2,7 +2,6 @@ module.exports = function(config) {
   var cfg = {
     basePath: '../../',
     frameworks: ['jasmine'],
-    files: [],
     browsers: ['Chrome', 'Firefox'],
     customLaunchers: {
       Chrome_travis_ci: {
@@ -11,8 +10,7 @@ module.exports = function(config) {
       }
     },
     singleRun: true,
-    port: 9876,
-    colors: true
+    port: 9876
   };
   
   if (process.env.TRAVIS) {
