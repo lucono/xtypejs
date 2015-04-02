@@ -373,7 +373,10 @@
         return (typeof compositeType === 'function') ||     // Item is a specified instance type
                 !!(getBaseType(item, compositeType));
     }
-    
+
+    /**
+     * Return the first of the types, if any, matches the type of the item.
+     */
     function which(item, types) {
         types = (typeof types === 'string') ? types.split(typeDelimiterRegExp)
                 : (!Array.isArray(types) ? [types]
@@ -462,7 +465,7 @@
     }
     
     /**
-     * Gets the type Id of the item for the specified types.
+     * Gets the composite type consisting of the specified types.
      */
     function getCompositeType(types, item) {
         var typeString;
@@ -660,6 +663,9 @@
         clearTypeListStringCache();
     }
     
+    /**
+     * Defines a non-configurable property on the module for the specified type.
+     */
     function defineType(typeName, hostObj) {
         Object.defineProperty(hostObj, typeName.toUpperCase(), {
             value: TYPE_VALUE_MAPPING[typeName],
