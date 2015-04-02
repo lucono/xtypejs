@@ -239,4 +239,4 @@ xtype.setOptions({nameScheme: 'default'});
 
 ---
 
-#### For more usage options, see the full API documentation [here](API.md) &nbsp; &lArr;
+**For more usage options, see the full API documentation** ***[here](API.md)*** &nbsp; &lArr;

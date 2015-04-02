@@ -55,11 +55,6 @@ xtype.isNan(new Number('5a')) === true;
 ```
 
 
-### Performance
-  
-*xtypejs* is designed to be fast and robust, employing bitwise operations and memory-efficient memoization techniques internally in order to provide good overall performance and results in small, medium and large applications and libraries.
-  
-
 ### Type expression strings vs. type Id expressions
   
   Internally, type matching is always performed with type Ids (or constants) for better performance. So, although a type can be checked using either of the following two methods:
@@ -105,6 +100,6 @@ xtype.is(val, xtype.SINGLE_PROP_OBJECT)
 ```
 
 
-### Minified vs. Source version
+### Source vs. Minified version
 
 *xtypejs* is implemented as a single file, which can be used with or without prior minification in both CommonJS and AMD based environments, as well as in a browser via regular script tag.
