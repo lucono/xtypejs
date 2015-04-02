@@ -473,7 +473,7 @@
                     matchingTypes: ['object', 'empty_object', 'any', Object]
                 },
                 {
-                    description: 'single element array',
+                    description: 'single property object',
                     testValue: {foo: 'foo'},
                     simpleType: 'object',
                     extendedType: 'single_prop_object',
@@ -766,6 +766,21 @@
                             ' to be ' + str(simpleType) + 
                             ' because it is the expected simple type for the value ' + str(item)));
                     });
+                });
+            });
+            
+            
+            describe('Getting more specific object types', function() {
+
+                it('should get specific object type as defined by host environment', function() {
+                    
+                    expect(xtype.type(arguments)).toBe('object');       // xtype.type should report object type
+                    
+                    expect(xtype.typeOf(arguments)).toBe('arguments',   // but xtype.typeOf should report more specific object type
+                            
+                    msg('Expected xtype.typeOf(arguments)' +
+                        ' to be "arguments"' + 
+                        ' because it is the specific type of the arguments object'));
                 });
             });
             
