@@ -1,6 +1,8 @@
 # xtypejs [![Build Status](https://travis-ci.org/lucono/xtypejs.svg?branch=master)](https://travis-ci.org/lucono/xtypejs)
 
-*xtypejs* is a JavaScript extended type and basic data validation library that enables concise and efficient verification of JavaScript values by using data-validating pseudo types that unify both the checking of the type, and some of the most commonly required basic data validation checks in JavaScript applications, into a single concise and efficient operation.
+*xtypejs* is a JavaScript extended type and basic data validation library that enables concise and efficient verification of JavaScript values by using data-validating pseudo types that unify both the type checking and some of the most commonly required basic data validation checks in JavaScript applications into a single, concise and efficient operation.
+
+It is fast and robust, internally employing bitwise operations and memory-efficient memoization techniques to provide good overall performance in small, medium and large applications and libraries.
 
 ## Features
 
@@ -32,11 +34,11 @@ npm install git://github.com/lucono/xtypejs.git
 -------------------------- | ---------------------- | --------------------------
 **Basic**                  | **Number**             | **String** 
 `null`                     | `number`               | `string`            
-<code>&#117;ndefined</code>     | `positive_number`      | `whitespace`        
+<code>&#117;ndefined</code>| `positive_number`      | `whitespace`        
 `nan`                      | `negative_number`      | `single_char_string` 
 `symbol`                   | `zero`                 | `multi_char_string` 
 `function`                 | `non_positive_number`  | `empty_string`      
-`date`                     | `nonnegative_number`   | `blank_string`      
+`date`                     | `non_negative_number`  | `blank_string`      
 `error`                    | `non_zero_number`      | `non_empty_string`  
 `regexp`                   | `integer`              | `non_blank_string`  
 **Object**                 | `positive_integer`     | **Boolean**         
@@ -51,6 +53,7 @@ npm install git://github.com/lucono/xtypejs.git
 `single_elem_array`        | &nbsp;                 | &nbsp;
 `multi_elem_array`         | &nbsp;                 | &nbsp;
 `non_empty_array`          | &nbsp;                 | &nbsp;
+&nbsp;                     | &nbsp;                 | &nbsp;
   
   &nbsp;
 **See the full docs for supported types** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/SupportedTypes.md)*** &nbsp; &lArr;
@@ -105,19 +108,21 @@ The *xtypejs* API provides methods to get the simple or extended type of a value
 
 
 ## Testing
-
+  
 ```
 npm test
 ```
 
-See the testing section of the link below for more testing details and to run the tests directly in your browser for the current head version of the library.
-
-**More testing details** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/BuildTest.md)*** &nbsp; &lArr;
+See the link below for more testing details and how to run the tests directly in your browser for the current head version of the library.
+  
+**More testing details** ***[here](//github.com/lucono/xtypejs/tree/master/test)*** &nbsp; &lArr;
 
 
 ## Notes
+  
+See the Notes and FAQ docs for notes on special pseudo types such as `NONE` and `ANY`, the special handling of the `NaN` value by *xtypejs*, and more.
 
-**See library notes and FAQ** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/NotesFaq.md)*** &nbsp; &lArr;
+**See important library notes and FAQ** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/NotesFaq.md)*** &nbsp; &lArr;
 
 
 ## License
