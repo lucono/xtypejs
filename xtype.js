@@ -1,6 +1,6 @@
 /**
  * @license Copyright (c) 2015, Lucas Ononiwu. All Rights Reserved.
- * Available via the MIT license. See: http://github.com/lucono/xtype-js for details.
+ * Available via the MIT license. See: http://github.com/lucono/xtypejs for details.
  */
 /**
  * The MIT License (MIT)
