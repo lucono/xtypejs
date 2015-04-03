@@ -1,4 +1,4 @@
-# xtypejs - Building and Testing
+# xtypejs - Testing
 
 #### [Back to Home](//github.com/lucono/xtypejs) &nbsp; &lArr;
 
