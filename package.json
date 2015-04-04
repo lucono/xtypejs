@@ -1,6 +1,6 @@
 {
   "name": "xtypejs",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Efficient JavaScript unified type and basic data validation library.",
   "main": "xtype",
   "keywords": [

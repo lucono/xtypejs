@@ -1,0 +1,37 @@
+{
+  "name": "xtypejs",
+  "version": "0.2.9",
+  "homepage": "https://github.com/lucono/xtypejs",
+  "description": "Efficient JavaScript unified type and basic data validation library.",
+  "main": "dist/xtype.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "type",
+    "xtype",
+    "typejs",
+    "type-js",
+    "typeof",
+    "data-type"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "spec",
+    "package.json",
+    "Gruntfile.js",
+    "README.md",
+    "docs",
+    "LICENSE",
+    ".travis.yml",
+    "xtype.js",
+    "dist/LICENSE"
+  ]
+}
