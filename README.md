@@ -30,7 +30,7 @@ npm install git://github.com/lucono/xtypejs.git
 
 ## Supported Types
   
- &nbsp; | &nbsp; | &nbsp;
+ | | 
 -------------------------- | ---------------------- | --------------------------
 **Basic**                  | **Number**             | **String** 
 `null`                     | `number`               | `string`            
@@ -53,7 +53,6 @@ npm install git://github.com/lucono/xtypejs.git
 `single_elem_array`        | &nbsp;                 | &nbsp;
 `multi_elem_array`         | &nbsp;                 | &nbsp;
 `non_empty_array`          | &nbsp;                 | &nbsp;
-&nbsp;                     | &nbsp;                 | &nbsp;
   
   &nbsp;
 **See the full docs for supported types** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/SupportedTypes.md)*** &nbsp; &lArr;
@@ -62,11 +61,23 @@ npm install git://github.com/lucono/xtypejs.git
 ## Sample Usage
 
 ```js
+/* Importing the library */
+
+var xtype = require('xtypejs');         // (node.js). See docs for AMD and script tag.
+
 /* Getting the extended type of a value */
 
 xtype(-2.5)   === 'negative_float';      // Value is number, negative and float
-xtype('  ')   === 'blank_string';        // Value is string and blank
+xtype('  ')   === 'whitespace';          // Value is string and blank
 xtype({})     === 'empty_object';        // Value is object and is empty
+
+/* Every type also has a corresponding compact name. So using compact names,
+ * the following is a less verbose equivalent to the type checks above:
+ */
+
+xtype(-2.5)   === 'float-';             // 'float-' is same as 'negative_float'
+xtype('  ')   === 'str_';               // 'str_' is same as 'whitespace'
+xtype({})     === 'obj0';               // 'obj0' is same as 'empty_object'
 
 /* Getting the simple type of a value */
 

@@ -3,13 +3,44 @@
 #### [Back to Home](//github.com/lucono/xtypejs) &nbsp; &lArr;
 
 
+#### Importing the library
+
+```js
+/* node.js and CommonJS environments */
+
+var xtype = require('xtypejs');
+```
+
+```js
+/* requirejs and AMD environments */
+
+require(['xtype'], function(xtype) {
+    // Use xtype here
+});
+```
+
+```js
+/* script tag */
+
+<script src="path/to/xtype.js"></script>
+```
+
 #### Getting the extended type of a value
 
 ```js
 xtype(-2.5)   === 'negative_float';      // Value is number, negative and float
-xtype('  ')   === 'blank_string';        // Value is string and blank
+xtype('  ')   === 'whitespace';          // Value is string and blank
 xtype({})     === 'empty_object';        // Value is object and is empty
 xtype(['hi']) === 'single_elem_array';   // Value is array, has exactly one element
+
+/* Every type also has a corresponding compact name, so based on preference
+ * the following is a less verbose equivalent to the type checks above:
+ */
+
+xtype(-2.5)   === 'float-';              // 'float-' is same as 'negative_float'
+xtype('  ')   === 'str_';                // 'str_' is same as 'whitespace'
+xtype({})     === 'obj0';                // 'obj0' is same as 'empty_object'
+xtype(['hi']) === 'arr1';                // 'arr1' is same as 'single_elem_array'
 ```
 
 #### Getting the simple type of a value
