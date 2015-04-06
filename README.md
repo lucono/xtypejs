@@ -30,29 +30,23 @@ npm install git://github.com/lucono/xtypejs.git
 
 ## Supported Types
   
- | | 
--------------------------- | ---------------------- | --------------------------
-**Basic**                  | **Number**             | **String** 
-`null`                     | `number`               | `string`            
-<code>&#117;ndefined</code>| `positive_number`      | `whitespace`        
-`nan`                      | `negative_number`      | `single_char_string` 
-`symbol`                   | `zero`                 | `multi_char_string` 
-`function`                 | `non_positive_number`  | `empty_string`      
-`date`                     | `non_negative_number`  | `blank_string`      
-`error`                    | `non_zero_number`      | `non_empty_string`  
-`regexp`                   | `integer`              | `non_blank_string`  
-**Object**                 | `positive_integer`     | **Boolean**         
-`object`                   | `negative_integer`     | `boolean`   
-`empty_object`             | `float`                | `true`      
-`single_prop_object`       | `positive_float`       | `false`     
-`multi_prop_object`        | `negative_float`       | **Other**                 
-`non_empty_object`         | `infinite_number`      | `primitive`       
-**Array**                  | `positive_infinity`    | `nothing`         
-`array`                    | `negative_infinity`    | `any`             
-`empty_array`              | `non_infinite_number`  | `none`     
-`single_elem_array`        | &nbsp;                 | &nbsp;
-`multi_elem_array`         | &nbsp;                 | &nbsp;
-`non_empty_array`          | &nbsp;                 | &nbsp;
+ | | | |
+-------------------------- | ---------------------- | ----------------------- | -----------------
+**Basic**                  | **String**             | **Number**              | `positive_integer`   
+`null`                     | `string`               | `number`                | `negative_integer`    
+`undefined`                | `whitespace`           | `positive_number`       | `float`               
+`nan`                      | `single_char_string`   | `negative_number`       | `positive_float`      
+`symbol`                   | `multi_char_string`    | `zero`                  | `negative_float`      
+`function`                 | `empty_string`         | `non_positive_number`   | `infinite_number`     
+`date`                     | `blank_string`         | `non_negative_number`   | `positive_infinity`   
+`error`                    | `non_empty_string`     | `non_zero_number`       | `negative_infinity`   
+`regexp`                   | `non_blank_string`     | `integer`               | `non_infinite_number` 
+**Object**                 | **Array**              | **Boolean**             | **Other**             
+`object`                   | `array`                | `boolean`               | `primitive`                           
+`empty_object`             | `empty_array`          | `true`                  | `nothing`                             
+`single_prop_object`       | `single_elem_array`    | `false`                 | `any`                                 
+`multi_prop_object`        | `multi_elem_array`     |                         | `none`               
+`non_empty_object`         | `non_empty_array`      |                         |                   
   
   &nbsp;
 **See the full docs for supported types** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/SupportedTypes.md)*** &nbsp; &lArr;
