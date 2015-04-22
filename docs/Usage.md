@@ -105,10 +105,14 @@ switch (xtype.which(item, ['multi_char_string', 'positive_integer', Product])) {
 Different ways of checking values provide flexibility based on application needs.
   
 ```js
+// Verify if flag variable is a single character string
+
 xtype.is(flag, 'single_char_string');
 xtype.is(flag, xtype.SINGLE_CHAR_STRING);
 xtype.isSingleCharString(flag);
     
+// Verify if flag variable is a single character string or positive number value
+
 xtype.is(flag, 'single_char_string, positive_number');
 xtype.is(flag, xtype.SINGLE_CHAR_STRING | xtype.POSITIVE_NUMBER);
 xtype.is(flag, ['single_char_string', xtype.POSITIVE_NUMBER]);

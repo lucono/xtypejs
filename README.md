@@ -18,13 +18,28 @@ It is fast and robust, internally employing bitwise operations and memory-effici
 
 ## Installation
 
+#### Using npm
+
 ```
 npm install xtypejs --save
 ```
+
 From github:
 
 ```
 npm install git://github.com/lucono/xtypejs.git
+```
+
+#### Using bower
+
+```
+bower install xtypejs --save
+```
+  
+From github:
+
+```
+bower install git://github.com/lucono/xtypejs.git
 ```
 
 
@@ -32,21 +47,22 @@ npm install git://github.com/lucono/xtypejs.git
   
  | | | |
 -------------------------- | ---------------------- | ----------------------- | -----------------
-**Basic**                  | **String**             | **Number**              | `positive_integer`   
-`null`                     | `string`               | `number`                | `negative_integer`    
-`undefined`                | `whitespace`           | `positive_number`       | `float`               
-`nan`                      | `single_char_string`   | `negative_number`       | `positive_float`      
-`symbol`                   | `multi_char_string`    | `zero`                  | `negative_float`      
-`function`                 | `empty_string`         | `non_positive_number`   | `infinite_number`     
-`date`                     | `blank_string`         | `non_negative_number`   | `positive_infinity`   
-`error`                    | `non_empty_string`     | `non_zero_number`       | `negative_infinity`   
-`regexp`                   | `non_blank_string`     | `integer`               | `non_infinite_number` 
-**Object**                 | **Array**              | **Boolean**             | **Other**             
-`object`                   | `array`                | `boolean`               | `primitive`                           
-`empty_object`             | `empty_array`          | `true`                  | `nothing`                             
-`single_prop_object`       | `single_elem_array`    | `false`                 | `any`                                 
-`multi_prop_object`        | `multi_elem_array`     |                         | `none`               
-`non_empty_object`         | `non_empty_array`      |                         |                   
+**Basic**                  | **String**             | **Number**              | `positive_integer`
+`null`                     | `string`               | `number`                | `negative_integer`
+`undefined`                | `whitespace`           | `integer`               | `positive_float`
+`nan`                      | `single_char_string`   | `float`                 | `negative_float`
+`symbol`                   | `multi_char_string`    | `positive_number`       | `positive_infinity`
+`function`                 | `empty_string`         | `negative_number`       | `negative_infinity`
+`date`                     | `blank_string`         | `infinite_number`       | `non_positive_number`
+`error`                    | `non_empty_string`     | `zero`                  | `non_negative_number`
+`regexp`                   | `non_blank_string`     | `non_zero_number`       | `non_infinite_number`
+**Object**                 | **Array**              | **Boolean**             | **Other**
+`object`                   | `array`                | `boolean`               | `primitive`
+`empty_object`             | `empty_array`          | `true`                  | `nothing`
+`single_prop_object`       | `single_elem_array`    | `false`                 | `any`
+`multi_prop_object`        | `multi_elem_array`     |                         | `none`
+`non_empty_object`         | `non_empty_array`      |                         |   
+         
   
   &nbsp;
 **See the full docs for supported types** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/SupportedTypes.md)*** &nbsp; &lArr;
@@ -57,27 +73,32 @@ npm install git://github.com/lucono/xtypejs.git
 ```js
 /* Importing the library */
 
-var xtype = require('xtypejs');         // (node.js). See docs for AMD and script tag.
-
-/* Getting the extended type of a value */
-
-xtype(-2.5)   === 'negative_float';      // Value is number, negative and float
-xtype('  ')   === 'whitespace';          // Value is string and blank
-xtype({})     === 'empty_object';        // Value is object and is empty
-
-/* Every type also has a corresponding compact name. So using compact names,
- * the following is a less verbose equivalent to the type checks above:
- */
-
-xtype(-2.5)   === 'float-';             // 'float-' is same as 'negative_float'
-xtype('  ')   === 'str_';               // 'str_' is same as 'whitespace'
-xtype({})     === 'obj0';               // 'obj0' is same as 'empty_object'
+var xtype = require('xtypejs');         // (node.js). See docs for AMD and others.
 
 /* Getting the simple type of a value */
 
 xtype.type(null)          === 'null';
-xtype.type(new Date())    === 'date';
+xtype.type(undefined)     === 'undefined';
+xtype.type(NaN)           === 'nan';
 xtype.type([])            === 'array';
+xtype.type({})            === 'object';
+xtype.type(new Date())    === 'date';
+xtype.type(function() {}) === 'function';
+
+/* Getting the extended type of a value */
+
+xtype(5)      === 'positive_integer';    // Value is number, positive and integer
+xtype('')     === 'empty_string';        // Value is string and empty
+xtype({})     === 'empty_object';        // Value is object and has no properties
+
+/*
+ * Every type also has a corresponding compact name. So using compact names,
+ * the following is a less verbose equivalent to the type checks above:
+ */
+
+xtype(5)      === 'int+';               // 'int+' is same as 'positive_integer'
+xtype('')     === 'str0';               // 'str0' is same as 'empty_string'
+xtype({})     === 'obj0';               // 'obj0' is same as 'empty_object'
 
 /*
  * Returns true if data is an object AND contains at least one own property,
@@ -100,6 +121,26 @@ xtype.is(data, '-obj0 arr1 int+');
 if (! xtype.is(value, [xtype.MULTI_CHAR_STRING, xtype.POSITIVE_INTEGER, Product])) {
     /* Handle cannot display product */
 }
+
+/*
+ * Switch on the result of xtype.which() to handle only valid input scenarios
+ * without first performing extensive type checking and data validations.
+ */
+  
+switch (xtype.which(item, ['multi_char_string', 'positive_integer', Product])) {
+
+    case 'multi_char_string':
+        /* Fetch and display product using item as the product name */
+        
+    case 'positive_integer':
+        /* Fetch and display product using item as the product id */
+        
+    case Product:
+        /* item is a Product object, so just display item as the product */
+        
+    default:
+        /* Handle invalid value.. cannot display product */
+}
 ```
   
 **See full usage and example docs** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/Usage.md)*** &nbsp; &lArr;
@@ -118,20 +159,24 @@ The *xtypejs* API provides methods to get the simple or extended type of a value
 npm test
 ```
 
-See the link below for more testing details and how to run the tests directly in your browser for the current head version of the library.
+See the link below for more testing details, and to run the tests directly in your browser for the current head version of the library.
   
 **More testing details** ***[here](//github.com/lucono/xtypejs/tree/master/test)*** &nbsp; &lArr;
 
 
 ## Notes
-  
-See the Notes and FAQ docs for notes on special pseudo types such as `NONE` and `ANY`, the special handling of the `NaN` value by *xtypejs*, and more.
 
-**See important library notes and FAQ** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/NotesFaq.md)*** &nbsp; &lArr;
+### `NaN` Handling
+  
+The JavaScript NaN value is rarely ever useful in JavaScript applications, and its presence usually only creates many additional instances in an application where it becomes necessary to perform additional type and data checking that are not relevant to the primary concern of the application.
+
+Because of this, *xtypejs* implements the special dedicated type `'nan'` (type Id `xtype.NAN`) for the JavaScript `NaN` value, that is completely decoupled from the `number` type, effectively eliminating the need for applications using *xtypejs* to explicitly handle `NaN` values when expecting `number` types. `NaN` values are particularly problematic in applications because though they are reported as the `number` type by the JavaScript runtime, there is effectively little to nothing an application can do to make meaningful use of them in the expected `number` context. The *xtypejs* approach helps by not only eliminating the effort of writing numerous checking and handling code for `NaN` values, but also helps keep the application code cleaner and more concise by eliminating the clutter that's almost always associated with these checks.
+  
+**See more important library notes and FAQ** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/NotesFaq.md)*** &nbsp; &lArr;
 
 
 ## License
 
 Licensed under the terms of the MIT license.
 
-
+**See full license** ***[here](https://github.com/lucono/xtypejs/blob/master/LICENSE)*** &nbsp; &lArr;

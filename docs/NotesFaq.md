@@ -11,13 +11,6 @@
 ### The `ANY` type
   
 `ANY` is the composite type consisting of ***all*** types, which means that all values will always match `ANY`. Therefore, `xtype.isAny(item)` will always be true for any value of `item`.
-  
-  
-### `NaN` Handling
-  
-The JavaScript NaN value is rarely ever useful in JavaScript applications, and its presence usually only creates many additional instances in an application where it becomes necessary to perform additional type and data checking that are not relevant to the primary concern of the application.
-
-Because of this, *xtypejs* implements the special dedicated type `'nan'` (type Id `xtype.NAN`) for the JavaScript `NaN` value, that is independent of the `number` type, effectively eliminating the need for applications using *xtypejs* to explicitly handle `NaN` values when expecting `number` types. `NaN` values are particularly a problem in applications because though they are reported as the `number` type by the JavaScript runtime, there is effectively little to nothing an application can do to make meaningful use of them in the expected `number` context. The *xtypejs* approach helps by not only eliminating the effort of writing checking and handling code for `NaN` values, but also helps keep the application code cleaner and more concise by eliminating the clutter that's almost always associated with these checks.
 
 
 ### JavaScript's `isNaN` vs. *xtypejs* `xtype.isNan`
@@ -26,14 +19,18 @@ There is an important difference between the behavior of the *xtypejs* `xtype.is
 
 So, the *xtypejs* `xtype.isNan` method will only return true for `number` types that do not have valid numeric values, and will not return true even for values that while not representing a valid numeric value, are of a non-`number` type such as `string`, or some other type.
 
-For instance, the mathematical operation `(5 / 'a')` is a division that results in the *NaN* value because it attempts to divide a number by a (non-numeric) string. So though the `typeof` of the result is `number`, its value is *NaN*. JavaScript's `isNaN` function and the *xtypejs* `xtype.isNan` method both report it identically in this case, as being *NaN*.
+For instance, the mathematical operation `(5 / 'a')` is a division that results in the *NaN* value because it attempts to divide a number by a (non-numeric) string. So though the `typeof` of the result is `number`, its value is *NaN*. JavaScript's `isNaN` function and the *xtypejs* `xtype.isNan` method both report it identically in this case, as being *NaN*. (The *xtypejs* `xtype.type` method will also report `nan` however, whereas JavaScript's `typeof` function will report `number`).
 
 ```js
-typeof (5 / 'a') === 'number';
+// Plain JavaScript:
 
+typeof (5 / 'a') === 'number';
 isNaN(5 / 'a') === true;
 isNaN(new Number(5 / 'a')) === true;
 
+// xtypejs:
+
+xtype.type(5 / 'a') === 'nan';
 xtype.isNan(5 / 'a') === true;
 xtype.isNan(new Number(5 / 'a')) === true;
 ```
@@ -41,8 +38,9 @@ xtype.isNan(new Number(5 / 'a')) === true;
 But considering a different value, the literal `'5a'`, it is of `string` type and not of `number` type, and therefore does not represent a failed value intended as a `number` value. It also is clearly not the *NaN* value. However, JavaScript's `isNaN` function will return `true` for this value, but the *xtypejs* `xtype.isNan` method will return `false`. This behavior is the key difference between JavaScript's `isNaN` function and the *xtypejs* `xtype.isNan` method.
 
 ```js
-typeof '5a' === 'string';
+// Plain JavaScript:
 
+typeof '5a' === 'string';
 isNaN('5a') === true;
 isNaN(new Number('5a')) === true;
 
@@ -50,6 +48,7 @@ isNaN(new Number('5a')) === true;
 // and true for the number object, as it is then no longer 
 // a string, but now a Number with a non-valid value:
 
+xtype.type('5a') === 'string';
 xtype.isNan('5a') === false;
 xtype.isNan(new Number('5a')) === true;
 ```

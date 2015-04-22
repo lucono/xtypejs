@@ -83,5 +83,9 @@ The following *xtypejs* built-in types are derived from a combination of simple 
  ||
 -------------------------- | --- |
 *Any constructor function* | Any constructor function is an Instance type. Each constructor function is the Instance type for objects of the constructor.
+  
+## Custom Types
+
+Any number of custom types can be derived from various combinations of the *xtypejs* built-in types. Each derived custom type must be a numeric value of a derivation from the type Ids of a number of existing xtypejs types, resulting in a new unique type Id value for which there is not an already existing value in *xtypejs*. Derived custom types can be fully registered into the *xtypejs* API by using the *xtype*.**registerTypes** API method. See the API documentation for more details.
 
 

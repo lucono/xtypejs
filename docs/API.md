@@ -45,16 +45,17 @@ Argument       | Type          | Description
 #### xtype.which(`item`, `types`)
 Gets the matching type of an item from a list of simple, extended and/or instance types.
   
-Argument       | Type          | Description  
-:------------- | :------------ | :-------------------
-`item`         | any           | The item/value of which the type is to be matched.
-`types`        | string        | A single or delimited list of several type names against which `item` is to be matched.
-               | number        | A single or OR'ed expression of several type Ids against which `item` is to be matched.
-               | function      | A single instance type against which `item` is to be matched.
-               | array         | An array of any combination of the type names or Ids, and/or instance types against which `item` is to be matched.
-**Return**     | string        | The matching type of `item` if provided as a type name in the `types` list argument, and if the matching type is a simple or extended type, or the `none` type if there was no match. 
-**Return**     | number        | The matching type of `item` if provided as a type Id in the `types` argument, and if the matching type is a simple or extended type, or the `xtype.NONE` type Id if there was no match. 
-               | function      | The most specific matching instance type of `item` from those specified in the `types` argument, if the matching type is an instance type, or the `none` type if there was no match.
+Argument       | Type             | Description  
+:------------- | :--------------- | :-------------------
+`item`         | any              | The item/value of which the type is to be matched.
+`types`        | string           | A single or delimited list of several type names against which `item` is to be matched.
+               | array            | An array of any combination of the type names or Ids, and/or instance types against which `item` is to be matched.
+               | number&nbsp;*    | A single or OR'ed expression of several type Ids as a single combined type, against which `item` is to be matched.
+               | function&nbsp;*  | A single instance type against which `item` is to be matched.
+**Return**     | string           | The matching type of `item` if the matching type was provided as a type name string in the `types` list argument, or the `none` type if there was no match. 
+               | number           | The matching type of `item` if the matching type was provided as a type Id in the `types` argument, or the `none` type if there was no match. 
+               | function         | The matching type of `item` if the matching type was provided as an instance type in the `types` argument, or the `none` type if there was no match.
+\* Note that for versions of the `types` argument, the `types` argument is treated not as a list of types, but as a single type against which `item` is to be matched, therefore returning either the value of the `types` argument if the type of `item` matches, or else returning the `none` type.
   
 &nbsp; 
   
