@@ -1,6 +1,6 @@
 # xtypejs [![Build Status](https://travis-ci.org/lucono/xtypejs.svg?branch=master)](https://travis-ci.org/lucono/xtypejs)
 
-*xtypejs* extends the standard JavaScript types with new data-validating pseudo types, while also normalizing all the irregularities of working with JavaScript types. It enables concise and efficient verification of JavaScript values by using data-validating pseudo types that unify both the type checking and some of the most commonly required basic data validation checks in JavaScript applications into a single, concise and efficient operation.
+*xtypejs* extends the standard JavaScript types with new data-validating pseudo types, while also normalizing all the irregularities of working with JavaScript types. With data-validating pseudo types, it unifies type checking and some of the most commonly required basic data validations in JavaScript applications, into a single concise and efficient operation.
 
 It is fast and robust, internally employing bitwise operations and memory-efficient memoization techniques to provide good overall performance in small, medium and large applications and libraries.
 

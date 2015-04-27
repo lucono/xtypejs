@@ -15,9 +15,9 @@
 
 ### JavaScript `isNaN` / ES6 `Number.isNaN` vs. *xtypejs* `xtype.isNan`
   
-There is an important difference between the behavior of the *xtypejs* `xtype.isNan` method and JavaScript's `isNaN` function and `Number.isNaN` method. The *xtypejs* `xtype.isNan` method will only return true for values that represent the JavaScript `NaN` value. However, JavaScript's `isNaN` function can also return true for values that are entirely not of the `number` type because it first tries to coerce the value to a number, whereas JavaScript's `Number.isNaN` method will not try to coerce the value to a number but will return false for `Number` objects with `NaN` values.
+In addition to the `NaN` value, JavaScript's `isNaN` function can also return true for values that are entirely not of the `number` type because it will first try to coerce the value to a number, whereas though the ECMAScript 6 `Number.isNaN` method will not try to coerce the value to a number, it will return false for `Number` objects with `NaN` values.
 
-So, the *xtypejs* `xtype.isNan` method will only return true for `number` types that do not have valid numeric values, and will not return true even for values that while not representing a valid numeric value, are of a non-`number` type such as `string`, or some other type. It does this consistently for both primitive and object number and non-number values.
+The *xtypejs* `xtype.isNan` method however, will only return true for `number` types that do not have valid numeric values, and will not return true even for values that while not representing a valid numeric value, are of a non-`number` type such as `string`, or some other type. It does this consistently for both primitive and object number and non-number values.
 
 For instance, consider two cases:
 
