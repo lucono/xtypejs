@@ -55,7 +55,7 @@ Argument       | Type             | Description
 **Return**     | string           | The matching type of `item` if the matching type was provided as a type name string in the `types` list argument, or the `none` type if there was no match. 
                | number           | The matching type of `item` if the matching type was provided as a type Id in the `types` argument, or the `none` type if there was no match. 
                | function         | The matching type of `item` if the matching type was provided as an instance type in the `types` argument, or the `none` type if there was no match.
-\* Note that for versions of the `types` argument, the `types` argument is treated not as a list of types, but as a single type against which `item` is to be matched, therefore returning either the value of the `types` argument if the type of `item` matches, or else returning the `none` type.
+\* Note that for this type of the `types` argument, the `types` argument is treated not as a list of types, but as a single type against which `item` is to be matched, therefore either returning the value of the `types` argument if the type of `item` matches, or otherwise returning the `none` type.
   
 &nbsp; 
   

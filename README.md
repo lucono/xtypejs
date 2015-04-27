@@ -1,6 +1,6 @@
 # xtypejs [![Build Status](https://travis-ci.org/lucono/xtypejs.svg?branch=master)](https://travis-ci.org/lucono/xtypejs)
 
-*xtypejs* is a JavaScript extended type and basic data validation library that enables concise and efficient verification of JavaScript values by using data-validating pseudo types that unify both the type checking and some of the most commonly required basic data validation checks in JavaScript applications into a single, concise and efficient operation.
+*xtypejs* extends the standard JavaScript types with new data-validating pseudo types, while also normalizing all the irregularities of working with JavaScript types. It enables concise and efficient verification of JavaScript values by using data-validating pseudo types that unify both the type checking and some of the most commonly required basic data validation checks in JavaScript applications into a single, concise and efficient operation.
 
 It is fast and robust, internally employing bitwise operations and memory-efficient memoization techniques to provide good overall performance in small, medium and large applications and libraries.
 
@@ -18,25 +18,25 @@ It is fast and robust, internally employing bitwise operations and memory-effici
 
 ## Installation
 
-#### Using npm
+### npm
 
 ```
 npm install xtypejs --save
 ```
 
-From github:
+**From github**
 
 ```
 npm install git://github.com/lucono/xtypejs.git
 ```
 
-#### Using bower
+### bower
 
 ```
 bower install xtypejs --save
 ```
   
-From github:
+**From github**
 
 ```
 bower install git://github.com/lucono/xtypejs.git
@@ -74,7 +74,9 @@ bower install git://github.com/lucono/xtypejs.git
 /* Importing the library */
 
 var xtype = require('xtypejs');         // (node.js). See docs for AMD and others.
+```
 
+```js
 /* Getting the simple type of a value */
 
 xtype.type(null)          === 'null';
@@ -84,7 +86,9 @@ xtype.type([])            === 'array';
 xtype.type({})            === 'object';
 xtype.type(new Date())    === 'date';
 xtype.type(function() {}) === 'function';
+```
 
+```js
 /* Getting the extended type of a value */
 
 xtype(5)      === 'positive_integer';    // Value is number, positive and integer
@@ -99,7 +103,9 @@ xtype({})     === 'empty_object';        // Value is object and has no propertie
 xtype(5)      === 'int+';               // 'int+' is same as 'positive_integer'
 xtype('')     === 'str0';               // 'str0' is same as 'empty_string'
 xtype({})     === 'obj0';               // 'obj0' is same as 'empty_object'
+```
 
+```js
 /*
  * Returns true if data is an object AND contains at least one own property,
  * OR is an array AND has exactly one element, 
@@ -119,27 +125,29 @@ xtype.is(data, '-obj0 arr1 int+');
  */
     
 if (! xtype.is(value, [xtype.MULTI_CHAR_STRING, xtype.POSITIVE_INTEGER, Product])) {
-    /* Handle cannot display product */
+    // Handle cannot display product
 }
+```
 
+```js
 /*
  * Switch on the result of xtype.which() to handle only valid input scenarios
  * without first performing extensive type checking and data validations.
  */
   
-switch (xtype.which(item, ['multi_char_string', 'positive_integer', Product])) {
+switch (xtype.which(value, ['multi_char_string', 'positive_integer', Product])) {
 
     case 'multi_char_string':
-        /* Fetch and display product using item as the product name */
+        // Fetch and display product using value as the product name
         
     case 'positive_integer':
-        /* Fetch and display product using item as the product id */
+        // Fetch and display product using value as the product id
         
     case Product:
-        /* item is a Product object, so just display item as the product */
+        // value is a Product object, so just display it
         
     default:
-        /* Handle invalid value.. cannot display product */
+        // Handle invalid value.. cannot display product
 }
 ```
   
@@ -168,9 +176,11 @@ See the link below for more testing details, and to run the tests directly in yo
 
 ### `NaN` Handling
   
-The JavaScript NaN value is rarely ever useful in JavaScript applications, and its presence usually only creates many additional instances in an application where it becomes necessary to perform additional type and data checking that are not relevant to the primary concern of the application.
+The classification of the JavaScript `NaN` value as the `number` type is rarely ever useful in JavaScript applications, and usually only creates many additional instances in an application where it becomes necessary to perform additional type and data checks that could have been avoided in the `number` context.
 
-Because of this, *xtypejs* implements the special dedicated type `'nan'` (type Id `xtype.NAN`) for the JavaScript `NaN` value, that is completely decoupled from the `number` type, effectively eliminating the need for applications using *xtypejs* to explicitly handle `NaN` values when expecting `number` types. `NaN` values are particularly problematic in applications because though they are reported as the `number` type by the JavaScript runtime, there is effectively little to nothing an application can do to make meaningful use of them in the expected `number` context. The *xtypejs* approach helps by not only eliminating the effort of writing numerous checking and handling code for `NaN` values, but also helps keep the application code cleaner and more concise by eliminating the clutter that's almost always associated with these checks.
+Because of this, *xtypejs* implements the special dedicated type `'nan'` (type Id `xtype.NAN`) for the JavaScript `NaN` value, that is completely decoupled and distinct from the `number` type, effectively eliminating the need for applications using *xtypejs* to explicitly handle `NaN` values whenever expecting `number` types. `NaN` values are particularly problematic in JavaScript applications because though they are reported as the `number` type by the JavaScript runtime, there is effectively little to nothing an application can do to make meaningful use of them in the expected `number` context.
+
+The *xtypejs* approach helps by not only eliminating the effort of writing numerous checking and handling code for `NaN` values, but also helps keep the application code cleaner and more concise by eliminating the clutter that's almost always associated with these checks.
   
 **See more important library notes and FAQ** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/NotesFaq.md)*** &nbsp; &lArr;
 

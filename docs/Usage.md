@@ -46,10 +46,24 @@ xtype(['hi']) === 'arr1';                // 'arr1' is same as 'single_elem_array
 #### Getting the simple type of a value
 
 ```js
-xtype.type(null)          === 'null';
-xtype.type(new Date())    === 'date';
-xtype.type(function() {}) === 'function';
-xtype.type([])            === 'array';
+xtype.type(null)              === 'null';
+xtype.type(undefined)         === 'undefined';
+xtype.type(NaN)               === 'nan';
+
+xtype.type([])                === 'array';
+xtype.type({})                === 'object';
+xtype.type(new Date())        === 'date';
+xtype.type(function() {})     === 'function';
+xtype.type(/ab+c/i)           === 'regexp';
+xtype.type(new Error('No!')   === 'error';
+xtype.type(Symbol())          === 'symbol';
+
+xtype.type('Hi')              === 'string';
+xtype.type(new String('Hi'))  === 'string';
+xtype.type(25)                === 'number';
+xtype.type(new Number(25))    === 'number';
+xtype.type(true)              === 'boolean';
+xtype.type(new Boolean(true)) === 'boolean';
 ```
 
 #### Checking values against combinations of various types
@@ -84,16 +98,16 @@ if (! xtype.is(value, [xtype.MULTI_CHAR_STRING, xtype.POSITIVE_INTEGER, Product]
 // Switch on the result of xtype.which() to handle only valid input scenarios
 // without first performing extensive type checking and data validations.
     
-switch (xtype.which(item, ['multi_char_string', 'positive_integer', Product])) {
+switch (xtype.which(value, ['multi_char_string', 'positive_integer', Product])) {
 
     case 'multi_char_string':
-        // Fetch and display product using item as the product name
+        // Fetch and display product using value as the product name
         
     case 'positive_integer':
-        // Fetch and display product using item as the product id
+        // Fetch and display product using value as the product id
         
     case Product:
-        // Product object received, so just display product
+        // value is a Product object, so just display it
         
     default:
         // Handle invalid value.. cannot display product
