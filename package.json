@@ -1,12 +1,13 @@
 {
   "name": "xtypejs",
   "version": "0.2.9",
-  "description": "Efficient JavaScript unified type and basic data validation library.",
+  "description": "Efficient data-validating pseudo types and type normalization for JavaScript.",
   "main": "xtype",
   "keywords": [
     "type",
     "xtype",
     "typejs",
+    "xtypejs",
     "type-js",
     "typeof",
     "data-type"
