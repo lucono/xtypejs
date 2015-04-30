@@ -6,8 +6,8 @@ It is fast and robust, internally employing bitwise operations and memory-effici
 
 ## Features
 
+* Implements a rich set of intuitive data-validating pseudo-types.
 * Determines the simple, extended, or custom type of any value.
-* Implements a rich set of intuitive data-validating types for different types of values.
 * Supports compounding of existing types to produce custom new data-validating types.
 * Supports instance types to provide broader, more complex type and data validation checks. 
 * Very flexible, with custom name schemes and other library options.
@@ -62,9 +62,9 @@ bower install git://github.com/lucono/xtypejs.git
 `single_prop_object`       | `single_elem_array`    | `false`                 | `any`
 `multi_prop_object`        | `multi_elem_array`     |                         | `none`
 `non_empty_object`         | `non_empty_array`      |                         |   
-         
-  
-  &nbsp;
+
+There are also *Instance Types*, which include any constructor function, and *Custom Types*, which can be derived from various combinations of the *xtypejs* built-in types.
+
 **See the full docs for supported types** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/SupportedTypes.md)*** &nbsp; &lArr;
 
 
@@ -96,8 +96,9 @@ xtype('')     === 'empty_string';        // Value is string and empty
 xtype({})     === 'empty_object';        // Value is object and has no properties
 
 /*
- * Every type also has a corresponding compact name. So using compact names,
- * the following is a less verbose equivalent to the type checks above:
+ * All types also have corresponding compact names, which are available
+ * by switching to the compact name scheme. In the compact name scheme,
+ * the following is a less verbose equivalent of the type checks above:
  */
 
 xtype(5)      === 'int+';               // 'int+' is same as 'positive_integer'
@@ -161,6 +162,11 @@ The *xtypejs* API provides methods to get the simple or extended type of a value
 **See the API documentation** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/API.md)*** &nbsp; &lArr;
 
 
+## Dependencies
+
+*xtypejs* has no dependencies.
+
+
 ## Testing
   
 ```
@@ -178,11 +184,25 @@ See the link below for more testing details, and to run the tests directly in yo
   
 The classification of the JavaScript `NaN` value as the `number` type is rarely ever useful in JavaScript applications, and usually only creates many additional instances in an application where it becomes necessary to perform additional type and data checks that could have been avoided in the `number` context.
 
+```js
+// Plain JavaScript:
+
+typeof 5   === 'number';
+typeof NaN === 'number';         // Also!
+```
+
 Because of this, *xtypejs* implements the special dedicated type `'nan'` (type Id `xtype.NAN`) for the JavaScript `NaN` value, that is completely decoupled and distinct from the `number` type, effectively eliminating the need for applications using *xtypejs* to explicitly handle `NaN` values whenever expecting `number` types. `NaN` values are particularly problematic in JavaScript applications because though they are reported as the `number` type by the JavaScript runtime, there is effectively little to nothing an application can do to make meaningful use of them in the expected `number` context.
+
+```js
+// xtypejs:
+
+xtype.type(5)   === 'number';
+xtype.type(NaN) === 'nan';       // NaN is not number
+```
 
 The *xtypejs* approach helps by not only eliminating the effort of writing numerous checking and handling code for `NaN` values, but also helps keep the application code cleaner and more concise by eliminating the clutter that's almost always associated with these checks.
   
-**See more important library notes and FAQ** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/NotesFaq.md)*** &nbsp; &lArr;
+**See other important library notes and FAQ** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/NotesFaq.md)*** &nbsp; &lArr;
 
 
 ## License
