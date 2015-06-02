@@ -64,8 +64,7 @@ module.exports = function (grunt) {
       options: {
         compress: {
           global_defs: {
-            "$XTYPE_JS_BUNDLE_COMPACT_NAME_SCHEME$": true,
-            "$XTYPE_JS_BUNDLE_OPTIONS_FEATURE$": true
+            "$XTYPE_JS_BUNDLE_COMPACT_NAME_SCHEME$": true
           },
           dead_code: true
         }
@@ -110,6 +109,21 @@ module.exports = function (grunt) {
       jasmine_node_test_minified_lib: {
         command: './node_modules/jasmine/bin/jasmine.js test/typejs-spec-node-minified.js JASMINE_CONFIG_PATH=test/config/jasmine.json'
       }
+    },
+    'string-replace': {
+      version: {
+        files: {
+          'dist/': ['dist/xtype.js']
+        },
+        options: {
+          replacements: [
+            {
+              pattern: /{{\s*VERSION\s*}}/g,
+              replacement: '<%= pkg.version %>'
+            }
+          ]
+        }
+      }
     }
   });
   
@@ -119,9 +133,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-shell');
-
+  grunt.loadNpmTasks('grunt-string-replace');
+  
   grunt.registerTask('test-node', ['shell:jasmine_node_test_source_lib', 'shell:jasmine_node_test_minified_lib']);
   grunt.registerTask('test', ['jshint', 'test-node', 'karma']);
-  grunt.registerTask('build', ['clean', 'copy', 'uglify']);
+  grunt.registerTask('build', ['clean', 'copy', 'string-replace', 'uglify']);
   grunt.registerTask('default', ['build', 'test']);
 };
