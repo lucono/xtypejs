@@ -90,12 +90,15 @@
             'array', 'empty_array', 'single_elem_array', 'multi_elem_array', 'non_empty_array',
             'object', 'empty_object', 'single_prop_object', 'multi_prop_object', 'non_empty_object',
             'primitive', 'nothing', 'any', 'none'
-        ];
+        ];        
         
         if (typeof Symbol === 'function') {         // Add symbol type only if implemented in test VM
             allNonInstanceTypes.push('symbol');
         }
-            
+        
+        var expectedTypeCount = (allNonInstanceTypes.length + (typeof Symbol === 'function' ? 0 : 1));  // Add 1 to account for uncounted 'symbol' type
+        
+        
             
         var allInstanceTypes = [
             String, Number, Boolean, Function, Object,
@@ -640,9 +643,8 @@
             
             describe('Getting all types', function() {
                 
-                var expectedTypeCount = allNonInstanceTypes.length,
-                allReceivedTypes = xtype.typeNames(),
-                allReceivedTypeIds = xtype.typeIds();
+                var allReceivedTypes = xtype.typeNames(),
+                    allReceivedTypeIds = xtype.typeIds();
                 
                 
                 it('should get the expected full set of type names', function() {
