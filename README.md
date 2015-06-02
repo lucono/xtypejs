@@ -64,8 +64,8 @@ bower install git://github.com/lucono/xtypejs.git
 `non_empty_object`         | `non_empty_array`      |                         |   
 
 There are also *Instance Types*, which include any constructor function, and *Custom Types*, which can be derived from various combinations of the *xtypejs* built-in types.
-
-**See the full docs for supported types** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/SupportedTypes.md)*** &nbsp; &lArr;
+  
+**More on the supported types at** ***[xtype.js.org](http://xtype.js.org)*** &nbsp; &lArr;
 
 
 ## Sample Usage
@@ -96,9 +96,8 @@ xtype('')     === 'empty_string';        // Value is string and empty
 xtype({})     === 'empty_object';        // Value is object and has no properties
 
 /*
- * All types also have corresponding compact names, which are available
- * by switching to the compact name scheme. In the compact name scheme,
- * the following is a less verbose equivalent of the type checks above:
+ * Every type also has a corresponding compact name. So switching to the
+ * compact name scheme, a less verbose equivalent of the type checks above:
  */
 
 xtype(5)      === 'int+';               // 'int+' is same as 'positive_integer'
@@ -107,12 +106,19 @@ xtype({})     === 'obj0';               // 'obj0' is same as 'empty_object'
 ```
 
 ```js
-/*
- * Returns true if data is an object AND contains at least one own property,
- * OR is an array AND has exactly one element, 
- * OR is a number AND is an integer AND is greater than zero.
- * Else returns false.
- */
+/* Validate sets of values */
+
+xtype.none.isNan(7, 2.5, NaN, 0, -5)        === false;
+xtype.any.isZero(7, 2.5, NaN, 0, -5)        === true;
+xtype.all.isPositiveInteger(3, 5.1, 7)      === false;
+
+xtype.some.isFloat(3, 5.5, 7)               === true;       // Some but not all are float
+xtype.some.isFloat(2.5, 8.5, 2.1)           === false;      // All are float, not some
+xtype.all.isNonZeroNumber(4, -20, 8.5)      === true;
+```
+
+```js
+/* Return true if data is any of several types */
     
 xtype.is(data, 'non_empty_object, single_elem_array, positive_integer');
     
@@ -152,14 +158,51 @@ switch (xtype.which(value, ['multi_char_string', 'positive_integer', Product])) 
 }
 ```
   
-**See full usage and example docs** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/Usage.md)*** &nbsp; &lArr;
+**See more usage and examples at** ***[xtype.js.org](http://xtype.js.org)*** &nbsp; &lArr;
 
 
 ## API
 
-The *xtypejs* API provides methods to get the simple or extended type of a value, get the native type of any primitive or object value, verify whether a value matches a set of simple or complex mix of types in a single call, get the matching type of a value from a list of specific types which are interesting to the application, perform other type-related checks and verifications, and change various *xtypejs* options, including using custom name schemes.
+*xtypejs* comes with a comprehensive and intuitive API which provides validations, normalized type checking, customization and configuration, as well as extensibility to suit the specific needs of any application.
   
-**See the API documentation** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/API.md)*** &nbsp; &lArr;
+**See the API docs at** ***[xtype.js.org](http://xtype.js.org)*** &nbsp; &lArr;
+
+
+## Building
+
+To build the project, clone it locally and run the following command:
+
+```
+npm install && grunt build
+```
+
+This will install the dev dependencies and then build the library, generating a `dist` directory under the project root, containing the source and minified versions and associated source map file for *xtypejs*. To not bundle the compact name scheme in the final minified version, set the `$XTYPE_JS_BUNDLE_COMPACT_NAME_SCHEME$` global def variable to `false` in the uglify options of the `Gruntfile` before building the project.
+
+
+## Testing
+
+There are comprehensive tests that cover almost every aspect of the *xtypejs* functionality. The link below can also be used to view and run the tests directly in the browser for the current head version of the library.
+
+For more comprehensive tests with reports, including js lint and code coverage reports, you can clone the project and run the tests. The following command will install the dev dependencies and run the tests:
+
+```
+npm install && npm test
+```
+
+After installing the dependencies, this will first build the library, generating a `dist` directory under the project root, containing minified and source versions of the library, as well as a source map file. It will then perform the following actions:
+
+* Creates a `build` directory under the project root directory.
+* Runs js linting on the source version of *xtypejs* in the `dist` directory and generates an HTML report under the `build` directory.
+* Runs the Jasmine spec tests for the source library in node.
+* Runs the Jasmine spec tests for the minified library in node.
+* Runs the Jasmine spec tests and code coverage for the source library in chrome.
+* Runs the Jasmine spec tests and code coverage for the source library in firefox.
+* Runs the Jasmine spec tests for the minified library in chrome.
+* Runs the Jasmine spec tests for the minified library in firefox.
+
+HTML reports are generated under the `build` directory for the js linting results, the jasmine tests for the source and minified libraries in chrome and firefox, and the code coverage reports for the source library in chrome and firefox.
+
+**Run the tests directly in your browser** ***[here](https://rawgit.com/lucono/xtypejs/master/test/index.html)*** &nbsp; &lArr;
 
 
 ## Dependencies
@@ -167,42 +210,11 @@ The *xtypejs* API provides methods to get the simple or extended type of a value
 *xtypejs* has no dependencies.
 
 
-## Testing
-  
-```
-npm test
-```
-
-See the link below for more testing details, and to run the tests directly in your browser for the current head version of the library.
-  
-**More testing details** ***[here](//github.com/lucono/xtypejs/tree/master/test)*** &nbsp; &lArr;
-
-
 ## Notes
 
-### `NaN` Handling
-  
-The classification of the JavaScript `NaN` value as the `number` type is rarely ever useful in JavaScript applications, and usually only creates many additional instances in an application where it becomes necessary to perform additional type and data checks that could have been avoided in the `number` context.
+#### Source vs. Minified version
 
-```js
-// Plain JavaScript:
-
-typeof 5   === 'number';
-typeof NaN === 'number';         // Also!
-```
-
-Because of this, *xtypejs* implements the special dedicated type `'nan'` (type Id `xtype.NAN`) for the JavaScript `NaN` value, that is completely decoupled and distinct from the `number` type, effectively eliminating the need for applications using *xtypejs* to explicitly handle `NaN` values whenever expecting `number` types. `NaN` values are particularly problematic in JavaScript applications because though they are reported as the `number` type by the JavaScript runtime, there is effectively little to nothing an application can do to make meaningful use of them in the expected `number` context.
-
-```js
-// xtypejs:
-
-xtype.type(5)   === 'number';
-xtype.type(NaN) === 'nan';       // NaN is not number
-```
-
-The *xtypejs* approach helps by not only eliminating the effort of writing numerous checking and handling code for `NaN` values, but also helps keep the application code cleaner and more concise by eliminating the clutter that's almost always associated with these checks.
-  
-**See other important library notes and FAQ** ***[here](https://github.com/lucono/xtypejs/blob/master/docs/NotesFaq.md)*** &nbsp; &lArr;
+*xtypejs* is implemented as a single file, which can be used with or without prior minification in both CommonJS and AMD based environments, as well as in a browser via regular script tag.
 
 
 ## License
