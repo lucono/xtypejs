@@ -78,30 +78,37 @@
         
         
         var allNonInstanceTypes = [     // Must include all the simple and extended non-instance types
-                'null', 'undefined', 'nan', 'symbol', 'function', 'date', 'error', 'regexp',
-                'string', 'empty_string', 'whitespace', 'single_char_string', 'multi_char_string', 
-                        'blank_string', 'non_empty_string', 'non_blank_string',
-                'number', 'zero', 'positive_integer', 'positive_float', 'positive_infinity', 
-                        'negative_integer', 'negative_float', 'negative_infinity',
-                        'float', 'integer', 'infinite_number', 'non_infinite_number', 
-                        'positive_number', 'negative_number', 'non_zero_number', 
-                        'non_positive_number', 'non_negative_number',
-                'boolean', 'true', 'false',
-                'array', 'empty_array', 'single_elem_array', 'multi_elem_array', 'non_empty_array',
-                'object', 'empty_object', 'single_prop_object', 'multi_prop_object', 'non_empty_object',
-                'primitive', 'nothing', 'any', 'none'
-            ],
+            'null', 'undefined', 'nan', 'function', 'date', 'error', 'regexp',
+            'string', 'empty_string', 'whitespace', 'single_char_string', 'multi_char_string', 
+                    'blank_string', 'non_empty_string', 'non_blank_string',
+            'number', 'zero', 'positive_integer', 'positive_float', 'positive_infinity', 
+                    'negative_integer', 'negative_float', 'negative_infinity',
+                    'float', 'integer', 'infinite_number', 'non_infinite_number', 
+                    'positive_number', 'negative_number', 'non_zero_number', 
+                    'non_positive_number', 'non_negative_number',
+            'boolean', 'true', 'false',
+            'array', 'empty_array', 'single_elem_array', 'multi_elem_array', 'non_empty_array',
+            'object', 'empty_object', 'single_prop_object', 'multi_prop_object', 'non_empty_object',
+            'primitive', 'nothing', 'any', 'none'
+        ];
+        
+        if (typeof Symbol === 'function') {         // Add symbol type only if implemented in test VM
+            allNonInstanceTypes.push('symbol');
+        }
             
             
-            allInstanceTypes = [
-                (typeof Symbol === 'function' ? Symbol : function(){}),     // Add Symbol if implemented in test VM
-                String, Number, Boolean, Function, Object,
-                Array, Date, Error, RegExp,
-                CustomInstanceParentType, CustomInstanceChildType
-            ],
+        var allInstanceTypes = [
+            String, Number, Boolean, Function, Object,
+            Array, Date, Error, RegExp,
+            CustomInstanceParentType, CustomInstanceChildType
+        ];
+        
+        if (typeof Symbol === 'function') {         // Add symbol instance type only if implemented in test VM
+            allInstanceTypes.push(Symbol);
+        }
             
             
-            allTestTypes = allNonInstanceTypes.concat(allInstanceTypes),    
+        var allTestTypes = allNonInstanceTypes.concat(allInstanceTypes),    
             
 
             testData = [
