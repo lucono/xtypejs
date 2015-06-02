@@ -1,8 +1,8 @@
 {
   "name": "xtypejs",
-  "version": "0.2.9",
-  "homepage": "https://github.com/lucono/xtypejs",
-  "description": "Efficient data-validating pseudo types and type normalization for JavaScript.",
+  "version": "0.4.0",
+  "homepage": "http://xtype.js.org",
+  "description": "Efficient data-validating pseudo types for JavaScript.",
   "main": "dist/xtype.js",
   "moduleType": [
     "amd",

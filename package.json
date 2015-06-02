@@ -1,7 +1,7 @@
 {
   "name": "xtypejs",
-  "version": "0.2.9",
-  "description": "Efficient data-validating pseudo types and type normalization for JavaScript.",
+  "version": "0.4.0",
+  "description": "Efficient data-validating pseudo types for JavaScript.",
   "main": "xtype",
   "keywords": [
     "type",
@@ -16,7 +16,7 @@
     "type": "MIT",
     "url": "https://github.com/lucono/xtypejs/blob/master/LICENSE"
   },
-  "homepage": "https://github.com/lucono/xtypejs",
+  "homepage": "http://xtype.js.org",
   "repository": {
     "type": "git",
     "url": "https://github.com/lucono/xtypejs.git"
@@ -30,6 +30,7 @@
     "grunt-contrib-uglify": "^0.8.0",
     "grunt-karma": "^0.10.1",
     "grunt-shell": "^1.1.2",
+    "grunt-string-replace": "^1.2.0",
     "jasmine": "^2.2.1",
     "jasmine-core": "^2.2.0",
     "jshint": "^2.6.3",
