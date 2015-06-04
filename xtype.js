@@ -1,4 +1,4 @@
-/** @license | xtypejs v{{ VERSION }} | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license
+/** @license | xtypejs v{{ VERSION }} | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
