@@ -334,7 +334,7 @@
         buildAliasMappings();
         
         Object.defineProperty(moduleExport, 'VERSION', {
-            value: (/\s*{{[^}]*}}\s*/g.test(VERSION) ? 'unknown' : VERSION),
+            value: (/\s*{{[^}]*}}\s*/g.test(VERSION) ? 'unspecified' : VERSION),
             enumerable: true,
             writable: false,
             configurable: false
