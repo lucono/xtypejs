@@ -7,7 +7,7 @@ module.exports = function (grunt) {
       all: [
         "Gruntfile.js",
         "dist/xtype.js",
-        "test/**/*-spec.js"
+        "test/spec/**/*-spec.js"
       ],
       options: {
         jshintrc: 'test/config/.jshintrc',
@@ -21,7 +21,7 @@ module.exports = function (grunt) {
       },
       source_lib: {
         files: [
-          { src: ['dist/xtype.js', 'test/**/*-spec.js'] }
+          { src: ['dist/xtype.js', 'test/spec/**/*-spec.js'] }
         ],
         reporters: ['progress', 'spec', 'coverage', 'html'],
         htmlReporter: {
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
       },
       minified_lib: {
         files: [
-          { src: ['dist/**/*.min.js', 'test/**/*-spec.js'] }
+          { src: ['dist/**/*.min.js', 'test/spec/**/*-spec.js'] }
         ],
         reporters: ['progress', 'spec', 'html'],
         htmlReporter: {
@@ -104,10 +104,10 @@ module.exports = function (grunt) {
     },
     shell: {
       jasmine_node_test_source_lib: {
-        command: './node_modules/jasmine/bin/jasmine.js test/typejs-spec-node-source.js JASMINE_CONFIG_PATH=test/config/jasmine.json'
+        command: './node_modules/jasmine/bin/jasmine.js test/spec/typejs-spec-node-source.js JASMINE_CONFIG_PATH=test/config/jasmine.json'
       },
       jasmine_node_test_minified_lib: {
-        command: './node_modules/jasmine/bin/jasmine.js test/typejs-spec-node-minified.js JASMINE_CONFIG_PATH=test/config/jasmine.json'
+        command: './node_modules/jasmine/bin/jasmine.js test/spec/typejs-spec-node-minified.js JASMINE_CONFIG_PATH=test/config/jasmine.json'
       }
     },
     'string-replace': {
