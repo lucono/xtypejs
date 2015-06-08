@@ -1,0 +1,50 @@
+
+body {
+	margin: 0px;
+}
+
+#logo {
+    display: inline-block;
+    text-decoration: none;
+    outling: none;
+    color: #9ce;
+    font-weight: bold;
+    font-size: 64px;
+}
+
+.top-section {
+    display: block;
+    background-color: #fff;
+    font-family: Lato, sans-serif, serif;
+    font-size: 42px;
+    font-weight: bold;
+    color: #333;
+    padding: 10px 30px 20px 30px;
+    border-bottom: #69c 5px solid;
+    margin-bottom: 8px;
+    white-space: nowrap;
+}
+
+.top-section a {
+    text-decoration: none;
+    font-size: 32px;
+    color: #aaa;
+    outline: none;
+}
+
+.top-section a:hover {
+    text-decoration: underline;
+}
+
+.top-section > * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 30px;
+}
+
+.top-section .description {
+    font-size: 16px;
+    font-weight: 300;
+    color: #505050;
+    display: block;
+}
