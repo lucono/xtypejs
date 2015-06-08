@@ -202,7 +202,7 @@ After installing the dependencies, this will first build the library, generating
 
 HTML reports are generated under the `build` directory for the js linting results, the jasmine tests for the source and minified libraries in chrome and firefox, and the code coverage reports for the source library in chrome and firefox.
 
-**Run the tests directly in your browser** ***[here](https://rawgit.com/lucono/xtypejs/master/test/index.html)*** &nbsp; &lArr;
+**Run the tests directly in your browser** ***[here](https://rawgit.com/lucono/xtypejs/master/test/spec/index.html)*** &nbsp; &lArr;
 
 
 ## Dependencies
