@@ -1,0 +1,328 @@
+
+<content-wrapper code-artifact="api">
+
+
+<content name="xtype">
+xtype(-2.5)   === '{negative_float}';         //#:4:8 Value is number, negative and float
+xtype('  ')   === '{whitespace}';             //#:4:8 Value is string and blank
+xtype({})     === '{empty_object}';           //#:4:8 Value is object and is empty
+xtype(['hi']) === '{single_elem_array}';      //#:4:8 Value is array, has exactly one element
+</content>
+
+
+
+
+<content name="type">
+xtype.type(null)              === '{null}';
+xtype.type(undefined)         === '{undefined}';
+xtype.type(NaN)               === '{nan}';
+
+xtype.type([])                === '{array}';
+xtype.type({})                === '{object}';
+xtype.type(new Date())        === '{date}';
+xtype.type(function() {})     === '{function}';
+xtype.type(/ab+c/i)           === '{regexp}';
+xtype.type(new Error('No!')   === '{error}';
+xtype.type(Symbol())          === '{symbol}';
+
+xtype.type('Hi')              === '{string}';
+xtype.type(new String('Hi'))  === '{string}';
+xtype.type(25)                === '{number}';
+xtype.type(new Number(25))    === '{number}';
+xtype.type(true)              === '{boolean}';
+xtype.type(new Boolean(true)) === '{boolean}';
+</content>
+
+
+
+
+<content name="typeOf">
+function getArgumentsObject() {
+    return arguments;
+}
+
+xtype.type(getArgumentsObject())    === '{object}';
+
+// However:
+
+xtype.typeOf(getArgumentsObject())  === 'arguments';
+</content>
+
+
+
+
+<content name="registerNameScheme">
+var customNameScheme = {
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+};
+
+xtype.registerNameScheme('my_custom_scheme', customNameScheme);
+
+// The custom scheme is now internally registered
+// and can now be referenced by name:
+
+xtype.options.setNameScheme('my_custom_scheme');
+
+xtype({})       === 'emp_obj';
+xtype(25)       === 'pos_num';
+xtype('  ')     === 'bl_str';
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content name="options_setNameScheme">
+// Switch to the 'compact' name scheme:
+
+xtype.options.setNameScheme('compact');
+
+xtype({})             === 'obj0';    // 'obj0' is empty_object in new scheme
+xtype(25)             === 'int+';    // 'int+' is positive_integer in new scheme
+xtype.is({}, 'obj0')  === true;
+xtype.is(25, 'int+')  === true;
+
+// Any custom scheme which was already
+// previously registered can also be used:
+
+xtype.options.setNameScheme('my_custom_scheme');
+</content>
+
+
+
+
+<content name="options_set">
+// Switch to the 'compact' name scheme:
+
+xtype.options.set({
+    delimiterPattern: '',
+    nameScheme: 'compact'
+});
+
+// Or, if using a custom unnamed scheme:
+
+xtype.options.set({
+    delimiterPattern: '',
+    nameScheme: {
+        string: 'str',
+        empty_string: 'emp_str',
+        /* More name scheme entries */
+    }
+});
+</content>
+
+
+
+
+<content name="options_setDelimiterPattern">
+xtype.options.setDelimiterPattern('/');
+
+xtype.is(0, '{zero} / {positive_number}')     === true;
+xtype.is(25, '{zero} / {positive_number}')    === true;
+xtype.is(-3, '{zero} / {positive_number}')    === false;
+
+// Using a different pattern to also allow the comma character:
+
+xtype.options.setDelimiterPattern('[/,]');
+
+xtype.is(25, '{zero}, {positive_number} / {float}') === true;
+</content>
+
+
+
+
+<content name="noConflict">
+/*
+ * To reassign the xtype module to the 'otherName'
+ * variable, and return the global 'xtype' variable
+ * to its previous value prior to importing xtypejs:
+ */
+
+var otherName = xtype.noConflict();
+
+otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
+</content>
+
+
+
+
+<content name="which">
+/*
+ * Switch on the result of xtype.which() to handle only valid data scenarios
+ * without first performing extensive type checking and data validations.
+ */
+ 
+// For instance, in an application or library that receives a varying piece of
+// information with which a product should be displayed, the following example
+// handles three scenarios for the type of product-related information received:
+
+switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
+
+    case '{multi_char_string}':
+        // Fetch and display product with value as the product name string
+
+    case '{positive_integer}':
+        // Fetch and display product with value as the product Id number
+
+    case Product:
+        // value is already a Product object, so just display it
+
+    default:
+        // Handle invalid value.. cannot display product
+}
+</content>
+
+
+
+
+<content name="is">
+/*
+ * Complex type and data requirements can be concisely validated
+ * using combinations of relevant simple and/or extended types.
+ */
+ 
+// The following two examples return true ONLY if:
+// value is an array AND has exactly one element, 
+// OR is a number AND has an integer value AND is greater than zero.
+
+xtype.is(value, '{single_elem_array}, {positive_integer}');
+
+xtype.is(value, xtype.SINGLE_ELEM_ARRAY & xtype.POSITIVE_INTEGER);
+
+// The following example returns true if the value is a multi-character
+// string, a positive integer or a Product instance:
+
+xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]);
+</content>
+
+
+
+
+<content name="not_isType">
+xtype.not.isNull(null)                   === false;
+xtype.not.isFalse(true)                  === true;
+xtype.not.isNaN(12)                      === true;
+
+xtype.not.isNegativeNumber(1.3)          === true;
+xtype.not.isWhitespace('   ')            === false;
+xtype.not.isZero(0.0)                    === false;
+
+xtype.not.isEmptyArray(['hi'])           === true;
+xtype.not.isSinglePropObject({ one: 1 }) === false;
+xtype.not.isMultiPropObject({ one: 1 })  === true;
+</content>
+
+
+
+
+<content name="none_isType">
+xtype.none.isNan(7, 2.5, NaN, 0, -5)                === false;
+xtype.none.isBlankString('Tom', 0, true, null, ' ') === false;
+xtype.none.isFloat(3, -5, 7)                        === true;
+xtype.none.isFalse(true, true, false, true)         === false;
+</content>
+
+
+
+
+<content name="any_isType">
+xtype.any.isNan(7, 2.5, NaN, 0, -5)                 === true;
+xtype.any.isBlankString('Tom', 0, true, null, ' ')  === true;
+xtype.any.isFloat(3, -5, 7)                         === false;
+xtype.any.isFalse(true, true, false, true)          === true;
+</content>
+
+
+
+
+<content name="some_isType">
+xtype.some.isFloat(7, 2.5, NaN, 0, -5)         === true;
+xtype.some.isString('Tom', 0, true, null, ' ') === true;
+xtype.some.isFloat(3, -5, 7)                   === false;
+xtype.some.isInteger(3, -5, 7)                 === false; // All integer, not some
+</content>
+
+
+
+
+<content name="all_isType">
+xtype.all.isFloat(7, 2.5, NaN, 0, -5)         === true;
+xtype.all.isNonBlankString('hi', 'Tom', 'pi') === false;
+xtype.all.isFloat(3.1, -5.5, 7)               === false;
+xtype.all.isNonZeroNumber(3, -5, 7)           === true;
+</content>
+
+
+
+
+<content name="isType">
+xtype.isSingleCharString('g')           === true;
+xtype.isNonEmptyObject({foo: 'bar'})    === true;
+xtype.isSingleElemArray(['foo'])        === true;
+
+xtype.isFloat(2.50)                     === true;
+xtype.isPositiveNumber(-2.5)            === false;
+xtype.isNan(5 / 'hi')                   === true;
+</content>
+
+
+
+
+<content name="registerTypes">
+// Register a new type with name 'non_negative_integer'
+// for numbers that are non-negative and also integer:
+
+xtype.registerTypes({
+    non_negative_integer: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER)
+});
+
+// Or to assign both a default name and the compact name '-int-' to the new type: 
+
+xtype.registerTypes({
+    non_negative_integer: {
+        typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
+        compactName: '-int-'
+    }
+    /* Can contain more Type entries */
+});
+
+// After registration, the new type becomes available for type checking:
+
+xtype.is(value, '{@type:non_negative_integer:-int-}');  //#:10:14 True for non-negative integers
+
+// A new 'is' method with the camel-cased name of the new type will
+// also become available on the xtype module for checking the new type:
+ 
+xtype.isNonNegativeInteger(value);      // True if value is non-negative integer
+
+// Also, a new type Id constant will become available on the xtype module
+// with the uppercased name of the new type and the value of its type Id:
+
+xtype.NON_NEGATIVE_INTEGER === (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER);
+</content>
+
+
+
+
+<content name="idToName">
+xtype.idToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
+</content>
+
+
+
+
+<content name="nameToId">
+xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
+</content>
+
+
+
+</content-wrapper>
+
+

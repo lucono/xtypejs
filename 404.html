@@ -1,0 +1,14 @@
+<html><head><script>
+    'use strict';
+    
+    var protocol = window.location.protocol,
+        host = window.location.host,
+        pathname = window.location.pathname,
+        pathSegments = pathname.split('/'),
+        doc = (pathSegments.length > 1 ? pathSegments[1] : ''),
+        item = (pathSegments.length > 2 ? pathSegments[2] : ''),
+        search = (doc ? ('?doc=' + doc + (item ? ('&item=' + item) : '')) : ''),
+    	proposedUrl = (protocol + '//' + host + '/' + search);
+		
+    window.location.replace(proposedUrl);
+</script></head></html>

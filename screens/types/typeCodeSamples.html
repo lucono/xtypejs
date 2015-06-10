@@ -1,0 +1,50 @@
+
+<content-wrapper code-artifact="types">
+
+
+<content name="null" disabled>
+
+xtype(null)                 === '{null}'; 
+xtype.is(null, '{null}')    === true;
+xtype.isNull(null)          === true;
+xtype.isNull('hi')          === false;
+</content>
+
+
+
+
+<content name="undefined" disabled>
+
+/* @compact
+ * All types also have corresponding compact names, which are available
+ * by switching to the compact name scheme. In the compact name scheme,
+ * the following is a less verbose equivalent of the type checks above:
+ */
+
+xtype(5)      === '{positive_integer}';
+
+/* @compact: Test comment */
+// @default: Test default comment // @compact: Test compact comment
+
+xtype('')     === '{empty_string}';
+xtype({})     === '{empty_object}';
+</content>
+
+
+
+
+<content name="nan" disabled>
+
+/* @compact
+ * All types also have corresponding compact names, which are available
+ * by switching to the compact name scheme. In the compact name scheme,
+ * the following is a less verbose equivalent of the type checks above:
+ */
+
+xtype(5)      === '{positive_integer}'; // @compact: '{positive_integer}' is same as 'positive_integer'
+xtype('')     === '{empty_string}';     // @compact: '{empty_string}' is same as 'empty_string'
+xtype({})     === '{empty_object}';     // @compact: '{empty_object}' is same as 'empty_object'
+</content>
+
+
+</content-wrapper>

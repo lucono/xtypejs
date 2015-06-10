@@ -1,0 +1,656 @@
+{
+	"methodsByCategory": {
+		"typeMethods": {
+			"name": "Types",
+			"methods": [
+				{
+					"name": "xtype",
+					"signature": "xtype({value})",
+					"description": "Gets the extended type of a value, or the simple type if the value type has no extended types.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value for which to get the extended type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The name of the extended type of {value}, or its simple type if there is no corresponding extended type."
+						}
+					]
+				},
+				
+				{
+					"name": "type",
+					"signature": "xtype.type({value})",
+					"description": "Gets the simple type of a value.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value for which to get the simple type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The name of the simple type of {value}."
+						}
+					]
+				},
+				
+				{
+					"name": "typeOf",
+					"signature": "xtype.typeOf({value})",
+					"description": "Gets the type of a value, including more specific types of {object} that are native to the host environment which are not of the xtypejs built-in types, such as {global}, {Arguments}, HTML element object types, etc. For the xtypejs built-in types, this method will return the same results as the xtype.type({value}) method.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value for which to get the type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The name of the type of {value}, including types that are not of the xtypejs built-in types."
+						}
+					]
+				}
+			]
+		},
+		
+		"validationMethods": {
+			"name": "Validation",
+			"methods": [
+				{
+					"name": "is",
+					"signature": "xtype.is({value}, {types})",
+					"description": "Checks whether a value matches any of a list of simple, extended and/or instance types.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value of which the type is to be checked."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+								},
+								{
+									"type": "number",
+									"description": "A single or OR'ed expression of several type Ids against which {value} is to be checked."
+								},
+								{
+									"type": "function",
+									"description": "A single instance type against which {value} is to be checked"
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, but must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or an OR'ed expression of several type Ids."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if {value} matches any of the type or types represented in the {types} parameter, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "is<em>Type</em>",
+					"interface": "",
+					"signature": "xtype.is<em>Type</em> ({value})",
+					"description": "Checks if {value} is of the referenced type.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if {value} is of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "not.is<em>Type</em>",
+					"interface": "not",
+					"signature": "xtype.not.is<em>Type</em> ({value})",
+					"description": "Checks if {value} is not of the referenced type.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if {value} is not of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "none.is<em>Type</em>",
+					"interface": "none",
+					"signature": "xtype.none.is<em>Type</em> ({values})",
+					"description": "Checks if none of a list of values are of the referenced type.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if none of the values in {values} are of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "any.is<em>Type</em>",
+					"interface": "any",
+					"signature": "xtype.any.is<em>Type</em> ({values})",
+					"description": "Checks if any of a list of values are of the referenced type.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if one or more of the values in {values} are of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "some.is<em>Type</em>",
+					"interface": "some",
+					"signature": "xtype.some.is<em>Type</em> ({values})",
+					"description": "Checks if some, but not all, of a list of values are of the referenced type.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if only some, but not all of the values in {values} are of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "all.is<em>Type</em>",
+					"interface": "all",
+					"signature": "xtype.all.is<em>Type</em> ({values})",
+					"description": "Checks if all of a list of values are of the referenced type.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if all of the values in {values} are of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "which",
+					"signature": "xtype.which({value}, {types})",
+					"description": "Gets the matching type of a value from a list of simple, extended and/or instance types.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value of which the type is to be matched."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be matched."
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the type names or Ids, and/or instance types against which {value} is to be matched."
+								},
+								{
+									"type": "number *",
+									"description": "A single or OR'ed expression of several type Ids as a single combined type, against which {value} is to be matched."
+								},
+								{
+									"type": "function *",
+									"description": "A single instance type against which {value} is to be matched."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The matching type of {value} if the matching type was provided as a type name string in the {types} list argument, or the {none} type if there was no match."
+						},
+						{
+							"type": "number",
+							"description": "The matching type of {value} if the matching type was provided as a type Id in the {types} argument, or the {none} type if there was no match."
+						},
+						{
+							"type": "function",
+							"description": "The matching type of {value} if the matching type was provided as an instance type in the {types} argument, or the {none} type if there was no match."
+						}
+					],
+					"notes": "* Note that the single <em>number</em> and <em>function</em> forms of the {types} argument are treated not as a list of types, but as a single type against which {value} is to be matched, therefore either returning the value of the {types} argument if the type of {value} matches, or otherwise returning the {none} type. This is useful as a form of the <em>xtype.is</em> call, but which rather than returning a boolean {true} when there is a match, will return the actual type used instead. Likewise, rather than returning {false} when there is no match, it will return the {none} type instead."
+				}
+			]
+		},
+		
+		"utilityMethods": {
+			"name": "Utility",
+			"methods": [
+				{
+					"name": "nameToId",
+					"signature": "xtype.nameToId({type})",
+					"description": "Gets the type Id/constant corresponding to the specific type name in the active name scheme.",
+					"arguments": [
+						{
+							"name": "type",
+							"types": [					
+								{
+									"type": "string",
+									"description": "The name of a single simple or extended type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "number",
+							"description": "The type Id/constant corresponding to the type name specified by {type}."
+						}
+					]
+				},
+				
+				{
+					"name": "idToName",
+					"signature": "xtype.idToName({type})",
+					"description": "Gets the type name in the active name scheme corresponding to the specified type Id.",
+					"arguments": [
+						{
+							"name": "type",
+							"types": [					
+								{
+									"type": "number",
+									"description": "The type Id/constant of a single simple or extended type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The type name corresponding to the type Id/constant specified by {type}."
+						}
+					]
+				},
+				
+				{
+					"name": "typeNames",
+					"signature": "xtype.typeNames()",
+					"description": "Gets a list of the names of all types.",
+					"new": true,
+					"arguments": [],
+					"return": [
+						{
+							"type": "array",
+							"description": "An array containing the string names of all types."
+						}
+					]
+				},
+				
+				{
+					"name": "typeIds",
+					"signature": "xtype.typeIds()",
+					"description": "Gets a list of the type Ids of all types.",
+					"new": true,
+					"arguments": [],
+					"return": [
+						{
+							"type": "array",
+							"description": "An array containing the numeric type Id values of all types."
+						}
+					]
+				}
+			]
+		},
+		
+		"extensionMethods": {
+			"name": "Extension",
+			"methods": [
+				{
+					"name": "registerTypes",
+					"signature": "xtype.registerTypes({typesData})",
+					"description": "Adds one or more custom types to xtypejs.",
+					"arguments": [
+						{
+							"name": "typesData",
+							"types": [					
+								{
+									"type": "object",
+									"description": "An object containing the custom types to be added."
+								}
+							]
+						}
+					],
+					"argumentDetails": [
+						{
+							"name": "typesData",
+							"properties": [
+								{
+									"name": "<em>object properties</em>",
+									"types": [
+										{
+											"type": "-",
+											"required": "-",
+											"description": "Each key in the {typesData} object represents the name of a new custom type to be added. The names must be all lowercase, can only contain alphanumeric characters and the underscore character, and must not conflict with the names of any of the existing types in xtypejs. The uppercased version of this name becomes available as an xtype property for the type Id, for each successfully registered type."
+										}
+									]
+								},
+								{
+									"name": "<em>object values</em>",
+									"types": [
+										{
+											"type": "number",
+											"required": "yes",
+											"description": "The value of a binary combination of existing xtypejs type Ids that yields a unique type Id value for the new custom type to be registered."
+										},
+										{
+											"type": "object",
+											"required": "yes",
+											"description": "An object with a required {'typeId'} property having the value of the type Id of the new custom type, and an optional {'compactName'} property having a string value which will be used as the compact name of the registered custom type. The compact name must not conflict with any of the existing compact names in xtypejs."
+										}
+									]
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				},
+				{
+					"name": "registerNameScheme",
+					"signature": "xtype.registerNameScheme({schemeName}, {aliases})",
+					"description": "Adds a new name scheme to xtypejs. It does not automatically switch to the new scheme.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "schemeName",
+							"types": [					
+								{
+									"type": "string",
+									"description": "The name to be used for the new scheme."
+								}
+							]
+						},
+						{
+							"name": "aliases",
+							"types": [					
+								{
+									"type": "object",
+									"description": "An object containing the type name aliases to be used when the name scheme being added is in use."
+								}
+							]
+						}
+					],
+					"argumentDetails": [
+						{
+							"name": "aliases",
+							"properties": [
+								{
+									"name": "<em>object properties</em>",
+									"types": [
+										{
+											"type": "-",
+											"required": "-",
+											"description": "The keys in the {aliases} object are the regular names of the types for which the type names are to be changed when this scheme is in use. A key doesn't have to exist for every type, and only those types for which a key exists in {aliases} will be updated when this scheme is in use."
+										}
+									]
+								},
+								{
+									"name": "<em>object values</em>",
+									"types": [
+										{
+											"type": "string",
+											"required": "yes",
+											"description": "The values in the {aliases} object are the name aliases to be used for the corresponding types when this scheme is in use."
+										}
+									]
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "object",
+							"description": "The name scheme previously associated with {schemeName} if any."
+						}
+					]
+				}
+			]
+		},
+		
+		"optionsMethods": {
+			"name": "Options",
+			"methods": [
+				{
+					"name": "options.setDelimiterPattern",
+					"signature": "xtype.options.setDelimiterPattern({delimiterPattern})",
+					"description": "Sets the regular expression pattern used in recognizing how individual type names are delimited in type name expression strings.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "{delimiterPattern}",
+							"types": [
+								{
+									"type": "string",
+									"description": "The type name expression string delimiter pattern to use. Note that this is not a regular expression object, but a regular expression pattern string. If an empty string or the null or undefined value is supplied, then the delimiter pattern is reset to the built-in default, which allows a comma, space or pipe character for delmiting types."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				},
+				
+				{
+					"name": "options.setNameScheme",
+					"signature": "xtype.options.setNameScheme({nameScheme})",
+					"description": "Sets the scheme to be used for type names.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "{nameScheme}",
+							"types": [
+								{
+									"type": "string",
+									"description": "The name of an in-built type name scheme to be used for type names. This can be {'default'} for the default name scheme, or {'compact'} for the compact name scheme."
+								},
+								{
+									"type": "object",
+									"description": "An object representing a custom name scheme to be used. For each property of the object with the regular name of a type, the new name for the type will be set to the value of the property. The object does not have to contain a property for every type name. The type names for which the object does not contain a property will not be changed."
+								},
+								{
+									"type": "-",
+									"description": "If no value is supplied for {nameScheme}, the default name scheme is used instead."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				},
+				
+				{
+					"name": "options.set",
+					"signature": "xtype.options.set({optionsData})",
+					"description": "Sets multiple options in a single operation.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "optionsData",
+							"types": [					
+								{
+									"type": "object",
+									"description": "An object whose keys are the decaplitalized <em>option</em> names in any of the {xtype.options.set<em>Option</em>} methods, and whose values are the corresponding values to be set for each <em>option</em>. For instance, an object key of {'nameScheme'} would correspond to the {xtype.options.setNameScheme} method."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				},
+				
+				{
+					"name": "setOptions",
+					"signature": "xtype.setOptions({optionsData})",
+					"description": "Same as the newer {xtype.options.set} method, which should be used instead.",
+					"deprecated": true
+				}
+			]
+		},
+		
+		"otherMethods": {
+			"name": "Other",
+			"methods": [
+				{
+					"name": "noConflict",
+					"signature": "xtype.noConflict()",
+					"description": "When xtypejs is imported using a {&lt;script&gt;} tag, this method returns the {'xtype'} global variable to its previous value before xtypejs was imported. Note that this method is only available when xtypejs is imported using a {&lt;script&gt;} tag.",
+					"arguments": [],
+					"return": [
+						{
+							"type": "<em>xtypejs</em>",
+							"description": "The xtypejs module."
+						}
+					]
+				}
+			]
+		}
+	},
+	
+	"properties": [
+		
+	]
+}

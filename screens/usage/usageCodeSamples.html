@@ -1,0 +1,585 @@
+
+<content-wrapper code-artifact="usage">
+
+
+<content 
+    name="installing" 
+    title="Installing" 
+    lang="sh">
+
+# npm:
+npm install xtypejs --save
+
+# npm from github:
+npm install git://github.com/lucono/xtypejs.git
+
+# bower:
+bower install xtypejs --save
+
+# bower from github:
+bower install git://github.com/lucono/xtypejs.git
+</content>
+
+
+
+
+<content 
+    name="importing_node_requirejs" 
+    title="Importing with node and requireJS">
+
+var xtype = require('xtypejs');             // node.js and CommonJS
+
+require(['xtype'], function(xtype) {        // requirejs and AMD
+    // Use xtype here
+});
+</content>
+
+
+
+
+<content 
+    name="importing_with_html_script_tag" 
+    title="Importing with HTML script tag"
+    lang="html">
+
+<script src="path/to/xtype.js"></script>    <!-- exports xtype global variable -->
+    
+<script>
+    // Use xtype here
+</script>
+</content>
+
+
+
+
+<content 
+    name="getting_extended_type" 
+    title="Getting the extended type of a value">
+
+xtype(-2.5)   === '{negative_float}';       // Value is number, negative and float
+xtype('  ')   === '{whitespace}';           // Value is string and blank
+xtype({})     === '{empty_object}';         // Value is object and is empty
+xtype(['hi']) === '{single_elem_array}';    // Value is array, has exactly one element
+</content>
+
+
+
+
+<content 
+    name="getting_simple_type" 
+    title="Getting the simple type of a value">
+
+xtype.type(null)              === '{null}';
+xtype.type(undefined)         === '{undefined}';
+xtype.type(NaN)               === '{nan}';
+
+xtype.type([])                === '{array}';
+xtype.type({})                === '{object}';
+xtype.type(new Date())        === '{date}';
+xtype.type(function() {})     === '{function}';
+xtype.type(/ab+c/i)           === '{regexp}';
+xtype.type(new Error('No!')   === '{error}';
+xtype.type(Symbol())          === '{symbol}';
+
+xtype.type('Hi')              === '{string}';
+xtype.type(new String('Hi'))  === '{string}';
+xtype.type(25)                === '{number}';
+xtype.type(new Number(25))    === '{number}';
+xtype.type(true)              === '{boolean}';
+xtype.type(new Boolean(true)) === '{boolean}';
+</content>
+
+
+
+
+<content 
+    name="checking_combination_of_types" 
+    title="Checking values against combinations of various types"
+    description="Complex type and data requirements can be concisely validated using combinations of relevant simple and/or extended types.">
+
+// The following example returns true ONLY if:
+// data is an object AND contains at least one own property,
+// OR is an array AND has exactly one element, 
+// OR is a number AND has an integer value AND is greater than zero.
+
+xtype.is(data, '{non_empty_object}, {single_elem_array}, {positive_integer}');
+</content>
+
+
+
+
+<content 
+    name="checking_instance_and_other_types" 
+    title="Checking instance types along with other types">
+
+// For instance, in an application or library method that receives a varying
+// piece of information with which a product should be displayed, the following
+// example validates that the value is either a product name string (multi_char_string),
+// a product Id number (positive_integer), or an actual Product instance:
+
+xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]));
+
+// A type expression can also be used as a unit type entry in the type list.
+// So, suppose that if a product name is provided, it can be blank and a known
+// default product name will be used instead, then the we could now have: 
+
+xtype.is(value, ['{multi_char_string}, {blank_string}', '{positive_integer}', Product]));
+</content>
+
+
+
+
+<content 
+    name="checking_values_in_different_ways" 
+    title="Checking values in different ways"
+    description="Different ways of checking values provide flexibility based on application needs and constraints.">
+
+// Verify if flag variable is a single character string:
+
+xtype.is(flag, '{single_char_string}');
+xtype.is(flag, xtype.SINGLE_CHAR_STRING);
+xtype.isSingleCharString(flag);
+
+// Verify if flag variable is a single character string or positive number value:
+
+xtype.is(flag, '{single_char_string}, {positive_number}');
+xtype.is(flag, xtype.SINGLE_CHAR_STRING | xtype.POSITIVE_NUMBER);
+xtype.is(flag, ['{single_char_string}', xtype.POSITIVE_NUMBER]);
+</content>
+
+
+
+
+<content 
+    name="validating_value_against_specific_type" 
+    title="Validating a value against a specific type">
+
+xtype.isSingleCharString('g')           === true;
+xtype.isNonEmptyObject({foo: 'bar'})    === true;
+xtype.isSingleElemArray(['foo'])        === true;
+
+xtype.isFloat(2.50)                     === true;
+xtype.isPositiveNumber(-2.5)            === false;
+xtype.isNan(5 / 'hi')                   === true;
+</content>
+
+
+
+
+<content 
+    name="validating_multiple_values_against_specific_type" 
+    title="Validating multiple values against a specific type"
+    description="The 'none', 'any', 'some', and 'all' method extensions provide the checking of multiple values against a single type.">
+
+xtype.none.isNan(7, 2.5, NaN, 0, -5)        === false;
+xtype.any.isZero(7, 2.5, NaN, 0, -5)        === true;
+xtype.all.isPositiveInteger(3, 5.1, 7)      === false;
+
+xtype.some.isFloat(3, 5.5, 7)               === true;       // Some but not all are float
+xtype.some.isFloat(2.5, 8.5, 2.1)           === false;      // All are float, not some
+xtype.all.isNonZeroNumber(4, -20, 8.5)      === true;
+
+// They can also take a single array of the values to be checked:
+
+var values = ['Tom', 0, true, null, ' '];
+
+xtype.any.isNothing(values)        === true;     // null is of 'nothing' type
+xtype.all.isPrimitive(values)      === false;    // null is of 'nothing' type, not 'primitive'
+xtype.none.isBlankString(values)   === false;
+xtype.some.isTrue(values)          === true;
+</content>
+
+
+
+
+<content
+    name="switching_based_on_value_type"
+    title="Switching based on the type of a value"
+    description="Switch on the result of xtype.which() to handle only valid data scenarios without first performing extensive type checking and data validations.">
+
+// For instance, in an application or library that receives a varying piece of
+// information with which a product should be displayed, the following example
+// handles three scenarios for the type of product-related information received:
+
+switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
+
+    case '{multi_char_string}':
+        // Fetch and display product with value as the product name string
+
+    case '{positive_integer}':
+        // Fetch and display product with value as the product Id number
+
+    case Product:
+        // value is already a Product object, so just display it
+
+    default:
+        // Handle invalid value.. cannot display product
+}
+</content>
+
+
+
+
+<content 
+    name="checking_boolean_values" 
+    title="Checking boolean values">
+
+xtype.isTrue(23.5)                  === false;      // Truthy but not boolean
+xtype.isTrue(new MyProduct())       === false;      // Any type can be checked
+xtype.isTrue('true')                === false;      // String is not boolean
+xtype.isFalse('false')              === false;      // String is not boolean
+
+xtype.isTrue(true)                  === true;       // Primitive true is actual true
+xtype.isTrue(new Boolean(true))     === true;       // Object true is actual true
+
+xtype.isFalse(false)                === true;       // Primitive false is actual false
+xtype.isFalse(new Boolean(false))   === true;       // Object false is actual false
+</content>
+
+
+
+
+<content 
+    name="application_flag_example" 
+    title="Single character application flag example">
+
+// Suppose a single character application/operation flag is expected
+// as input. The 'single_char_string' extended type will match a string
+// that contains exactly one non-whitespace character, regardless of
+// whether it also contains other whitespace characters. 
+
+xtype.isSingleCharString('t')               === true;
+xtype.isSingleCharString(' g ')             === true;
+xtype.isSingleCharString('  ')              === false;
+xtype.isSingleCharString('q1')              === false;
+xtype.isSingleCharString(new String(' z ')) === true;
+</content>
+
+
+
+
+<content
+    name="normalized_type_checking"
+    title="Normalized type checking"
+    description="Primitive types and their corresponding object types share the same simple types.">
+ 
+// Regular type checking:
+
+typeof 'foo'                === 'string';
+typeof new String('foo')    === 'object';
+
+// Type checking with xtypejs:
+
+xtype.type('foo')               === '{string}';
+xtype.type(new String('foo'))   === '{string}';
+
+xtype.type(25)                  === '{number}';
+xtype.type(new Number(25))      === '{number}';
+
+xtype.isZero(0)                 === true;
+xtype.isZero(new Number(0))     === true;
+</content>
+
+
+
+
+<content
+    name="registering_custom_types"
+    title="Registering custom types"
+    description="Any number of custom types can be created by combining several of the xtypejs built-in types in a way that captures the definition of the new type. The newly derived type can then be registered into xtypejs with a unique custom name and optionally, a compact name as well. The type must be unique from any type that already exists in xtypejs, which is determined by having a unique type Id.">
+ 
+// xtypejs has the '{non_negative_number}' type as well as the '{integer} type,
+// but does not have a single type specifically for the non-negative equivalent
+// for integers. To check that a value is a non-negative integer, we would have
+// to perform a check for both '{non_negative_number}' and '{integer}':
+
+xtype.is(value, '{non_negative_number}, {integer}');
+
+// OR:
+
+xtype.isNonNegativeNumber(value) && xtype.isInteger(value);
+
+
+// ----------
+// However, the example below shows how to create, register, and use a single
+// new type with name 'non_negative_integer' for performing the same check:
+
+xtype.registerTypes({
+    non_negative_integer: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER)
+});
+
+// Or to assign both a default name and the compact name '-int-' to the new type: 
+
+xtype.registerTypes({
+    non_negative_integer: {
+        typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
+        compactName: '-int-'
+    }    
+});
+
+// After registration of the new type, we can now use it in type checking:
+
+xtype.is(value, '{@type:non_negative_integer:-int-}'); //#:8:14 True if value is integer and non-negative
+
+// A new 'is' method with the camel-cased name of the new type will
+// also become available on the xtype module for checking the new type:
+ 
+xtype.isNonNegativeInteger(value);
+
+// Also, a new type Id constant will become available on the xtype module
+// with the uppercased name of the new type and the value of its type Id:
+
+xtype.NON_NEGATIVE_INTEGER === (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER);
+
+/*
+ * --------------
+ * MORE EXAMPLES
+ * --------------
+ */
+ 
+// Another custom type example is a non-zero integer custom type:
+
+xtype.registerTypes({
+    non_zero_integer: {
+        typeId: (xtype.NON_ZERO_NUMBER & xtype.INTEGER),
+        compactName: '-int0'
+    }    
+});
+
+xtype.is(value, '{@type:non_zero_integer:-int0}');
+xtype.isNonZeroInteger(value);
+xtype.NON_ZERO_INTEGER === (xtype.NON_ZERO_NUMBER & xtype.INTEGER);
+
+
+// Yet another example is a custom type that permits empty strings, but
+// requires a multi-charater string when not empty, but does not permit
+// strings of only a single character. Unlike in the prior examples, the
+// desired type Id derivation for this custom type is an 'OR' relationsihip:
+
+xtype.registerTypes({
+    empty_or_multi_char: {
+        typeId: (xtype.EMPTY_STRING | xtype.MULTI_CHAR_STRING),
+        compactName: 'str02+'
+    }    
+});
+
+xtype.is(value, '{@type:empty_or_multi_char:str02+}');
+xtype.isEmptyOrMultiChar(value);
+xtype.EMPTY_OR_MULTI_CHAR === (xtype.EMPTY_STRING | xtype.MULTI_CHAR_STRING);
+</content>
+
+
+
+
+<content
+    name="delimiting_types_in_expressions"
+    title="Delimiting types in type expression strings"
+    description="By default, a comma or space or pipe character can be used as a delimiter in type expression strings. Additional spaces can be used around delimiters, and are ignored.">
+
+xtype.is(flag, '{single_char_string},{positive_number}');
+xtype.is(flag, '{single_char_string}, {positive_number}');
+xtype.is(flag, '{single_char_string}|{positive_number}');
+xtype.is(flag, '{single_char_string} | {positive_number}');
+xtype.is(flag, '{single_char_string} {positive_number}'); 
+</content>
+
+
+
+
+<content
+    name="using_custom_delimiter"
+    title="Using a custom delimiter"
+    description="A custom pattern can be used in place of the default type delimiters. This can be useful in applications for which the default delimiters may not be ideal. For instance, if the type expressions are being stored as part of data validation metadata, but the default delimiter characters are problematic for the specific storage format being used.">
+ 
+// When a custom type delimiter pattern is used, it should be ensured
+// that the characters allowed by the pattern do not conflict with the
+// characters in the type names of any type name schemes being used.
+
+xtype.options.setDelimiterPattern('/');
+
+xtype.is(0, '{zero} / {positive_number}')     === true;
+xtype.is(25, '{zero} / {positive_number}')    === true;
+xtype.is(-3, '{zero} / {positive_number}')    === false;
+
+// Using a different pattern to also allow the comma character:
+
+xtype.options.setDelimiterPattern('[/,]');
+
+xtype.is(25, '{zero}, {positive_number} / {float}') === true;
+</content>
+
+
+
+
+<content
+    name="switching_to_compact_name_scheme"
+    title="Switching to the compact name scheme">
+
+// With the regular 'default' name scheme:
+
+xtype({})                           === 'empty_object';
+xtype(25)                           === 'positive_integer';
+xtype.is({}, 'empty_object')        === true;
+xtype.is(25, 'positive_integer')    === true;
+
+// Switch to the bundled 'compact' name scheme:
+
+xtype.options.setNameScheme('compact');
+
+xtype({})               === 'obj0';     // Compact scheme uses 'obj0' for 'empty_object'
+xtype(25)               === 'int+';     // Compact scheme uses 'int+' for 'positive_integer'
+xtype.is({}, 'obj0')    === true;
+xtype.is(25, 'int+')    === true;
+</content>
+
+
+
+
+<content
+    name="using_custom_name_scheme"
+    title="Using a custom name scheme"
+    description="By default, there is the very concise 'compact' name scheme, the less compact 'default' name scheme, and then the flexibility to invent and apply your own scheme according to your liking and the needs of your application.">
+ 
+xtype.options.setNameScheme({
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+});
+
+xtype({})       === 'emp_obj';          // empty_object is 'emp_obj' in new scheme
+xtype(25)       === 'pos_num';          // positive_integer is 'pos_num' in new scheme
+xtype('  ')     === 'bl_str';           // blank_string is 'bl_str' in new scheme
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content
+    name="registering_custom_name_scheme"
+    title="Registering a custom name scheme">
+
+var customNameScheme = {
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+};
+
+xtype.registerNameScheme('my_custom_scheme', customNameScheme);
+
+// The custom scheme is now internally registered
+// and can now be referenced by name:
+
+xtype.options.setNameScheme('my_custom_scheme');
+
+xtype({})       === 'emp_obj';
+xtype(25)       === 'pos_num';
+xtype('  ')     === 'bl_str';
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content
+    name="switching_back_to_default_name_scheme"
+    title="Switching back to the default name scheme">
+
+xtype.options.setNameScheme('default');
+</content>
+
+
+
+
+<content 
+    name="prevent_name_collisions" 
+    title="Preventing name collisions"
+    description="When imported as a script tag, the xtype module is assigned to the global variable 'xtype'. The 'noConflict' method can be used to reassign the xtype module to a different namespace or variable name, and return the global 'xtype' variable to its previous value prior to importing xtypejs.">
+
+var otherName = xtype.noConflict();
+
+otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
+</content>
+
+
+
+
+<content 
+    name="using_none_and_any_types" 
+    title="Using the none and any types"
+    description="The 'none' type represents the set of no types, which means that no value can actually ever match 'none'. Therefore, xtype.isNone(value) will always be false for any value.">
+
+xtype.isNone(25)                    === false;
+xtype.isNone(['hi', 5])             === false;
+xtype.isNone(undefined)             === false;
+
+xtype.not.isNone('hello')           === true;         // true for any value
+xtype.all.isNone('hi', 5, true)     === false;        // false for any list of values
+xtype.some.isNone(null, 25, false)  === false;        // false for any list of values
+xtype.any.isNone(null, 25, false)   === false;        // false for any list of values
+xtype.none.isNone(null, 25, false)  === true;         // true for any list of values
+
+/*
+ * The '{any}' type is the composite type consisting of all types, which means
+ * that all values will always match 'any'. Therefore, xtype.isAny(value) will always
+ * be true for any value. The 'any' type can be added to a validating type expression
+ * to temporarily make it fully permissive, therefore accepting all values.
+ */
+
+xtype.isAny(25)                    === true;
+xtype.isAny(['hi', 5])             === true;
+xtype.isAny(undefined)             === true;
+
+xtype.is(25, '{object}')           === false;
+xtype.is(25, '{object}, {any}')    === true;          // allows any value to pass type check
+
+xtype.not.isAny('hello')           === false;         // false for any value
+xtype.all.isAny('hi', 5, true)     === true;          // true for any list of values
+xtype.some.isAny(null, 25, false)  === false;         // false for any list of values
+xtype.any.isAny(null, 25, false)   === true;          // true for any list of values
+xtype.none.isAny(null, 25, false)  === false;         // false for any list of values
+</content>
+
+
+
+
+<content 
+    name="checking_for_nan" 
+    title="Checking for NaN"
+    disabled>
+
+    
+</content>
+
+
+
+
+<content 
+    name="using_type_expressions_vs_typeid_expressions" 
+    title="Using type expression strings vs type Id expressions"
+    disabled>
+
+    
+</content>
+
+
+
+
+<content 
+    name="reporting_bugs_and_issues" 
+    title="Reporting bugs and issues"
+    description="Please report bugs or problems by creating an issue on the GitHub project [issues page](https://github.com/lucono/xtypejs/issues)."
+    lang="sh">
+</content>
+
+
+
+</content-wrapper>

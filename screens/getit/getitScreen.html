@@ -1,0 +1,87 @@
+<section class="screen-content" template-artifact="getit">
+    
+    <div class="screen-content-links">
+        <div>
+            <h1>Current version {{latestVersion ? '- ' + latestVersion: ''}}</h1>
+        </div>
+        <ul class="horizontal-links">
+            <li data-ng-repeat="contentName in AppUtils.keys(getItContent)" data-ng-init="contentItem = getItContent[contentName]">
+                <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+            </li>
+            <li>
+                <a screen-link=":download">Download</a>
+            </li>
+        </ul>
+        
+        <div class="links-section-buttons">
+            <a href="https://github.com/lucono/xtypejs/stargazers">Star GitHub Project</a>
+        </div>
+    </div>
+    
+    <div class="screen-content-body">        
+        <div class="colspan-70">
+        
+            <div class="content-group">
+            
+                <div class="content-item" 
+                    data-ng-repeat="contentName in AppUtils.keys(getItContent)" 
+                    data-ng-init="contentItem = getItContent[contentName]; codeSamples = contentItem.codeSamples;">
+                    
+                    <div id="{{contentName}}">
+                        
+                        <div class="item-title" data-ng-if="contentItem.attributes.title">
+                            <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-if="contentItem.attributes.description">
+                            {{contentItem.attributes.description}}
+                        </p>
+                        
+                        <div class="code-container" data-ng-if="codeSamples">                            
+                            <div class="code-content">
+                                <pre data-ng-repeat="(view, content) in codeSamples" 
+                                    data-ng-bind-html="content"
+                                    class="{{view}}-view prettyprint">
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="download">
+                        
+                        <div class="item-title">
+                            <a screen-link=":download">
+                                Download
+                                <span class="release-title" data-ng-if="releaseTitle"> &nbsp; &ndash; &nbsp; {{releaseTitle}}</span>
+                            </a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-if="releaseDescription">{{releaseDescription}}</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="asset in assets">
+                                <a href="{{asset.browser_download_url}}"><i class="fa fa-2x fa-{{asset.content_type.indexOf('zip') > 0 ? 'file-archive-o' : 'file-o'}}"></i> &nbsp; {{asset.name}}</a>
+                            </li>
+                            <li data-ng-if="!assets">
+                                <a href="{{fallbackDownloadUrl}}" target="_blank"><i class="fa fa-2x fa-folder-open-o"></i> &nbsp; latest release</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>

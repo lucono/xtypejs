@@ -1,0 +1,150 @@
+<section class="screen-content" template-artifact="api">
+    
+    <div class="screen-content-links">
+        <div class="cols-4" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="methodGroup in colGroup">
+                <h2><a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name}}</a></h2>
+                <ul>
+                    <li data-ng-repeat="method in methodGroup.methods" data-ng-if="!method.deprecated">
+                        <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.name"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+                            
+    <div class="screen-content-body">    
+        <div class="colspan-70">
+            
+            <div id="{{methodGroup.name | lowercase}}_api" class="content-group" data-ng-repeat="methodGroup in methodGroups">
+                
+                <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
+                
+                <div class="content-item" 
+                    data-ng-repeat="method in methodGroup.methods" 
+                    data-ng-init="codeSamples = codeContent[method.plainName].codeSamples" 
+                    data-ng-if="!method.deprecated">
+                    
+                    <div id="{{method.plainName}}">
+                        
+                        <div class="item-title">
+                            <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.signature"></a>
+                            <span class="title-label deprecated-label" data-ng-if="method.deprecated">deprecated</span>
+                            <span class="title-label new-label" data-ng-if="method.new">new</span>
+                        </div>
+                        <p class="item-description" data-ng-bind-html="method.description"></p>
+                        
+                        <table class="api-table" data-ng-if="method.arguments || method.return">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span data-ng-if="method.arguments.length > 0">Arguments</span>
+                                        <span class="gray" data-ng-if="method.arguments.length === 0">No Arguments</span>
+                                    </th>
+                                    <th class="center">Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody data-ng-repeat="argument in method.arguments">
+                                <tr>
+                                    <td><code data-ng-bind-html="argument.name"></code></td>
+                                    <td class="nowrap center" data-ng-bind-html="argument.types[0].type"></td>
+                                    <td data-ng-bind-html="argument.types[0].description"></td>
+                                </tr>
+                                <tr data-ng-repeat="argType in argument.types.slice(1)">
+                                    <td></td>
+                                    <td class="nowrap center" data-ng-bind-html="argType.type"></td>
+                                    <td data-ng-bind-html="argType.description"></td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="return">Return</td>
+                                    <td class="nowrap center" data-ng-bind-html="method.return[0].type"></td>
+                                    <td data-ng-bind-html="method.return[0].description"></td>
+                                </tr>
+                                <tr data-ng-repeat="returnType in method.return.slice(1)">
+                                    <td></td>
+                                    <td class="nowrap center" data-ng-bind-html="returnType.type"></td>
+                                    <td data-ng-bind-html="returnType.description"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div data-ng-repeat="argumentDetail in method.argumentDetails" data-ng-if="method.argumentDetails">
+                            <div class="item-subtitle">Argument: <code>{{argumentDetail.name}}</code></div>
+                            <table class="api-table">
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th class="center">Type</th>
+                                        <th class="center">Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-ng-repeat="property in argumentDetail.properties">
+                                    <tr>
+                                        <td data-ng-bind-html="property.name"></td>
+                                        <td class="nowrap center" data-ng-bind-html="property.types[0].type"></td>
+                                        <td class="center" data-ng-bind-html="property.types[0].required"></td>
+                                        <td data-ng-bind-html="property.types[0].description"></td>
+                                    </tr>
+                                    <tr data-ng-repeat="propertyType in property.types.slice(1)">
+                                        <td></td>
+                                        <td class="nowrap center" data-ng-bind-html="propertyType.type"></td>
+                                        <td class="center" data-ng-bind-html="propertyType.required"></td>
+                                        <td data-ng-bind-html="propertyType.description"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="data-table" data-ng-if="method.methodEnumeration">
+                            <div class="item-subtitle">Method List</div>
+                                
+                            <div class="data-col" data-ng-repeat="colGroup in [col1TypeEnumerationGroups, col2TypeEnumerationGroups]">
+                                <div data-ng-repeat="typeEnumGroup in colGroup">
+                                    <div class="data-cell-title">{{method.methodEnumeration[typeEnumGroup].name}}</div>
+                                    <div class="data-cell" data-ng-repeat="methodItem in method.methodEnumeration[typeEnumGroup].methods" data-ng-bind-html="methodItem"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-footnote" data-ng-bind-html="method.notes" data-ng-if="method.notes"></div>
+                            
+                        <div class="code-container {{activeViews[method.plainName] || 'default'}}-view" data-ng-if="codeSamples">
+                            <ul class="code-tabs">
+                                <li class="tab-label">Example</li>
+                                <li class="{{view}}-view"
+                                    data-ng-repeat="view in AppUtils.keys(codeSamples)"
+                                    data-ng-if="AppUtils.keys(codeSamples).length > 1">
+                                    <a href="" data-ng-click="switchCodeView(method.plainName, view)">{{view}}</a>
+                                </li>
+                            </ul>
+                            <div class="code-content">
+                                <pre data-ng-repeat="(view, code) in codeContent[method.plainName].codeSamples" 
+                                    data-ng-bind-html="code"
+                                    class="{{view}}-view prettyprint">
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+                
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li data-ng-repeat="methodGroup in methodGroups" scroll-fixed>
+                    <a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name | lowercase}}</a>
+                </li>
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
