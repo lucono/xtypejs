@@ -221,4 +221,9 @@ HTML reports are generated under the `build` directory for the js linting result
 
 Licensed under the terms of the MIT license.
 
-**See full license** ***[here](https://github.com/lucono/xtypejs/blob/master/LICENSE)*** &nbsp; &lArr;
+
+## Website
+
+See the website for the full list and explanation of the various types, API documentation, usage guide, examples, installation and download instructions.
+
+#### **[xtype.js.org](http://xtype.js.org/)**
