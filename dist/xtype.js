@@ -1,4 +1,4 @@
-/** @license | xtypejs v0.4.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs v0.4.2 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -49,7 +49,7 @@
          * -------------------------
          */
         
-        var VERSION = '0.4.1',
+        var VERSION = '0.4.2',
             TYPE_DELIMITER_DEFAULT_PATTERN = '[|, ]',
             NAME_SCHEME_DEFAULT_OPTION_VALUE = 'default',
             OBJECT_CLASS_REGEX = /^\[object\s(.*)\]$/,
