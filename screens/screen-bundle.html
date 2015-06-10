@@ -1,0 +1,1429 @@
+<section class="screen-content" template-artifact="types">
+    
+    <div class="screen-content-links">
+        <div class="cols-4" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="typeGroup in colGroup">
+                <h2><a screen-link=":{{typeGroup.name | lowercase}}_types">{{typeGroup.name}}</a></h2>
+                <ul>
+                    <li data-ng-repeat="type in typeGroup.types">
+                        <a screen-link=":{{type.name}}">{{type.title || type.friendlyName}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+                            
+    <div class="screen-content-body">        
+        <div class="colspan-70">
+            
+            <div id="{{typeGroup.name | lowercase}}_types" class="content-group" data-ng-repeat="typeGroup in typeGroups">
+            
+                <a screen-link=":{{typeGroup.name | lowercase}}_types" class="content-group-title">{{typeGroup.name}} Types</a>
+                
+                <div class="content-item"
+                    data-ng-repeat="type in typeGroup.types"
+                    data-ng-init="codeSamples = codeContent[type.name].codeSamples; activeView = activeViews[type.name]">
+                                          
+                    <div id="{{type.name}}">
+                        
+                        <div class="item-title">
+                            <a screen-link=":{{type.name}}">{{type.title || type.name}}</a>                            
+                            <a screen-link=":{{type.name}}" class="title-label compact-label" data-ng-if="type.compactName"><code>{{type.compactName}}</code></a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-bind-html="type.description"></p>
+                            
+                        <div class="item-detail">
+                            <div class="item-header">
+                                <div data-ng-if="type.typeId">
+                                   <span class="nowrap">type id</span>
+                                   <span>
+                                       <a data-ng-if="type.typeId.toLowerCase() === type.name.toLowerCase()"
+                                           screen-link=":{{type.name}}" 
+                                           class="type-label squeezed">
+                                           <code>xtype.{{type.typeId}}</code>
+                                       </a>
+                                       <span data-ng-if="type.typeId.toLowerCase() !== type.name.toLowerCase()"
+                                           data-ng-bind-html="type.typeId">
+                                       </span>
+                                   </span>
+                                </div>
+                                <div>
+                                   <span>category</span>
+                                   <span>{{type.category}} type</span>
+                                </div>
+                                <div>
+                                   <span>composite</span>
+                                   <span>{{(type.composite === true || type.composition.length > 0) ? 'yes' : 'no'}}</span>
+                                </div>
+                                <div data-ng-if="AppUtils.isArray(type.composition) ? type.composition.length > 0 : type.composition">
+                                    <span>composition</span>
+                                    <span>
+                                        <span data-ng-if="!AppUtils.isArray(type.composition)" data-ng-bind-html="type.composition"></span>
+                                        <span data-ng-if="AppUtils.isArray(type.composition)">
+                                            <a data-ng-repeat="compositeTypeName in type.composition" 
+                                                screen-link=":{{compositeTypeName}}" 
+                                                class="type-label">
+                                                <code>{{compositeTypeName}}</code>
+                                            </a>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="code-container {{activeView || 'default'}}-view" data-ng-if="codeSamples">
+                                <ul class="code-tabs">
+                                    <li class="tab-label">Example</li>
+                                    <li class="{{view}}-view" 
+                                        data-ng-repeat="view in AppUtils.keys(codeSamples)" 
+                                        data-ng-if="AppUtils.keys(codeSamples).length > 1">
+                                        <a href="" data-ng-click="switchCodeView(type.name, view)">{{view}}</a>
+                                    </li>
+                                </ul>
+                                <div class="code-content">
+                                    <pre data-ng-repeat="(view, code) in codeSamples" 
+                                        data-ng-bind-html="code"
+                                        class="{{view}}-view prettyprint">
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div> 
+                
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li data-ng-repeat="typeGroup in typeGroups" scroll-fixed>
+                    <a screen-link=":{{typeGroup.name | lowercase}}_types">{{typeGroup.name | lowercase}}</a>
+                </li>
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
+
+
+<content-wrapper code-artifact="types">
+
+
+<content name="null" disabled>
+
+xtype(null)                 === '{null}'; 
+xtype.is(null, '{null}')    === true;
+xtype.isNull(null)          === true;
+xtype.isNull('hi')          === false;
+</content>
+
+
+
+
+<content name="undefined" disabled>
+
+/* @compact
+ * All types also have corresponding compact names, which are available
+ * by switching to the compact name scheme. In the compact name scheme,
+ * the following is a less verbose equivalent of the type checks above:
+ */
+
+xtype(5)      === '{positive_integer}';
+
+/* @compact: Test comment */
+// @default: Test default comment // @compact: Test compact comment
+
+xtype('')     === '{empty_string}';
+xtype({})     === '{empty_object}';
+</content>
+
+
+
+
+<content name="nan" disabled>
+
+/* @compact
+ * All types also have corresponding compact names, which are available
+ * by switching to the compact name scheme. In the compact name scheme,
+ * the following is a less verbose equivalent of the type checks above:
+ */
+
+xtype(5)      === '{positive_integer}'; // @compact: '{positive_integer}' is same as 'positive_integer'
+xtype('')     === '{empty_string}';     // @compact: '{empty_string}' is same as 'empty_string'
+xtype({})     === '{empty_object}';     // @compact: '{empty_object}' is same as 'empty_object'
+</content>
+
+
+</content-wrapper>
+
+<section class="screen-content" template-artifact="api">
+    
+    <div class="screen-content-links">
+        <div class="cols-4" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="methodGroup in colGroup">
+                <h2><a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name}}</a></h2>
+                <ul>
+                    <li data-ng-repeat="method in methodGroup.methods" data-ng-if="!method.deprecated">
+                        <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.name"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+                            
+    <div class="screen-content-body">    
+        <div class="colspan-70">
+            
+            <div id="{{methodGroup.name | lowercase}}_api" class="content-group" data-ng-repeat="methodGroup in methodGroups">
+                
+                <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
+                
+                <div class="content-item" 
+                    data-ng-repeat="method in methodGroup.methods" 
+                    data-ng-init="codeSamples = codeContent[method.plainName].codeSamples" 
+                    data-ng-if="!method.deprecated">
+                    
+                    <div id="{{method.plainName}}">
+                        
+                        <div class="item-title">
+                            <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.signature"></a>
+                            <span class="title-label deprecated-label" data-ng-if="method.deprecated">deprecated</span>
+                            <span class="title-label new-label" data-ng-if="method.new">new</span>
+                        </div>
+                        <p class="item-description" data-ng-bind-html="method.description"></p>
+                        
+                        <table class="api-table" data-ng-if="method.arguments || method.return">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span data-ng-if="method.arguments.length > 0">Arguments</span>
+                                        <span class="gray" data-ng-if="method.arguments.length === 0">No Arguments</span>
+                                    </th>
+                                    <th class="center">Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody data-ng-repeat="argument in method.arguments">
+                                <tr>
+                                    <td><code data-ng-bind-html="argument.name"></code></td>
+                                    <td class="nowrap center" data-ng-bind-html="argument.types[0].type"></td>
+                                    <td data-ng-bind-html="argument.types[0].description"></td>
+                                </tr>
+                                <tr data-ng-repeat="argType in argument.types.slice(1)">
+                                    <td></td>
+                                    <td class="nowrap center" data-ng-bind-html="argType.type"></td>
+                                    <td data-ng-bind-html="argType.description"></td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="return">Return</td>
+                                    <td class="nowrap center" data-ng-bind-html="method.return[0].type"></td>
+                                    <td data-ng-bind-html="method.return[0].description"></td>
+                                </tr>
+                                <tr data-ng-repeat="returnType in method.return.slice(1)">
+                                    <td></td>
+                                    <td class="nowrap center" data-ng-bind-html="returnType.type"></td>
+                                    <td data-ng-bind-html="returnType.description"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div data-ng-repeat="argumentDetail in method.argumentDetails" data-ng-if="method.argumentDetails">
+                            <div class="item-subtitle">Argument: <code>{{argumentDetail.name}}</code></div>
+                            <table class="api-table">
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th class="center">Type</th>
+                                        <th class="center">Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-ng-repeat="property in argumentDetail.properties">
+                                    <tr>
+                                        <td data-ng-bind-html="property.name"></td>
+                                        <td class="nowrap center" data-ng-bind-html="property.types[0].type"></td>
+                                        <td class="center" data-ng-bind-html="property.types[0].required"></td>
+                                        <td data-ng-bind-html="property.types[0].description"></td>
+                                    </tr>
+                                    <tr data-ng-repeat="propertyType in property.types.slice(1)">
+                                        <td></td>
+                                        <td class="nowrap center" data-ng-bind-html="propertyType.type"></td>
+                                        <td class="center" data-ng-bind-html="propertyType.required"></td>
+                                        <td data-ng-bind-html="propertyType.description"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="data-table" data-ng-if="method.methodEnumeration">
+                            <div class="item-subtitle">Method List</div>
+                                
+                            <div class="data-col" data-ng-repeat="colGroup in [col1TypeEnumerationGroups, col2TypeEnumerationGroups]">
+                                <div data-ng-repeat="typeEnumGroup in colGroup">
+                                    <div class="data-cell-title">{{method.methodEnumeration[typeEnumGroup].name}}</div>
+                                    <div class="data-cell" data-ng-repeat="methodItem in method.methodEnumeration[typeEnumGroup].methods" data-ng-bind-html="methodItem"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-footnote" data-ng-bind-html="method.notes" data-ng-if="method.notes"></div>
+                            
+                        <div class="code-container {{activeViews[method.plainName] || 'default'}}-view" data-ng-if="codeSamples">
+                            <ul class="code-tabs">
+                                <li class="tab-label">Example</li>
+                                <li class="{{view}}-view"
+                                    data-ng-repeat="view in AppUtils.keys(codeSamples)"
+                                    data-ng-if="AppUtils.keys(codeSamples).length > 1">
+                                    <a href="" data-ng-click="switchCodeView(method.plainName, view)">{{view}}</a>
+                                </li>
+                            </ul>
+                            <div class="code-content">
+                                <pre data-ng-repeat="(view, code) in codeContent[method.plainName].codeSamples" 
+                                    data-ng-bind-html="code"
+                                    class="{{view}}-view prettyprint">
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+                
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li data-ng-repeat="methodGroup in methodGroups" scroll-fixed>
+                    <a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name | lowercase}}</a>
+                </li>
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
+
+
+<content-wrapper code-artifact="api">
+
+
+<content name="xtype">
+xtype(-2.5)   === '{negative_float}';         //#:4:8 Value is number, negative and float
+xtype('  ')   === '{whitespace}';             //#:4:8 Value is string and blank
+xtype({})     === '{empty_object}';           //#:4:8 Value is object and is empty
+xtype(['hi']) === '{single_elem_array}';      //#:4:8 Value is array, has exactly one element
+</content>
+
+
+
+
+<content name="type">
+xtype.type(null)              === '{null}';
+xtype.type(undefined)         === '{undefined}';
+xtype.type(NaN)               === '{nan}';
+
+xtype.type([])                === '{array}';
+xtype.type({})                === '{object}';
+xtype.type(new Date())        === '{date}';
+xtype.type(function() {})     === '{function}';
+xtype.type(/ab+c/i)           === '{regexp}';
+xtype.type(new Error('No!')   === '{error}';
+xtype.type(Symbol())          === '{symbol}';
+
+xtype.type('Hi')              === '{string}';
+xtype.type(new String('Hi'))  === '{string}';
+xtype.type(25)                === '{number}';
+xtype.type(new Number(25))    === '{number}';
+xtype.type(true)              === '{boolean}';
+xtype.type(new Boolean(true)) === '{boolean}';
+</content>
+
+
+
+
+<content name="typeOf">
+function getArgumentsObject() {
+    return arguments;
+}
+
+xtype.type(getArgumentsObject())    === '{object}';
+
+// However:
+
+xtype.typeOf(getArgumentsObject())  === 'arguments';
+</content>
+
+
+
+
+<content name="registerNameScheme">
+var customNameScheme = {
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+};
+
+xtype.registerNameScheme('my_custom_scheme', customNameScheme);
+
+// The custom scheme is now internally registered
+// and can now be referenced by name:
+
+xtype.options.setNameScheme('my_custom_scheme');
+
+xtype({})       === 'emp_obj';
+xtype(25)       === 'pos_num';
+xtype('  ')     === 'bl_str';
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content name="options_setNameScheme">
+// Switch to the 'compact' name scheme:
+
+xtype.options.setNameScheme('compact');
+
+xtype({})             === 'obj0';    // 'obj0' is empty_object in new scheme
+xtype(25)             === 'int+';    // 'int+' is positive_integer in new scheme
+xtype.is({}, 'obj0')  === true;
+xtype.is(25, 'int+')  === true;
+
+// Any custom scheme which was already
+// previously registered can also be used:
+
+xtype.options.setNameScheme('my_custom_scheme');
+</content>
+
+
+
+
+<content name="options_set">
+// Switch to the 'compact' name scheme:
+
+xtype.options.set({
+    delimiterPattern: '',
+    nameScheme: 'compact'
+});
+
+// Or, if using a custom unnamed scheme:
+
+xtype.options.set({
+    delimiterPattern: '',
+    nameScheme: {
+        string: 'str',
+        empty_string: 'emp_str',
+        /* More name scheme entries */
+    }
+});
+</content>
+
+
+
+
+<content name="options_setDelimiterPattern">
+xtype.options.setDelimiterPattern('/');
+
+xtype.is(0, '{zero} / {positive_number}')     === true;
+xtype.is(25, '{zero} / {positive_number}')    === true;
+xtype.is(-3, '{zero} / {positive_number}')    === false;
+
+// Using a different pattern to also allow the comma character:
+
+xtype.options.setDelimiterPattern('[/,]');
+
+xtype.is(25, '{zero}, {positive_number} / {float}') === true;
+</content>
+
+
+
+
+<content name="noConflict">
+/*
+ * To reassign the xtype module to the 'otherName'
+ * variable, and return the global 'xtype' variable
+ * to its previous value prior to importing xtypejs:
+ */
+
+var otherName = xtype.noConflict();
+
+otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
+</content>
+
+
+
+
+<content name="which">
+/*
+ * Switch on the result of xtype.which() to handle only valid data scenarios
+ * without first performing extensive type checking and data validations.
+ */
+ 
+// For instance, in an application or library that receives a varying piece of
+// information with which a product should be displayed, the following example
+// handles three scenarios for the type of product-related information received:
+
+switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
+
+    case '{multi_char_string}':
+        // Fetch and display product with value as the product name string
+
+    case '{positive_integer}':
+        // Fetch and display product with value as the product Id number
+
+    case Product:
+        // value is already a Product object, so just display it
+
+    default:
+        // Handle invalid value.. cannot display product
+}
+</content>
+
+
+
+
+<content name="is">
+/*
+ * Complex type and data requirements can be concisely validated
+ * using combinations of relevant simple and/or extended types.
+ */
+ 
+// The following two examples return true ONLY if:
+// value is an array AND has exactly one element, 
+// OR is a number AND has an integer value AND is greater than zero.
+
+xtype.is(value, '{single_elem_array}, {positive_integer}');
+
+xtype.is(value, xtype.SINGLE_ELEM_ARRAY & xtype.POSITIVE_INTEGER);
+
+// The following example returns true if the value is a multi-character
+// string, a positive integer or a Product instance:
+
+xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]);
+</content>
+
+
+
+
+<content name="not_isType">
+xtype.not.isNull(null)                   === false;
+xtype.not.isFalse(true)                  === true;
+xtype.not.isNaN(12)                      === true;
+
+xtype.not.isNegativeNumber(1.3)          === true;
+xtype.not.isWhitespace('   ')            === false;
+xtype.not.isZero(0.0)                    === false;
+
+xtype.not.isEmptyArray(['hi'])           === true;
+xtype.not.isSinglePropObject({ one: 1 }) === false;
+xtype.not.isMultiPropObject({ one: 1 })  === true;
+</content>
+
+
+
+
+<content name="none_isType">
+xtype.none.isNan(7, 2.5, NaN, 0, -5)                === false;
+xtype.none.isBlankString('Tom', 0, true, null, ' ') === false;
+xtype.none.isFloat(3, -5, 7)                        === true;
+xtype.none.isFalse(true, true, false, true)         === false;
+</content>
+
+
+
+
+<content name="any_isType">
+xtype.any.isNan(7, 2.5, NaN, 0, -5)                 === true;
+xtype.any.isBlankString('Tom', 0, true, null, ' ')  === true;
+xtype.any.isFloat(3, -5, 7)                         === false;
+xtype.any.isFalse(true, true, false, true)          === true;
+</content>
+
+
+
+
+<content name="some_isType">
+xtype.some.isFloat(7, 2.5, NaN, 0, -5)         === true;
+xtype.some.isString('Tom', 0, true, null, ' ') === true;
+xtype.some.isFloat(3, -5, 7)                   === false;
+xtype.some.isInteger(3, -5, 7)                 === false; // All integer, not some
+</content>
+
+
+
+
+<content name="all_isType">
+xtype.all.isFloat(7, 2.5, NaN, 0, -5)         === true;
+xtype.all.isNonBlankString('hi', 'Tom', 'pi') === false;
+xtype.all.isFloat(3.1, -5.5, 7)               === false;
+xtype.all.isNonZeroNumber(3, -5, 7)           === true;
+</content>
+
+
+
+
+<content name="isType">
+xtype.isSingleCharString('g')           === true;
+xtype.isNonEmptyObject({foo: 'bar'})    === true;
+xtype.isSingleElemArray(['foo'])        === true;
+
+xtype.isFloat(2.50)                     === true;
+xtype.isPositiveNumber(-2.5)            === false;
+xtype.isNan(5 / 'hi')                   === true;
+</content>
+
+
+
+
+<content name="registerTypes">
+// Register a new type with name 'non_negative_integer'
+// for numbers that are non-negative and also integer:
+
+xtype.registerTypes({
+    non_negative_integer: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER)
+});
+
+// Or to assign both a default name and the compact name '-int-' to the new type: 
+
+xtype.registerTypes({
+    non_negative_integer: {
+        typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
+        compactName: '-int-'
+    }
+    /* Can contain more Type entries */
+});
+
+// After registration, the new type becomes available for type checking:
+
+xtype.is(value, '{@type:non_negative_integer:-int-}');  //#:10:14 True for non-negative integers
+
+// A new 'is' method with the camel-cased name of the new type will
+// also become available on the xtype module for checking the new type:
+ 
+xtype.isNonNegativeInteger(value);      // True if value is non-negative integer
+
+// Also, a new type Id constant will become available on the xtype module
+// with the uppercased name of the new type and the value of its type Id:
+
+xtype.NON_NEGATIVE_INTEGER === (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER);
+</content>
+
+
+
+
+<content name="idToName">
+xtype.idToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
+</content>
+
+
+
+
+<content name="nameToId">
+xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
+</content>
+
+
+
+</content-wrapper>
+
+
+<section class="screen-content" template-artifact="usage">
+    
+    <div class="screen-content-links">
+        <div class="cols-2">
+            <div>
+                <ul>
+                    <li data-ng-repeat="contentName in col1Items">
+                        <a screen-link=":{{contentName}}">{{usageContent[contentName].attributes.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="cols-2">
+            <div>
+                <ul>
+                    <li data-ng-repeat="contentName in col2Items">
+                        <a screen-link=":{{contentName}}">{{usageContent[contentName].attributes.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="screen-content-body">        
+        <div class="colspan-80">
+            
+            <div class="content-group">
+                
+                <div class="content-item" 
+                    data-ng-repeat="contentName in AppUtils.keys(usageContent)" 
+                    data-ng-init="contentItem = usageContent[contentName]">
+                    
+                    <div id="{{contentName}}">
+                        
+                        <div class="item-title" data-ng-if="contentItem.attributes.title">
+                            <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+                        </div>
+                        
+                        <p class="item-description" 
+                            data-ng-bind-html="contentItem.attributes.description" 
+                            data-ng-if="contentItem.attributes.description">
+                        </p>
+                        
+                        <div class="code-container {{activeViews[contentName] || 'default'}}-view" data-ng-if="contentItem.codeSamples">
+                            <ul class="code-tabs">
+                                <li class="tab-label">Example</li>
+                                <li class="{{view}}-view"
+                                    data-ng-repeat="view in AppUtils.keys(contentItem.codeSamples)" 
+                                    data-ng-if="AppUtils.keys(contentItem.codeSamples).length > 1">
+                                    <a href="" data-ng-click="switchCodeView(contentName, view)">{{view}}</a>
+                                </li>
+                            </ul>
+                            <div class="code-content">
+                                <pre data-ng-repeat="(view, content) in contentItem.codeSamples" 
+                                    data-ng-bind-html="content"
+                                    class="{{view}}-view prettyprint">
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="colspan-20 right-nav-container">
+            <ul class="right-nav">
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
+
+
+
+
+<content-wrapper code-artifact="usage">
+
+
+<content 
+    name="installing" 
+    title="Installing" 
+    lang="sh">
+
+# npm:
+npm install xtypejs --save
+
+# npm from github:
+npm install git://github.com/lucono/xtypejs.git
+
+# bower:
+bower install xtypejs --save
+
+# bower from github:
+bower install git://github.com/lucono/xtypejs.git
+</content>
+
+
+
+
+<content 
+    name="importing_node_requirejs" 
+    title="Importing with node and requireJS">
+
+var xtype = require('xtypejs');             // node.js and CommonJS
+
+require(['xtype'], function(xtype) {        // requirejs and AMD
+    // Use xtype here
+});
+</content>
+
+
+
+
+<content 
+    name="importing_with_html_script_tag" 
+    title="Importing with HTML script tag"
+    lang="html">
+
+<script src="path/to/xtype.js"></script>    <!-- exports xtype global variable -->
+    
+<script>
+    // Use xtype here
+</script>
+</content>
+
+
+
+
+<content 
+    name="getting_extended_type" 
+    title="Getting the extended type of a value">
+
+xtype(-2.5)   === '{negative_float}';       // Value is number, negative and float
+xtype('  ')   === '{whitespace}';           // Value is string and blank
+xtype({})     === '{empty_object}';         // Value is object and is empty
+xtype(['hi']) === '{single_elem_array}';    // Value is array, has exactly one element
+</content>
+
+
+
+
+<content 
+    name="getting_simple_type" 
+    title="Getting the simple type of a value">
+
+xtype.type(null)              === '{null}';
+xtype.type(undefined)         === '{undefined}';
+xtype.type(NaN)               === '{nan}';
+
+xtype.type([])                === '{array}';
+xtype.type({})                === '{object}';
+xtype.type(new Date())        === '{date}';
+xtype.type(function() {})     === '{function}';
+xtype.type(/ab+c/i)           === '{regexp}';
+xtype.type(new Error('No!')   === '{error}';
+xtype.type(Symbol())          === '{symbol}';
+
+xtype.type('Hi')              === '{string}';
+xtype.type(new String('Hi'))  === '{string}';
+xtype.type(25)                === '{number}';
+xtype.type(new Number(25))    === '{number}';
+xtype.type(true)              === '{boolean}';
+xtype.type(new Boolean(true)) === '{boolean}';
+</content>
+
+
+
+
+<content 
+    name="checking_combination_of_types" 
+    title="Checking values against combinations of various types"
+    description="Complex type and data requirements can be concisely validated using combinations of relevant simple and/or extended types.">
+
+// The following example returns true ONLY if:
+// data is an object AND contains at least one own property,
+// OR is an array AND has exactly one element, 
+// OR is a number AND has an integer value AND is greater than zero.
+
+xtype.is(data, '{non_empty_object}, {single_elem_array}, {positive_integer}');
+</content>
+
+
+
+
+<content 
+    name="checking_instance_and_other_types" 
+    title="Checking instance types along with other types">
+
+// For instance, in an application or library method that receives a varying
+// piece of information with which a product should be displayed, the following
+// example validates that the value is either a product name string (multi_char_string),
+// a product Id number (positive_integer), or an actual Product instance:
+
+xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]));
+
+// A type expression can also be used as a unit type entry in the type list.
+// So, suppose that if a product name is provided, it can be blank and a known
+// default product name will be used instead, then the we could now have: 
+
+xtype.is(value, ['{multi_char_string}, {blank_string}', '{positive_integer}', Product]));
+</content>
+
+
+
+
+<content 
+    name="checking_values_in_different_ways" 
+    title="Checking values in different ways"
+    description="Different ways of checking values provide flexibility based on application needs and constraints.">
+
+// Verify if flag variable is a single character string:
+
+xtype.is(flag, '{single_char_string}');
+xtype.is(flag, xtype.SINGLE_CHAR_STRING);
+xtype.isSingleCharString(flag);
+
+// Verify if flag variable is a single character string or positive number value:
+
+xtype.is(flag, '{single_char_string}, {positive_number}');
+xtype.is(flag, xtype.SINGLE_CHAR_STRING | xtype.POSITIVE_NUMBER);
+xtype.is(flag, ['{single_char_string}', xtype.POSITIVE_NUMBER]);
+</content>
+
+
+
+
+<content 
+    name="validating_value_against_specific_type" 
+    title="Validating a value against a specific type">
+
+xtype.isSingleCharString('g')           === true;
+xtype.isNonEmptyObject({foo: 'bar'})    === true;
+xtype.isSingleElemArray(['foo'])        === true;
+
+xtype.isFloat(2.50)                     === true;
+xtype.isPositiveNumber(-2.5)            === false;
+xtype.isNan(5 / 'hi')                   === true;
+</content>
+
+
+
+
+<content 
+    name="validating_multiple_values_against_specific_type" 
+    title="Validating multiple values against a specific type"
+    description="The 'none', 'any', 'some', and 'all' method extensions provide the checking of multiple values against a single type.">
+
+xtype.none.isNan(7, 2.5, NaN, 0, -5)        === false;
+xtype.any.isZero(7, 2.5, NaN, 0, -5)        === true;
+xtype.all.isPositiveInteger(3, 5.1, 7)      === false;
+
+xtype.some.isFloat(3, 5.5, 7)               === true;       // Some but not all are float
+xtype.some.isFloat(2.5, 8.5, 2.1)           === false;      // All are float, not some
+xtype.all.isNonZeroNumber(4, -20, 8.5)      === true;
+
+// They can also take a single array of the values to be checked:
+
+var values = ['Tom', 0, true, null, ' '];
+
+xtype.any.isNothing(values)        === true;     // null is of 'nothing' type
+xtype.all.isPrimitive(values)      === false;    // null is of 'nothing' type, not 'primitive'
+xtype.none.isBlankString(values)   === false;
+xtype.some.isTrue(values)          === true;
+</content>
+
+
+
+
+<content
+    name="switching_based_on_value_type"
+    title="Switching based on the type of a value"
+    description="Switch on the result of xtype.which() to handle only valid data scenarios without first performing extensive type checking and data validations.">
+
+// For instance, in an application or library that receives a varying piece of
+// information with which a product should be displayed, the following example
+// handles three scenarios for the type of product-related information received:
+
+switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
+
+    case '{multi_char_string}':
+        // Fetch and display product with value as the product name string
+
+    case '{positive_integer}':
+        // Fetch and display product with value as the product Id number
+
+    case Product:
+        // value is already a Product object, so just display it
+
+    default:
+        // Handle invalid value.. cannot display product
+}
+</content>
+
+
+
+
+<content 
+    name="checking_boolean_values" 
+    title="Checking boolean values">
+
+xtype.isTrue(23.5)                  === false;      // Truthy but not boolean
+xtype.isTrue(new MyProduct())       === false;      // Any type can be checked
+xtype.isTrue('true')                === false;      // String is not boolean
+xtype.isFalse('false')              === false;      // String is not boolean
+
+xtype.isTrue(true)                  === true;       // Primitive true is actual true
+xtype.isTrue(new Boolean(true))     === true;       // Object true is actual true
+
+xtype.isFalse(false)                === true;       // Primitive false is actual false
+xtype.isFalse(new Boolean(false))   === true;       // Object false is actual false
+</content>
+
+
+
+
+<content 
+    name="application_flag_example" 
+    title="Single character application flag example">
+
+// Suppose a single character application/operation flag is expected
+// as input. The 'single_char_string' extended type will match a string
+// that contains exactly one non-whitespace character, regardless of
+// whether it also contains other whitespace characters. 
+
+xtype.isSingleCharString('t')               === true;
+xtype.isSingleCharString(' g ')             === true;
+xtype.isSingleCharString('  ')              === false;
+xtype.isSingleCharString('q1')              === false;
+xtype.isSingleCharString(new String(' z ')) === true;
+</content>
+
+
+
+
+<content
+    name="normalized_type_checking"
+    title="Normalized type checking"
+    description="Primitive types and their corresponding object types share the same simple types.">
+ 
+// Regular type checking:
+
+typeof 'foo'                === 'string';
+typeof new String('foo')    === 'object';
+
+// Type checking with xtypejs:
+
+xtype.type('foo')               === '{string}';
+xtype.type(new String('foo'))   === '{string}';
+
+xtype.type(25)                  === '{number}';
+xtype.type(new Number(25))      === '{number}';
+
+xtype.isZero(0)                 === true;
+xtype.isZero(new Number(0))     === true;
+</content>
+
+
+
+
+<content
+    name="registering_custom_types"
+    title="Registering custom types"
+    description="Any number of custom types can be created by combining several of the xtypejs built-in types in a way that captures the definition of the new type. The newly derived type can then be registered into xtypejs with a unique custom name and optionally, a compact name as well. The type must be unique from any type that already exists in xtypejs, which is determined by having a unique type Id.">
+ 
+// xtypejs has the '{non_negative_number}' type as well as the '{integer} type,
+// but does not have a single type specifically for the non-negative equivalent
+// for integers. To check that a value is a non-negative integer, we would have
+// to perform a check for both '{non_negative_number}' and '{integer}':
+
+xtype.is(value, '{non_negative_number}, {integer}');
+
+// OR:
+
+xtype.isNonNegativeNumber(value) && xtype.isInteger(value);
+
+
+// ----------
+// However, the example below shows how to create, register, and use a single
+// new type with name 'non_negative_integer' for performing the same check:
+
+xtype.registerTypes({
+    non_negative_integer: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER)
+});
+
+// Or to assign both a default name and the compact name '-int-' to the new type: 
+
+xtype.registerTypes({
+    non_negative_integer: {
+        typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
+        compactName: '-int-'
+    }    
+});
+
+// After registration of the new type, we can now use it in type checking:
+
+xtype.is(value, '{@type:non_negative_integer:-int-}'); //#:8:14 True if value is integer and non-negative
+
+// A new 'is' method with the camel-cased name of the new type will
+// also become available on the xtype module for checking the new type:
+ 
+xtype.isNonNegativeInteger(value);
+
+// Also, a new type Id constant will become available on the xtype module
+// with the uppercased name of the new type and the value of its type Id:
+
+xtype.NON_NEGATIVE_INTEGER === (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER);
+
+/*
+ * --------------
+ * MORE EXAMPLES
+ * --------------
+ */
+ 
+// Another custom type example is a non-zero integer custom type:
+
+xtype.registerTypes({
+    non_zero_integer: {
+        typeId: (xtype.NON_ZERO_NUMBER & xtype.INTEGER),
+        compactName: '-int0'
+    }    
+});
+
+xtype.is(value, '{@type:non_zero_integer:-int0}');
+xtype.isNonZeroInteger(value);
+xtype.NON_ZERO_INTEGER === (xtype.NON_ZERO_NUMBER & xtype.INTEGER);
+
+
+// Yet another example is a custom type that permits empty strings, but
+// requires a multi-charater string when not empty, but does not permit
+// strings of only a single character. Unlike in the prior examples, the
+// desired type Id derivation for this custom type is an 'OR' relationsihip:
+
+xtype.registerTypes({
+    empty_or_multi_char: {
+        typeId: (xtype.EMPTY_STRING | xtype.MULTI_CHAR_STRING),
+        compactName: 'str02+'
+    }    
+});
+
+xtype.is(value, '{@type:empty_or_multi_char:str02+}');
+xtype.isEmptyOrMultiChar(value);
+xtype.EMPTY_OR_MULTI_CHAR === (xtype.EMPTY_STRING | xtype.MULTI_CHAR_STRING);
+</content>
+
+
+
+
+<content
+    name="delimiting_types_in_expressions"
+    title="Delimiting types in type expression strings"
+    description="By default, a comma or space or pipe character can be used as a delimiter in type expression strings. Additional spaces can be used around delimiters, and are ignored.">
+
+xtype.is(flag, '{single_char_string},{positive_number}');
+xtype.is(flag, '{single_char_string}, {positive_number}');
+xtype.is(flag, '{single_char_string}|{positive_number}');
+xtype.is(flag, '{single_char_string} | {positive_number}');
+xtype.is(flag, '{single_char_string} {positive_number}'); 
+</content>
+
+
+
+
+<content
+    name="using_custom_delimiter"
+    title="Using a custom delimiter"
+    description="A custom pattern can be used in place of the default type delimiters. This can be useful in applications for which the default delimiters may not be ideal. For instance, if the type expressions are being stored as part of data validation metadata, but the default delimiter characters are problematic for the specific storage format being used.">
+ 
+// When a custom type delimiter pattern is used, it should be ensured
+// that the characters allowed by the pattern do not conflict with the
+// characters in the type names of any type name schemes being used.
+
+xtype.options.setDelimiterPattern('/');
+
+xtype.is(0, '{zero} / {positive_number}')     === true;
+xtype.is(25, '{zero} / {positive_number}')    === true;
+xtype.is(-3, '{zero} / {positive_number}')    === false;
+
+// Using a different pattern to also allow the comma character:
+
+xtype.options.setDelimiterPattern('[/,]');
+
+xtype.is(25, '{zero}, {positive_number} / {float}') === true;
+</content>
+
+
+
+
+<content
+    name="switching_to_compact_name_scheme"
+    title="Switching to the compact name scheme">
+
+// With the regular 'default' name scheme:
+
+xtype({})                           === 'empty_object';
+xtype(25)                           === 'positive_integer';
+xtype.is({}, 'empty_object')        === true;
+xtype.is(25, 'positive_integer')    === true;
+
+// Switch to the bundled 'compact' name scheme:
+
+xtype.options.setNameScheme('compact');
+
+xtype({})               === 'obj0';     // Compact scheme uses 'obj0' for 'empty_object'
+xtype(25)               === 'int+';     // Compact scheme uses 'int+' for 'positive_integer'
+xtype.is({}, 'obj0')    === true;
+xtype.is(25, 'int+')    === true;
+</content>
+
+
+
+
+<content
+    name="using_custom_name_scheme"
+    title="Using a custom name scheme"
+    description="By default, there is the very concise 'compact' name scheme, the less compact 'default' name scheme, and then the flexibility to invent and apply your own scheme according to your liking and the needs of your application.">
+ 
+xtype.options.setNameScheme({
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+});
+
+xtype({})       === 'emp_obj';          // empty_object is 'emp_obj' in new scheme
+xtype(25)       === 'pos_num';          // positive_integer is 'pos_num' in new scheme
+xtype('  ')     === 'bl_str';           // blank_string is 'bl_str' in new scheme
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content
+    name="registering_custom_name_scheme"
+    title="Registering a custom name scheme">
+
+var customNameScheme = {
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+};
+
+xtype.registerNameScheme('my_custom_scheme', customNameScheme);
+
+// The custom scheme is now internally registered
+// and can now be referenced by name:
+
+xtype.options.setNameScheme('my_custom_scheme');
+
+xtype({})       === 'emp_obj';
+xtype(25)       === 'pos_num';
+xtype('  ')     === 'bl_str';
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content
+    name="switching_back_to_default_name_scheme"
+    title="Switching back to the default name scheme">
+
+xtype.options.setNameScheme('default');
+</content>
+
+
+
+
+<content 
+    name="prevent_name_collisions" 
+    title="Preventing name collisions"
+    description="When imported as a script tag, the xtype module is assigned to the global variable 'xtype'. The 'noConflict' method can be used to reassign the xtype module to a different namespace or variable name, and return the global 'xtype' variable to its previous value prior to importing xtypejs.">
+
+var otherName = xtype.noConflict();
+
+otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
+</content>
+
+
+
+
+<content 
+    name="using_none_and_any_types" 
+    title="Using the none and any types"
+    description="The 'none' type represents the set of no types, which means that no value can actually ever match 'none'. Therefore, xtype.isNone(value) will always be false for any value.">
+
+xtype.isNone(25)                    === false;
+xtype.isNone(['hi', 5])             === false;
+xtype.isNone(undefined)             === false;
+
+xtype.not.isNone('hello')           === true;         // true for any value
+xtype.all.isNone('hi', 5, true)     === false;        // false for any list of values
+xtype.some.isNone(null, 25, false)  === false;        // false for any list of values
+xtype.any.isNone(null, 25, false)   === false;        // false for any list of values
+xtype.none.isNone(null, 25, false)  === true;         // true for any list of values
+
+/*
+ * The '{any}' type is the composite type consisting of all types, which means
+ * that all values will always match 'any'. Therefore, xtype.isAny(value) will always
+ * be true for any value. The 'any' type can be added to a validating type expression
+ * to temporarily make it fully permissive, therefore accepting all values.
+ */
+
+xtype.isAny(25)                    === true;
+xtype.isAny(['hi', 5])             === true;
+xtype.isAny(undefined)             === true;
+
+xtype.is(25, '{object}')           === false;
+xtype.is(25, '{object}, {any}')    === true;          // allows any value to pass type check
+
+xtype.not.isAny('hello')           === false;         // false for any value
+xtype.all.isAny('hi', 5, true)     === true;          // true for any list of values
+xtype.some.isAny(null, 25, false)  === false;         // false for any list of values
+xtype.any.isAny(null, 25, false)   === true;          // true for any list of values
+xtype.none.isAny(null, 25, false)  === false;         // false for any list of values
+</content>
+
+
+
+
+<content 
+    name="checking_for_nan" 
+    title="Checking for NaN"
+    disabled>
+
+    
+</content>
+
+
+
+
+<content 
+    name="using_type_expressions_vs_typeid_expressions" 
+    title="Using type expression strings vs type Id expressions"
+    disabled>
+
+    
+</content>
+
+
+
+
+<content 
+    name="reporting_bugs_and_issues" 
+    title="Reporting bugs and issues"
+    description="Please report bugs or problems by creating an issue on the GitHub project [issues page](https://github.com/lucono/xtypejs/issues)."
+    lang="sh">
+</content>
+
+
+
+</content-wrapper>
+
+
+<section class="screen-content" template-artifact="getit">
+    
+    <div class="screen-content-links">
+        <div>
+            <h1>Current version {{latestVersion ? '- ' + latestVersion: ''}}</h1>
+        </div>
+        <ul class="horizontal-links">
+            <li data-ng-repeat="contentName in AppUtils.keys(getItContent)" data-ng-init="contentItem = getItContent[contentName]">
+                <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+            </li>
+            <li>
+                <a screen-link=":download">Download</a>
+            </li>
+        </ul>
+        
+        <div class="links-section-buttons">
+            <a href="https://github.com/lucono/xtypejs/stargazers">Star GitHub Project</a>
+        </div>
+    </div>
+    
+    <div class="screen-content-body">        
+        <div class="colspan-70">
+        
+            <div class="content-group">
+            
+                <div class="content-item" 
+                    data-ng-repeat="contentName in AppUtils.keys(getItContent)" 
+                    data-ng-init="contentItem = getItContent[contentName]; codeSamples = contentItem.codeSamples;">
+                    
+                    <div id="{{contentName}}">
+                        
+                        <div class="item-title" data-ng-if="contentItem.attributes.title">
+                            <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-if="contentItem.attributes.description">
+                            {{contentItem.attributes.description}}
+                        </p>
+                        
+                        <div class="code-container" data-ng-if="codeSamples">                            
+                            <div class="code-content">
+                                <pre data-ng-repeat="(view, content) in codeSamples" 
+                                    data-ng-bind-html="content"
+                                    class="{{view}}-view prettyprint">
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="download">
+                        
+                        <div class="item-title">
+                            <a screen-link=":download">
+                                Download
+                                <span class="release-title" data-ng-if="releaseTitle"> &nbsp; &ndash; &nbsp; {{releaseTitle}}</span>
+                            </a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-if="releaseDescription">{{releaseDescription}}</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="asset in assets">
+                                <a href="{{asset.browser_download_url}}"><i class="fa fa-2x fa-{{asset.content_type.indexOf('zip') > 0 ? 'file-archive-o' : 'file-o'}}"></i> &nbsp; {{asset.name}}</a>
+                            </li>
+                            <li data-ng-if="!assets">
+                                <a href="{{fallbackDownloadUrl}}" target="_blank"><i class="fa fa-2x fa-folder-open-o"></i> &nbsp; latest release</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
+
+
+
+
+<content-wrapper code-artifact="getit">
+
+
+<content 
+    name="npm" 
+    title="Install with npm" 
+    lang="sh">
+
+npm install xtypejs --save
+
+# From github:
+
+npm install git://github.com/lucono/xtypejs.git
+</content>
+
+
+
+<content 
+    name="bower" 
+    title="Install with bower"
+    lang="sh">
+
+bower install xtypejs --save
+
+# From github:
+
+bower install git://github.com/lucono/xtypejs.git
+</content>
+
+
+</content-wrapper>
