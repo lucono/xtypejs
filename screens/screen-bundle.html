@@ -718,7 +718,6 @@ xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
 
 
 
-
 <content-wrapper code-artifact="usage">
 
 
@@ -822,7 +821,7 @@ xtype.type(new Boolean(true)) === '{boolean}';
 // OR is an array AND has exactly one element, 
 // OR is a number AND has an integer value AND is greater than zero.
 
-xtype.is(data, '{non_empty_object}, {single_elem_array}, {positive_integer}');
+xtype.is(data, '{non_empty_object}, {single_elem_array}, {positive_integer}');  //@compact #:6:40 The commas can also be ommitted
 </content>
 
 
@@ -1303,7 +1302,6 @@ xtype.none.isAny(null, 25, false)  === false;         // false for any list of v
 
 
 </content-wrapper>
-
 
 <section class="screen-content" template-artifact="getit">
     

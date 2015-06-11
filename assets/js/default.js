@@ -75,7 +75,7 @@
     
     function filterView(code, typeData, view) {
         var typesByName = typeData.typesByName,
-            filteredCode = code; // filterViewSpecificComments(code, view);
+            filteredCode = filterViewSpecificComments(code, view);
         
         Object.keys(typesByName).forEach(function(typeName) {
             var sourceName = '\{' + typeName + '\}',
@@ -102,9 +102,7 @@
             }
         );
         
-        // Apply manual //#:digit tokens
-        //filteredCode = filteredCode.replace(/^(.*?)([ ]*)(\/\/|\/\*[ ]*)(#:([0-9]+)[ ])(.*?([\n\r]|$))/gm,
-        filteredCode = filteredCode.replace(/^(.*?)([ ]*)(\/\/|\/\*[ ]*)(#:([0-9]+)(:([0-9]+))?[ ])(.*?([\n\r]|$))/gm,
+        filteredCode = filteredCode.replace(/^(.*?)([ ]*)(\/\/|\/\*)([ ]*#:([0-9]+)(:([0-9]+))?[ ])(.*?([\n\r]|$))/gm,
             function(match, preComment, preCommentSpacing, commentStart, defaultPadDirective, defaultPadAdjustment, compactPadDirective, compactPadAdjustment, directiveToEnd) {
                 var paddingAdjustment = (view === 'default' ? defaultPadAdjustment : (compactPadAdjustment ? compactPadAdjustment : defaultPadAdjustment)),
                     paddingReduction = (!isNaN(paddingAdjustment) ? parseInt(paddingAdjustment) : 0),
@@ -219,12 +217,6 @@
     .run(['$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service) {
         
         if (Object.keys($location.search()).length > 0) {
-            /*
-            var screenPath = $urlRouter.href(new UrlMatcher("/:screen/:item"), {
-                screen: $location.search().doc,
-                item: $location.search().item
-            });
-            */
             var screenPath = getScreenPathFromQueryUrl($location.absUrl(), '', 'menu');
             $location.path(screenPath).search({}).replace();
         }
@@ -373,8 +365,6 @@
             serviceCache = {};
         
         service.getLatestRelease = function(callback) {
-            //$http.get('https://api.github.com/repos/lucono/xtypejs/tags')
-            //$http.get('https://api.github.com/repos/lucono/xtypejs/releases/latest', {
             $http.get(screenArtifacts.getit.json, {
                 cache: true
             }).success(function(responseData) {
