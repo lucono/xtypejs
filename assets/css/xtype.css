@@ -88,10 +88,9 @@ a, a:visited, a:active {
 .page-container {
     background-color: #ffffff;
     margin: 0 auto;
-    width: 1000px;
-    /*
-    overflow: auto;
-    */
+    width: 1100px;
+    padding: 0px 50px;
+    box-sizing: border-box;
 }
 
 .top-content-pane {

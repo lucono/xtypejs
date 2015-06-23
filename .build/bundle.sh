@@ -22,7 +22,7 @@ find ../assets ../vendor ../screens -name "*.js" -o -name "*.css" -o -name "*.ht
 cat ../assets/css/xtype.css \
     ../vendor/css/prettify-theme.css \
     ../vendor/css/typed.css \
-    > ../bundles/app-bundle.css
+    > ../bundles/app-bundle.min.css
 
 
 cat ../screens/overview/overviewScreen.html \
