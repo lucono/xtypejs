@@ -325,15 +325,15 @@
 					"return": [
 						{
 							"type": "string",
-							"description": "The matching type of {value} if the matching type was provided as a type name string in the {types} list argument, or the {none} type if there was no match."
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as a type name string in the {types} list argument, or the {none} type if there was no match."
 						},
 						{
 							"type": "number",
-							"description": "The matching type of {value} if the matching type was provided as a type Id in the {types} argument, or the {none} type if there was no match."
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as a type Id in the {types} argument, or the {none} type if there was no match."
 						},
 						{
 							"type": "function",
-							"description": "The matching type of {value} if the matching type was provided as an instance type in the {types} argument, or the {none} type if there was no match."
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as an instance type in the {types} argument, or the {none} type if there was no match."
 						}
 					],
 					"notes": "* Note that the single <em>number</em> and <em>function</em> forms of the {types} argument are treated not as a list of types, but as a single type against which {value} is to be matched, therefore either returning the value of the {types} argument if the type of {value} matches, or otherwise returning the {none} type. This is useful as a form of the <em>xtype.is</em> call, but which rather than returning a boolean {true} when there is a match, will return the actual type used instead. Likewise, rather than returning {false} when there is no match, it will return the {none} type instead."

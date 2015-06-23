@@ -12,6 +12,10 @@ angular.module('xtypejsSite')
             $scope.activeViews[methodName] = view;
         };
         
+        service.getCodeContent('api', function(codeContent) {
+            $scope.codeContent = codeContent;
+        });
+        
         service.getApiData(function(apiData) {
             var methodsByCategory = apiData.methodsByCategory;
         
@@ -30,20 +34,11 @@ angular.module('xtypejsSite')
                 methodsByCategory.optionsMethods,
                 methodsByCategory.otherMethods
             ];
-        });
         
-        $scope.col1TypeEnumerationGroups = ['Basic', 'String', 'Boolean', 'Object'];
-        $scope.col2TypeEnumerationGroups = ['Array', 'Number', 'Group'];
-        
-        service.getApiCodeContent(function(codeContent) {
-            $scope.codeContent = codeContent;
-        });        
-        
-        service.getApiData(function(apiData) {
-            $scope.apiMethods = apiData.methods;
-            $scope.apiProperties = apiData.properties;
+            $scope.col1TypeEnumerationGroups = ['Basic', 'String', 'Boolean', 'Object'];
+            $scope.col2TypeEnumerationGroups = ['Array', 'Number', 'Group'];
         });
         
         $rootScope.activeScreen = 'api';
-        $rootScope.activeScreenTitle = $rootScope.setPageTitle('API');
+        $rootScope.screenTitle = 'API';
     }]);

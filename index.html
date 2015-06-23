@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html data-ng-app="xtypejsSite">
+<html data-ng-app="xtypejsSite" ng-strict-di>
     
     <head prefix="og: http://ogp.me/ns#">
         
@@ -9,145 +9,148 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <title data-ng-bind-html="activeScreenTitle">xtypejs - Efficient data-validating pseudo types for JavaScript</title>
-        <meta name="description" content="Extend JavaScript types with close to 40 new, efficient, data-validating pseudo types, while also normalizing the irregularities of working with types in JavaScript.">
+        <title data-ng-bind="screenTitle + (sectionTitle ? ' - ' + sectionTitle : '')">
+            xtypejs - Efficient data-validating pseudo types for JavaScript
+        </title>
+        
+        <meta name="description" content="Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript.">
         
         <meta property="og:type" content="website">
 		<meta property="og:site_name" content="xtypejs">
         <meta property="og:url" content="http://xtype.js.org">
 		<meta property="og:image" content="http://xtype.js.org/assets/img/xtype-logo-padded.png">
 		<meta property="og:title" content="Efficient data-validating pseudo types for JavaScript">
-		<meta property="og:description" content="Extend JavaScript types with close to 40 new, efficient, data-validating pseudo types, while also normalizing the irregularities of working with types in JavaScript. Find out more at http://xtype.js.org.">
-            
+		<meta property="og:description" content="Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript. Find out more at http://xtype.js.org.">
+        
 		<meta itemprop="image" content="http://xtype.js.org/assets/img/xtype-logo-padded.png">
 		<meta itemprop="name" content="Efficient data-validating pseudo types for JavaScript">
-		<meta itemprop="description" content="Extend JavaScript types with close to 40 new, efficient, data-validating pseudo types, while also normalizing the irregularities of working with types in JavaScript. Find out more at http://xtype.js.org.">
+		<meta itemprop="description" content="Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript. Find out more at http://xtype.js.org.">
         
         <link href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        
+        <link href="bundles/app-bundle.css" rel="stylesheet">
+        <!--
         <link href="vendor/css/typed.css" rel="stylesheet">
         <link href="vendor/css/prettify-theme.css" rel="stylesheet">
         <link href="assets/css/xtype.css" rel="stylesheet">
+        -->
+        
+        <script>
+            (function() {
+                'use strict';               
+                if (!/xtype.js.org|localhost/g.test(window.location.hostname)) {
+                    window.location.assign('http://xtype.js.org' + window.location.pathname + window.location.hash);
+                }
+            })();
+        </script>
+        
     </head>
     
-    <body id="top">
+    
+    <body id="top" class="page-loading">
+        
+        <div class="screen-loader-pane">
+            <i class="spinner fa fa-refresh fa-spin fa-5x"></i>
+        </div>
+        
         <div class="page-container">
             
             <div class="top-content-pane">
                 
-                <a href="/" class="logo"><img src="assets/img/xtype-logo.png" width="285" height="90"></a>
+                <div class="logo-pane">
+                    <a href="/" class="logo"><img src="assets/img/xtype-logo.png" width="285" height="90"></a>
+                </div>
                 
                 <div class="lib-title">
-                    Efficient data-validating pseudo types for JavaScript.
-                    <span class="lib-subtitle">And type normalization for all the regular types.</span>
+                    Efficient data-validating pseudo types for JavaScript
+                    <!-- <span class="thin-text">for JavaScript</span> -->
+                    <!-- <span class="lib-subtitle">And type normalization for all the regular types.</span> -->
+                </div>
+                
+                <div class="top-links-pane">
+                    <div class="github-buttons">
+                        <a href="https://github.com/lucono/xtypejs" class="button" target="_blank">
+                            <i class="fa fa-github fa-2x"></i>
+                            View on GitHub
+                        </a>
+                    </div>
                 </div>
                     
+                <!--
                 <div class="typing-box">
                     <span class="invisible">|</span>
                     <span id="typing-field"></span>
                     <span class="invisible">|</span>
                 </div>
+                -->
                 
                 <a screen-link="{{activeScreen}}:menu" class="circle-button down menu-down-button"></a>
-                
-                <div class="description-pane-container">                    
-                    <div class="description-pane">
-                        <div>
-                            <span class="title">What</span>
-                            Extends JavaScript types with close to 40 new, efficient, data-validating pseudo types, and normalizes the irregularities of working with types in JavaScript.
-                        </div>
-                        <div>
-                            <span class="title">Why</span>
-                            Improves app efficiency and conciseness by unifying some of the most common data and type validations in JavaScript applications into single, concise and efficient operations.
-                        </div>
-                        <div>
-                            <span class="title">How</span>
-                            Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
-                        </div>
-                    </div>
-                    
-                    <div class="site-buttons">
-                        <div class="github-buttons">
-                            <a href="https://github.com/lucono/xtypejs" class="button" target="_blank">View on GitHub</a>
-                            <a screen-link="getit:menu" class="button">Get It</a>
-                            <!--
-                                <a href="{{packageInfo.downloadUrl}}" class="button" data-ng-bind-html="packageInfo.getItButtonText">Get It</a>
-                                <a>Get It</a>
-                            -->
-                        </div>
-                        <div class="share-buttons">
-                            <a share="g-plus"><i class="fa fa-google-plus fa-2x"></i></a>
-                            <a share="twitter"><i class="fa fa-twitter fa-2x"></i></a>
-                            <a share="email"><i class="fa fa-envelope fa-2x"></i></a>
-                            <a share="facebook"><i class="fa fa-facebook fa-2x"></i></a>
-                            <a share="linkedin"><i class="fa fa-linkedin fa-2x"></i></a>
-                        </div>
-                    </div>
-                </div>
                 
             </div>
             
             <nav id="menu" class="screen-tabs">
                 <ul>
+                    <li ui-sref-active="tab-current"><a screen-link="overview"><span ui-sref="overview">Overview</span></a></li>
                     <li ui-sref-active="tab-current"><a screen-link="types"><span ui-sref="types">Types</span></a></li>
+                    <li ui-sref-active="tab-current"><a screen-link="guide"><span ui-sref="guide">Guide</span></a></li>
                     <li ui-sref-active="tab-current"><a screen-link="api"><span ui-sref="api">API</span></a></li>
-                    <li ui-sref-active="tab-current"><a screen-link="usage"><span ui-sref="usage">Examples</span></a></li>
                     <li ui-sref-active="tab-current"><a screen-link="getit"><span ui-sref="getit">Get It</span></a></li>
                 </ul>
             </nav>
             
             <div class="screen-container">
-                <!--
-                <div class="screen-loader-pane">
-                    <img src="assets/img/gray-loader-bar.gif" class="screen-loader">
-                </div>
-                -->
                 <div ui-view></div>
             </div>
-                
+            
         </div>
         
-        <div class="footer-container">
+        <!--
+        <div class="share-buttons">
+            <a share="g-plus"><i class="fa fa-google-plus fa-2x"></i></a>
+            <a share="twitter"><i class="fa fa-twitter fa-2x"></i></a>
+            <a share="email"><i class="fa fa-envelope fa-2x"></i></a>
+            <a share="facebook"><i class="fa fa-facebook fa-2x"></i></a>
+            <a share="linkedin"><i class="fa fa-linkedin fa-2x"></i></a>
+        </div>
+        -->
+        
+        <div class="footer-container">            
             <div class="footer-section">
                 <a href="https://github.com/lucono/xtypejs" target="_blank">github</a>
                 <a href="https://github.com/lucono/xtypejs/stargazers" target="_blank">star</a>
                 <a href="https://github.com/lucono/xtypejs/watchers" target="_blank">watch</a>
                 <span><a href="http://twitter.com/xtypejs" target="_blank"><i class="fa fa-twitter">&nbsp;</i> xtypejs</a></span>
-                <span>licensed under the <a href="license.txt" target="_blank">MIT license</a></span>
+                <span>licensed under the <a href="license.txt" target="_blank">MIT license</a></span>                
                 <a screen-link="{{activeScreen}}:top" class="back-to-top"></a>
             </div>
         </div>
-            
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+        
+        <script src="bundles/app-bundle.min.js"></script>
         <!--
         <script src="vendor/js/modernizr.custom.min.js"></script>
-        <script src="vendor/js/jquery.js"></script>
-        <script src="vendor/js/angular.js"></script>
         <script src="vendor/js/angular-ui-router.js"></script>
         <script src="vendor/js/typed.js"></script>
         <script src="vendor/js/jquery.smooth-scroll.js"></script>
         <script src="vendor/js/prettify.js"></script>
-        -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-        <script src="vendor/vendor-bundle.min.js"></script>
         
-        <!--
-        <script src="assets/js/site-locator.js"></script>
         <script src="assets/js/xtype.js"></script>
         <script src="assets/js/default.js"></script>
+        <script src="screens/overview/overviewScreen.js"></script>
         <script src="screens/types/typesScreen.js"></script>
         <script src="screens/api/apiScreen.js"></script>
-        <script src="screens/usage/usageScreen.js"></script>
+        <script src="screens/guide/guideScreen.js"></script>
         <script src="screens/getit/getitScreen.js"></script>
         -->
-        <script src="assets/app-bundle.js"></script>
         
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');            
             ga('create', 'UA-63601255-1', 'auto');
             ga('require', 'linkid', 'linkid.js');
             ga('send', 'pageview');        
@@ -156,12 +159,11 @@
         <script type="application/ld+json">
             {
                 "@context": "http://schema.org/",
-                "@type": "http://schema.org/Code",
+                "@type": "http://schema.org/SoftwareSourceCode",
                 "name": "xtypejs",
                 "url": "http://xtype.js.org",
                 "codeRepository": "https://github.com/lucono/xtypejs",
                 "programmingLanguage": "JavaScript",
-                "author": "Lucas Ononiwu",
                 "author": "Lucas Ononiwu",
                 "copyrightYear": 2015,
                 "license": "http://xtype.js.org/license.txt"

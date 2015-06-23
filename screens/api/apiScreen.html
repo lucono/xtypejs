@@ -1,4 +1,4 @@
-<section class="screen-content" template-artifact="api">
+<section id="api-screen-content" class="screen-content" template-artifact="api">
     
     <div class="screen-content-links">
         <div class="cols-4" data-ng-repeat="colGroup in colGroups">
@@ -16,7 +16,7 @@
     <div class="screen-content-body">    
         <div class="colspan-70">
             
-            <div id="{{methodGroup.name | lowercase}}_api" class="content-group" data-ng-repeat="methodGroup in methodGroups">
+            <div id="{{methodGroup.name | lowercase}}_api" section-title="{{methodGroup.name}} API" class="content-group" data-ng-repeat="methodGroup in methodGroups">
                 
                 <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
                 
@@ -25,7 +25,7 @@
                     data-ng-init="codeSamples = codeContent[method.plainName].codeSamples" 
                     data-ng-if="!method.deprecated">
                     
-                    <div id="{{method.plainName}}">
+                    <div id="{{method.plainName}}" section-title="{{method.plainName}}">
                         
                         <div class="item-title">
                             <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.signature"></a>
@@ -121,11 +121,13 @@
                                     <a href="" data-ng-click="switchCodeView(method.plainName, view)">{{view}}</a>
                                 </li>
                             </ul>
-                            <div class="code-content">
-                                <pre data-ng-repeat="(view, code) in codeContent[method.plainName].codeSamples" 
-                                    data-ng-bind-html="code"
-                                    class="{{view}}-view prettyprint">
-                                </pre>
+                            <div class="code-content-window">
+                                <div class="code-content">
+                                    <pre data-ng-repeat="(view, code) in codeContent[method.plainName].codeSamples" 
+                                        data-ng-bind-html="code"
+                                        class="{{view}}-view prettyprint">
+                                    </pre>
+                                </div>
                             </div>
                         </div>
                     </div>

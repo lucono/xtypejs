@@ -92,6 +92,39 @@
                     .replace(new RegExp(sourceName, 'g'), filteredName);
         });
         
+        // Filter grouped {{type expression}} tokens
+        filteredCode = filteredCode.replace(/^(.*?)({{[ ]*([^{}]+?)[ ]*}})([^=;]*)(=+)?([^;]*?;)([ ]*(\/\/|\/\*)?.*?([\n\r]|$))/gm,
+        //filteredCode = filteredCode.replace(/{{[ ]*([^{}]+?)[ ]*}}/g,
+            function(match, preExpr, exprWithCurly, defaultExpression, preEqualSign, equalSign, postEqualToStmtEnd, postStmtToLineEnd, commentStart) {
+                var lengthFix;
+                
+                if (view === 'default') {
+                    lengthFix = new Array((exprWithCurly.length - defaultExpression.length) + 1).join(' ');
+                    
+                    return (preExpr + defaultExpression + preEqualSign + (equalSign ? lengthFix + equalSign : '') + 
+                        postEqualToStmtEnd + (!equalSign && commentStart ? lengthFix : '') + postStmtToLineEnd);
+                }
+                var typeList = defaultExpression.trim().split(/[ ]*[,/]+[ ]*/g),
+                    typeCount = typeList.length,
+                    typeIndex,
+                    typeName;
+                    
+                for (typeIndex = 0; typeIndex < typeCount; typeIndex++) {
+                    typeName = typeList[typeIndex];
+                    
+                    if (typesByName[typeName]) {
+                        typeList[typeIndex] = typesByName[typeName].compactName;
+                    }
+                }
+                var compactExpression = typeList.join(' ');
+                
+                lengthFix = new Array((exprWithCurly.length - compactExpression.length) + 1).join(' ');
+                
+                return (preExpr + compactExpression + preEqualSign + (equalSign ? lengthFix + equalSign : '') + 
+                    postEqualToStmtEnd + (!equalSign && commentStart ? lengthFix : '') + postStmtToLineEnd);
+            }
+        );
+        
         // Filter manual {@ type} tokens
         filteredCode = filteredCode.replace(/^(.*?)({@type:([^}]+)})([^;]*;[ ]*)((\/\/|\/\*)?.*?([\n\r]|$))/gm,
             function(match, preType, sourceNameCurly, sourceName, preComment, commentToEnd) {
@@ -138,7 +171,7 @@
     }
     
     function getLinkFriendlyForm(str) {
-        return $('<span>' + str + '</span>').text().replace(/\./g, '_');
+        return $('<span>' + str + '</span>').text(); //.replace(/\./g, '_');
     }
     
     function getURLParam(url, paramName) {
@@ -150,12 +183,6 @@
         var screen = (getURLParam(url, 'doc') || defaultScreen || ''),
             item = (getURLParam(url, 'item') || defaultItem || '');
         return (screen ? ('/' + screen + (item ? ('/' + item) : '')) : '');
-    }
-        
-    function navigateToItem(item) {
-        $.smoothScroll({
-            scrollTarget: '#' + item
-        });
     }
         
     function prettyPrintCode(code, lang, numbered) {
@@ -182,24 +209,28 @@
 		
 		return window.open(url, 'Share xtypejs', options);
     }
-
+    
     var screenArtifacts = {
+        overview: {
+            template: '/screens/overview/overviewScreen.html',
+            code: 'screens/overview/overviewCodeSamples.html'
+        },
         types: {
-            template: 'screens/types/typesScreen.html',
+            template: '/screens/types/typesScreen.html',
             code: 'screens/types/typeCodeSamples.html',
             json: 'screens/types/types.json'
         },
         api: {
-            template: 'screens/api/apiScreen.html',
+            template: '/screens/api/apiScreen.html',
             code: 'screens/api/apiCodeSamples.html',
             json: 'screens/api/api.json'
         },
-        usage: {
-            template: 'screens/usage/usageScreen.html',
-            code: 'screens/usage/usageCodeSamples.html'
+        guide: {
+            template: '/screens/guide/guideScreen.html',
+            code: 'screens/guide/guideCodeSamples.html'
         },
         getit: {
-            template: 'screens/getit/getitScreen.html',
+            template: '/screens/getit/getitScreen.html',
             code: 'screens/getit/getitOptions.html',
             json: 'https://api.github.com/repos/lucono/xtypejs/releases/latest'
         }
@@ -212,6 +243,16 @@
      * ==============
      */
     
+    var bundleLoadDeffered = $.Deferred(),
+        bundleLoadPromise = bundleLoadDeffered.promise(),
+        templateCache;
+            
+    function templatePromise(templateUrl) {                
+        return bundleLoadPromise.then(function() {
+            return templateCache.get(templateUrl);
+        });
+    }
+        
     angular.module('xtypejsSite', ['ui.router'])
     
     .run(['$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service) {
@@ -234,31 +275,46 @@
         };
         $rootScope.AppUtils = AppUtils;
         $rootScope.previousState = '';
-        $rootScope.activeScreen = 'types';
-        $rootScope.pageTitle = $sce.trustAsHtml('xtypejs');
+        $rootScope.activeScreen = '';
         
-        $rootScope.setPageTitle = function(title) {
-            $rootScope.pageTitle = $sce.trustAsHtml(title);
-        };
+        $rootScope.screenTitle = 'xtypejs';
+        $rootScope.sectionTitle = '';
         
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-            $rootScope.previousState = fromState;            
-            //$(".screen-loader-pane").show();
+            $rootScope.previousState = fromState;
         });
         
-        /*
         $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-            $(".screen-loader-pane").hide();
+            setTimeout(function() {
+                $('body').removeClass('page-loading');
+            }, 100);
         });
-        */
+        
+        $rootScope.navigateToItem = function(item, defer) {
+            if (defer) {
+                setTimeout(function() {
+                    $rootScope.navigateToItem(item);
+                    $rootScope.$apply(); // For deferred case, updates page title with scroll target attribute
+                }, 1000);
+                return;
+            }
+            var targetSelector = ('#' + item.replace(/\./g, '\\.')),
+                $target = $(targetSelector),
+                sectionTitle = $target.attr('section-title');
+            
+            if ($target.length === 0) {
+                return;
+            }
+            $.smoothScroll({ scrollTarget: $target });
+            $rootScope.sectionTitle = (sectionTitle ? sectionTitle : '');
+        };
         
         var httpCache = $cacheFactory('app-cache');
         $http.defaults.cache = httpCache;
         
-        $http.get('/screens/screen-bundle.html', {
-            cache: true
-        }).success(function(templateBundleContent) {
-            var $content = $('<div>' + templateBundleContent + '</div>');
+        function processScreenBundle(bundleContent) {
+            var fetctTrackers = [],
+                $content = $('<div>' + bundleContent + '</div>');
             
             AppUtils.keys(screenArtifacts).forEach(function(screenName) {
                 var artifacts = screenArtifacts[screenName],
@@ -274,9 +330,9 @@
                             artifactContent = $('<div>').append($artifact.clone()).html();                            
                             (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
                         } else {
-                            $http.get(artifactAddress, {
+                            fetctTrackers.push($http.get(artifactAddress, {
                                 cache: (artifactType === 'template' ? $templateCache : httpCache)
-                            });
+                            }));
                         }
                     }
                 });
@@ -285,29 +341,53 @@
                     $http.get(artifacts.json, {cache: true});
                 }
             });
+            
+            $.when.apply(this, fetctTrackers).then(function() {
+                templateCache = $templateCache;
+                bundleLoadDeffered.resolve();
+            });
+        }
+        
+        $http.get('/bundles/app-bundle.screens.html', {
+            cache: true
+        }).success(function(bundleContent) {
+            processScreenBundle(bundleContent);
+        }).error(function() {
+            processScreenBundle('');
         });
     }])
     
     .controller('scrollToItem', ['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams) {
-        if ($rootScope.previousState && $state.includes($rootScope.previousState.name.split('\.')[0])) {
-            navigateToItem($stateParams.item);
-        } else {
-            setTimeout(function() {
-                navigateToItem($stateParams.item);
-            }, 1000);
-        }
+        var isSameScreenNavigation = ($rootScope.previousState && $state.includes($rootScope.previousState.name.split('\.')[0]));
+        $rootScope.navigateToItem($stateParams.item, !isSameScreenNavigation);
     }])
     
     .config([
         '$stateProvider', '$urlRouterProvider', '$urlMatcherFactoryProvider', '$locationProvider', 
         function($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider, $locationProvider) {
             
-            $urlRouterProvider.otherwise('/types');
+            $urlRouterProvider.otherwise('/overview');
             
             $stateProvider
+                .state('overview', {
+                    url: '/overview',
+                    templateProvider: function() {
+                        return templatePromise(screenArtifacts.overview.template);
+                    },
+                    controller: 'OverviewScreenController',
+                    deepStateRedirect: true
+                })
+                .state('overview.item', {
+                    url: '/{item:[^/]+}',
+                    controller: 'scrollToItem',
+                    deepStateRedirect: true
+                })
+                
                 .state('types', {
                     url: '/types',
-                    templateUrl: screenArtifacts.types.template, //'screens/types/typesScreen.html',
+                    templateProvider: function() {
+                        return templatePromise(screenArtifacts.types.template);
+                    },
                     controller: 'TypesScreenController',
                     deepStateRedirect: true
                 })
@@ -319,7 +399,9 @@
                 
                 .state('api', {
                     url: '/api',
-                    templateUrl: screenArtifacts.api.template,
+                    templateProvider: function() {
+                        return templatePromise(screenArtifacts.api.template);
+                    },
                     controller: 'APIScreenController',
                     deepStateRedirect: true
                 })
@@ -329,13 +411,15 @@
                     deepStateRedirect: true
                 })
                 
-                .state('usage', {
-                    url: '/usage',
-                    templateUrl: screenArtifacts.usage.template,
-                    controller: 'UsageScreenController',
+                .state('guide', {
+                    url: '/guide',
+                    templateProvider: function() {
+                        return templatePromise(screenArtifacts.guide.template);
+                    },
+                    controller: 'GuideScreenController',
                     deepStateRedirect: true
                 })
-                .state('usage.item', {
+                .state('guide.item', {
                     url: '/{item:[^/]+}',
                     controller: 'scrollToItem',
                     deepStateRedirect: true
@@ -343,7 +427,9 @@
                 
                 .state('getit', {
                     url: '/getit',
-                    templateUrl: screenArtifacts.getit.template,
+                    templateProvider: function() {
+                        return templatePromise(screenArtifacts.getit.template);
+                    },
                     controller: 'GetItScreenController',
                     deepStateRedirect: true
                 })
@@ -407,23 +493,16 @@
             });
         };
         
-        service.getTypeCodeContent = function(callback) {
-            getCodeContent(screenArtifacts.types.code, callback);
-        };
-        
-        service.getApiCodeContent = function(callback) {
-            getCodeContent(screenArtifacts.api.code, callback);
-        };
-        
-        service.getUsageCodeContent = function(callback) {
-            getCodeContent(screenArtifacts.usage.code, callback);
-        };
-        
-        service.getGetItContent = function(callback) {
-            getCodeContent(screenArtifacts.getit.code, callback);
+        service.getCodeContent = function(screenName, callback) {
+            if (screenName in screenArtifacts) {
+                getCodeContent(screenArtifacts[screenName].code, callback);
+            }
         };
         
         function getCodeContent(codeUrl, callback) {
+            if (!codeUrl) {
+                return;
+            }
             service.getTypeData(function(typeData) {
                 $http.get(codeUrl, {
                         cache: true
@@ -454,8 +533,9 @@
                                 };
                                 if (compactCode !== defaultCode) {
                                     compactCode =
-                                        '\/\/ Switch to compact name scheme\n' +
-                                        'xtype.options.setNameScheme(\'compact\');\n\n' + 
+                                        ('no-compact-switch-prefix' in contentItem.attributes ? '' : 
+                                            '/* Switch to compact name scheme */\n' +
+                                            'xtype.options.setNameScheme(\'compact\');\n\n') +
                                         compactCode;
                                         
                                     itemCodeSamples.compact = $sce.trustAsHtml(prettyPrintCode(compactCode, contentItem.attributes.lang, false));
@@ -591,7 +671,7 @@
         };
     })
     
-    .directive('screenLink', ['$rootScope', '$location', function($rootScope, $location) {
+    .directive('screenLink', ['$rootScope', '$state', '$location', function($rootScope, $state, $location) {
         return function(scope, element, attrs) {
             if (!element.attr('href')) {        // No auto href installation if href value already manually provided
                 attrs.$observe('screenLink', function(value) {
@@ -603,28 +683,57 @@
                     
                     element.attr('href', href);
                 });
-            }            
+            }
             element.on('click', function(event) {
-                var href = element.attr('href');                
+                var href = element.attr('href');
                 if (!href) {
                     return;
                 }
                 var item = getURLParam(href, 'item'),
-                    screenPath = getScreenPathFromQueryUrl(href);
+                    screenPath = getScreenPathFromQueryUrl(href),
+                    currentPath = $location.path();
                 
-                if (screenPath !== $location.path()) {
+                if (screenPath !== currentPath) {
+                    var isSameScreenNavigation = (screenPath.split('/')[1] === currentPath.split('/')[1]);
+                    
                     $location.path(screenPath).search('').hash('');
-                    $rootScope.$apply();
+                    
+                    if (!isSameScreenNavigation) {
+                        $('body').addClass('screen-loading');
+                        
+                        setTimeout(function() {
+                            $rootScope.$apply();
+                            $('body').removeClass('screen-loading');
+                        }, 0);
+                    } else {
+                        $rootScope.$apply();
+                    }
                 } else if (item) {
-                    navigateToItem(item);
+                    $rootScope.navigateToItem(item);
                 }
                 event.preventDefault();
             });
         };
-    }]);
+    }])
+    /*
+    .directive('screenTitle', ['$rootScope', '$location', function($rootScope, $location) {
+        return function(scope, element, attrs) {
+            var screenTitle = element.attr('screen-title');
+            
+            if (!screenTitle) {
+                return;
+            }
+            element.on('click', function(event) {
+                $rootScope.pageTitle = screenTitle;
+            });
+        };
+    }])
+    */
+    ;
     
     
     $(document).ready(function() {
+        /*
         $('#typing-field').typed({
             strings:[
                 'efficient^500',
@@ -648,7 +757,8 @@
             showCursor: false,
             loop: true
         });
-    
+        */
+        
         $(window).scroll(function() {
             var $navContainer = $('.right-nav-container');
             

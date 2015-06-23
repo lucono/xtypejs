@@ -12,6 +12,10 @@ angular.module('xtypejsSite')
             $scope.activeViews[typeName] = view;
         };
         
+        service.getCodeContent('types', function(codeContent) {
+            $scope.codeContent = codeContent;
+        });
+        
         service.getTypeData(function(typeData) {
             $scope.colGroups = [
                 [typeData.typesByCategory.basicTypes, typeData.typesByCategory.objectTypes],
@@ -27,10 +31,6 @@ angular.module('xtypejsSite')
             ];
         });
         
-        service.getTypeCodeContent(function(codeContent) {
-            $scope.codeContent = codeContent;
-        });
-        
         $rootScope.activeScreen = 'types';
-        $rootScope.activeScreenTitle = $rootScope.setPageTitle('Types');
+        $rootScope.screenTitle = 'Types';
     }]);

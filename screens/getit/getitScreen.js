@@ -16,9 +16,10 @@ angular.module('xtypejsSite')
             $scope.releaseDescription = releaseData.body;
         });
         
-        service.getGetItContent(function(getItContent) {
+        service.getCodeContent('getit', function(getItContent) {
             $scope.getItContent = getItContent;
         });
+        
         $rootScope.activeScreen = 'getit';
-        $rootScope.activeScreenTitle = $rootScope.setPageTitle('Get It');
+        $rootScope.screenTitle = 'Get It';
     }]);

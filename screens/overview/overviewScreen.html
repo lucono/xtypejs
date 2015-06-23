@@ -1,0 +1,71 @@
+<section id="overview-screen-content" class="screen-content" template-artifact="overview">
+    
+    <div class="screen-content-links">
+        <div class="description-pane">
+            <div>
+                <span class="title">What</span>
+                Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript.
+            </div>
+            <div>
+                <span class="title">Why</span>
+                Improves efficiency and readability by unifying the most basic but common data and type validations in apps into single, highly optimized operations.
+            </div>
+            <div>
+                <span class="title">How</span>
+                Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
+            </div>
+        </div>
+    </div>
+    
+    <div class="code-comparison" 
+        data-ng-repeat="demoName in demoCodeSampleList"
+        data-ng-init="jsCodeSamples = codeContent[demoName + '_js'].codeSamples; xtypejsCodeSamples = codeContent[demoName + '_xtypejs'].codeSamples;">
+        
+        <div class="code-entry">
+            <div class="code-container default-view">
+                <div class="code-content-window">
+                    <div class="code-content">
+                        <pre data-ng-bind-html="jsCodeSamples.default" class="default-view prettyprint"></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="compare-label">
+                <span class="large">go</span>
+                <span>from this..</span>
+                <i class="fa fa-share fa-2x fa-rotate-180"></i>
+            </div>
+        </div>
+        
+        <div class="code-entry">
+            <div class="compare-label">
+                <span class="large">..to</span>
+                <span>concise</span>
+                <span>performant</span>
+                <span>readable</span>
+                <span>validation</span>
+                <i class="fa fa-reply fa-2x fa-rotate-180"></i>
+            </div>
+            <div class="code-container {{activeViews[demoName] || (xtypejsCodeSamples.compact ? 'compact' : 'default')}}-view">
+                <ul class="code-tabs">
+                    <!-- <li class="tab-label">xtype supports both compact and descriptive type names</li> -->
+                    <li class="{{view}}-view" 
+                        data-ng-repeat="(view, code) in xtypejsCodeSamples" 
+                        data-ng-if="AppUtils.keys(xtypejsCodeSamples).length > 1">
+                        <a href="" data-ng-click="switchCodeView(demoName, view)">{{view === 'compact' ? 'Compact Names' : 'Descriptive Names'}}</a>
+                    </li>
+                </ul>
+                <div class="code-content-window">
+                    <div class="code-content">
+                        <pre data-ng-repeat="(view, code) in xtypejsCodeSamples" 
+                            data-ng-bind-html="code"
+                            class="{{view}}-view prettyprint">
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>

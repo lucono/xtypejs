@@ -1,11 +1,11 @@
-<section class="screen-content" template-artifact="usage">
+<section id="guide-screen-content" class="screen-content" template-artifact="guide">
     
     <div class="screen-content-links">
         <div class="cols-2">
             <div>
                 <ul>
                     <li data-ng-repeat="contentName in col1Items">
-                        <a screen-link=":{{contentName}}">{{usageContent[contentName].attributes.title}}</a>
+                        <a screen-link=":{{contentName}}">{{guideContent[contentName].attributes.title}}</a>
                     </li>
                 </ul>
             </div>
@@ -14,7 +14,7 @@
             <div>
                 <ul>
                     <li data-ng-repeat="contentName in col2Items">
-                        <a screen-link=":{{contentName}}">{{usageContent[contentName].attributes.title}}</a>
+                        <a screen-link=":{{contentName}}">{{guideContent[contentName].attributes.title}}</a>
                     </li>
                 </ul>
             </div>
@@ -27,10 +27,10 @@
             <div class="content-group">
                 
                 <div class="content-item" 
-                    data-ng-repeat="contentName in AppUtils.keys(usageContent)" 
-                    data-ng-init="contentItem = usageContent[contentName]">
+                    data-ng-repeat="contentName in AppUtils.keys(guideContent)" 
+                    data-ng-init="contentItem = guideContent[contentName]">
                     
-                    <div id="{{contentName}}">
+                    <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
                         
                         <div class="item-title" data-ng-if="contentItem.attributes.title">
                             <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
@@ -50,11 +50,13 @@
                                     <a href="" data-ng-click="switchCodeView(contentName, view)">{{view}}</a>
                                 </li>
                             </ul>
-                            <div class="code-content">
-                                <pre data-ng-repeat="(view, content) in contentItem.codeSamples" 
-                                    data-ng-bind-html="content"
-                                    class="{{view}}-view prettyprint">
-                                </pre>
+                            <div class="code-content-window">
+                                <div class="code-content">
+                                    <pre data-ng-repeat="(view, content) in contentItem.codeSamples" 
+                                        data-ng-bind-html="content"
+                                        class="{{view}}-view prettyprint">
+                                    </pre>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 
-<content-wrapper code-artifact="usage">
+<content-wrapper code-artifact="guide">
 
 
 <content 
@@ -102,7 +102,7 @@ xtype.type(new Boolean(true)) === '{boolean}';
 // OR is an array AND has exactly one element, 
 // OR is a number AND has an integer value AND is greater than zero.
 
-xtype.is(data, '{non_empty_object}, {single_elem_array}, {positive_integer}');  //@compact The commas can also be ommitted
+xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
 </content>
 
 
@@ -123,7 +123,7 @@ xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]));
 // So, suppose that if a product name is provided, it can be blank and a known
 // default product name will be used instead, then the we could now have: 
 
-xtype.is(value, ['{multi_char_string}, {blank_string}', '{positive_integer}', Product]));
+xtype.is(value, ['{{multi_char_string, blank_string, positive_integer}}', Product]));
 </content>
 
 
@@ -142,7 +142,7 @@ xtype.isSingleCharString(flag);
 
 // Verify if flag variable is a single character string or positive number value:
 
-xtype.is(flag, '{single_char_string}, {positive_number}');
+xtype.is(flag, '{{single_char_string, positive_number}}');
 xtype.is(flag, xtype.SINGLE_CHAR_STRING | xtype.POSITIVE_NUMBER);
 xtype.is(flag, ['{single_char_string}', xtype.POSITIVE_NUMBER]);
 </content>
@@ -293,7 +293,7 @@ xtype.isZero(new Number(0))     === true;
 // for integers. To check that a value is a non-negative integer, we would have
 // to perform a check for both '{non_negative_number}' and '{integer}':
 
-xtype.is(value, '{non_negative_number}, {integer}');
+xtype.is(value, '{{non_negative_number, integer}}');
 
 // OR:
 
@@ -539,7 +539,7 @@ xtype.isAny(['hi', 5])             === true;
 xtype.isAny(undefined)             === true;
 
 xtype.is(25, '{object}')           === false;
-xtype.is(25, '{object}, {any}')    === true;          // allows any value to pass type check
+xtype.is(25, '{{object, any}}')    === true;          // allows any value to pass type check
 
 xtype.not.isAny('hello')           === false;         // false for any value
 xtype.all.isAny('hi', 5, true)     === true;          // true for any list of values

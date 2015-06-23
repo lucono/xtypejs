@@ -1,4 +1,4 @@
-<section class="screen-content" template-artifact="types">
+<section id="types-screen-content" class="screen-content" template-artifact="types">
     
     <div class="screen-content-links">
         <div class="cols-4" data-ng-repeat="colGroup in colGroups">
@@ -12,19 +12,19 @@
             </div>
         </div>
     </div>
-                            
+    
     <div class="screen-content-body">        
         <div class="colspan-70">
             
-            <div id="{{typeGroup.name | lowercase}}_types" class="content-group" data-ng-repeat="typeGroup in typeGroups">
+            <div id="{{typeGroup.name | lowercase}}_types" section-title="{{typeGroup.name}} Types" class="content-group" data-ng-repeat="typeGroup in typeGroups">
             
                 <a screen-link=":{{typeGroup.name | lowercase}}_types" class="content-group-title">{{typeGroup.name}} Types</a>
                 
                 <div class="content-item"
                     data-ng-repeat="type in typeGroup.types"
                     data-ng-init="codeSamples = codeContent[type.name].codeSamples; activeView = activeViews[type.name]">
-                                          
-                    <div id="{{type.name}}">
+                    
+                    <div id="{{type.name}}" section-title="{{type.title || type.name}}">
                         
                         <div class="item-title">
                             <a screen-link=":{{type.name}}">{{type.title || type.name}}</a>                            
@@ -80,11 +80,13 @@
                                         <a href="" data-ng-click="switchCodeView(type.name, view)">{{view}}</a>
                                     </li>
                                 </ul>
-                                <div class="code-content">
-                                    <pre data-ng-repeat="(view, code) in codeSamples" 
-                                        data-ng-bind-html="code"
-                                        class="{{view}}-view prettyprint">
-                                    </pre>
+                                <div class="code-content-window">
+                                    <div class="code-content">
+                                        <pre data-ng-repeat="(view, code) in codeSamples" 
+                                            data-ng-bind-html="code"
+                                            class="{{view}}-view prettyprint">
+                                        </pre>
+                                    </div>
                                 </div>
                             </div>
                         </div>

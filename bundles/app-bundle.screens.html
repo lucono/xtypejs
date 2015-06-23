@@ -1,4 +1,156 @@
-<section class="screen-content" template-artifact="types">
+<section id="overview-screen-content" class="screen-content" template-artifact="overview">
+    
+    <div class="screen-content-links">
+        <div class="description-pane">
+            <div>
+                <span class="title">What</span>
+                Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript.
+            </div>
+            <div>
+                <span class="title">Why</span>
+                Improves efficiency and readability by unifying the most basic but common data and type validations in apps into single, highly optimized operations.
+            </div>
+            <div>
+                <span class="title">How</span>
+                Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
+            </div>
+        </div>
+    </div>
+    
+    <div class="code-comparison" 
+        data-ng-repeat="demoName in demoCodeSampleList"
+        data-ng-init="jsCodeSamples = codeContent[demoName + '_js'].codeSamples; xtypejsCodeSamples = codeContent[demoName + '_xtypejs'].codeSamples;">
+        
+        <div class="code-entry">
+            <div class="code-container default-view">
+                <div class="code-content-window">
+                    <div class="code-content">
+                        <pre data-ng-bind-html="jsCodeSamples.default" class="default-view prettyprint"></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="compare-label">
+                <span class="large">go</span>
+                <span>from this..</span>
+                <i class="fa fa-share fa-2x fa-rotate-180"></i>
+            </div>
+        </div>
+        
+        <div class="code-entry">
+            <div class="compare-label">
+                <span class="large">..to</span>
+                <span>concise</span>
+                <span>performant</span>
+                <span>readable</span>
+                <span>validation</span>
+                <i class="fa fa-reply fa-2x fa-rotate-180"></i>
+            </div>
+            <div class="code-container {{activeViews[demoName] || (xtypejsCodeSamples.compact ? 'compact' : 'default')}}-view">
+                <ul class="code-tabs">
+                    <!-- <li class="tab-label">xtype supports both compact and descriptive type names</li> -->
+                    <li class="{{view}}-view" 
+                        data-ng-repeat="(view, code) in xtypejsCodeSamples" 
+                        data-ng-if="AppUtils.keys(xtypejsCodeSamples).length > 1">
+                        <a href="" data-ng-click="switchCodeView(demoName, view)">{{view === 'compact' ? 'Compact Names' : 'Descriptive Names'}}</a>
+                    </li>
+                </ul>
+                <div class="code-content-window">
+                    <div class="code-content">
+                        <pre data-ng-repeat="(view, code) in xtypejsCodeSamples" 
+                            data-ng-bind-html="code"
+                            class="{{view}}-view prettyprint">
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
+<content-wrapper code-artifact="overview">
+
+
+<content name="switch_example_js">
+
+function searchEmployees(value) {
+    if (typeof value === 'string') {
+         if (value.trim().length > 1) {
+            return EmployeeDB.searchByName(value);
+        } else if (value.trim().length === 1) {
+            return EmployeeDB.searchByMiddleInitial(value);
+        } else {
+            return { error: 'Invalid search value supplied' };
+        }
+    } else if (typeof value === 'object' && value !== null) {
+        if (Object.keys(value).length === 1) {
+            return EmployeeDB.searchByFieldValuePair(value);
+        } else if (Object.keys(value).length > 1) {
+            return { error: 'Search by multiple fields not supported' };
+        } else {
+            return { error: 'Invalid search value supplied' };
+        }
+    } else if (typeof value === 'number') {
+        if (!isNaN(value) && isFinite(value) && value > 0 && value % 1 === 0) {
+            return EmployeeDB.searchByEmployeeNumber(value);
+        } else {
+            return { error: 'Invalid employee number supplied' };
+        }
+    } else if (typeof value === 'number' && !isNaN(value) &&
+            value > 0 && isFinite(value) && value % 1 === 0) {
+        return EmployeeDB.searchByEmployeeNumber(value);
+    } else if (typeof value === 'undefined' || value === null) {
+        return { error: 'No search value supplied' };
+    } else {
+        return { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+
+
+<content name="switch_example_xtypejs" no-compact-switch-prefix>
+
+function searchEmployees(value) {
+    switch (xtype.which(value, '{{multi_char_string, single_char_string, positive_integer, single_prop_object, multi_prop_object, number, nothing}}')) {
+        case '{multi_char_string}':
+            return EmployeeDB.searchByName(value);
+        case '{single_char_string}':
+            return EmployeeDB.searchByMiddleInitial(value);
+        case '{positive_integer}':
+            return EmployeeDB.searchByEmployeeNumber(value);
+        case '{single_prop_object}':
+            return EmployeeDB.searchByFieldValuePair(value);
+        case '{multi_prop_object}':
+            return { error: 'Search by multiple fields not supported' };
+        case '{number}':
+            return { error: 'Invalid employee number supplied' };
+        case '{nothing}':
+            return { error: 'No search value supplied' };
+        default:
+            return { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+
+<!--
+<content name="switch_example_xtypejs" no-compact-switch-prefix>
+
+function findEmployee(value) {
+    var type = xtype.which(value, '{{multi_char_string, single_char_string, single_prop_object, positive_integer, number, nothing}}');
+    return type === '{multi_char_string}' ? EmployeeDB.searchByName(value)
+        : type === '{single_char_string}' ? EmployeeDB.searchByMiddleInitial(value)
+        : type === '{single_prop_object}' ? EmployeeDB.searchByFieldValuePair(value)
+        : type === '{positive_integer}' ? EmployeeDB.searchByEmployeeNumber(value)
+        : type === '{number}' ? { error: 'Employee number must be positive integer' }
+        : type === '{nothing}' ? { error: 'No search value supplied' }
+        : { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+-->
+
+</content-wrapper><section id="types-screen-content" class="screen-content" template-artifact="types">
     
     <div class="screen-content-links">
         <div class="cols-4" data-ng-repeat="colGroup in colGroups">
@@ -12,19 +164,19 @@
             </div>
         </div>
     </div>
-                            
+    
     <div class="screen-content-body">        
         <div class="colspan-70">
             
-            <div id="{{typeGroup.name | lowercase}}_types" class="content-group" data-ng-repeat="typeGroup in typeGroups">
+            <div id="{{typeGroup.name | lowercase}}_types" section-title="{{typeGroup.name}} Types" class="content-group" data-ng-repeat="typeGroup in typeGroups">
             
                 <a screen-link=":{{typeGroup.name | lowercase}}_types" class="content-group-title">{{typeGroup.name}} Types</a>
                 
                 <div class="content-item"
                     data-ng-repeat="type in typeGroup.types"
                     data-ng-init="codeSamples = codeContent[type.name].codeSamples; activeView = activeViews[type.name]">
-                                          
-                    <div id="{{type.name}}">
+                    
+                    <div id="{{type.name}}" section-title="{{type.title || type.name}}">
                         
                         <div class="item-title">
                             <a screen-link=":{{type.name}}">{{type.title || type.name}}</a>                            
@@ -80,11 +232,13 @@
                                         <a href="" data-ng-click="switchCodeView(type.name, view)">{{view}}</a>
                                     </li>
                                 </ul>
-                                <div class="code-content">
-                                    <pre data-ng-repeat="(view, code) in codeSamples" 
-                                        data-ng-bind-html="code"
-                                        class="{{view}}-view prettyprint">
-                                    </pre>
+                                <div class="code-content-window">
+                                    <div class="code-content">
+                                        <pre data-ng-repeat="(view, code) in codeSamples" 
+                                            data-ng-bind-html="code"
+                                            class="{{view}}-view prettyprint">
+                                        </pre>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -108,8 +262,6 @@
     <div ui-view></div> <!-- dummy child view -->
     
 </section>
-
-
 <content-wrapper code-artifact="types">
 
 
@@ -158,9 +310,7 @@ xtype({})     === '{empty_object}';     // @compact: '{empty_object}' is same as
 </content>
 
 
-</content-wrapper>
-
-<section class="screen-content" template-artifact="api">
+</content-wrapper><section id="api-screen-content" class="screen-content" template-artifact="api">
     
     <div class="screen-content-links">
         <div class="cols-4" data-ng-repeat="colGroup in colGroups">
@@ -178,7 +328,7 @@ xtype({})     === '{empty_object}';     // @compact: '{empty_object}' is same as
     <div class="screen-content-body">    
         <div class="colspan-70">
             
-            <div id="{{methodGroup.name | lowercase}}_api" class="content-group" data-ng-repeat="methodGroup in methodGroups">
+            <div id="{{methodGroup.name | lowercase}}_api" section-title="{{methodGroup.name}} API" class="content-group" data-ng-repeat="methodGroup in methodGroups">
                 
                 <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
                 
@@ -187,7 +337,7 @@ xtype({})     === '{empty_object}';     // @compact: '{empty_object}' is same as
                     data-ng-init="codeSamples = codeContent[method.plainName].codeSamples" 
                     data-ng-if="!method.deprecated">
                     
-                    <div id="{{method.plainName}}">
+                    <div id="{{method.plainName}}" section-title="{{method.plainName}}">
                         
                         <div class="item-title">
                             <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.signature"></a>
@@ -283,11 +433,13 @@ xtype({})     === '{empty_object}';     // @compact: '{empty_object}' is same as
                                     <a href="" data-ng-click="switchCodeView(method.plainName, view)">{{view}}</a>
                                 </li>
                             </ul>
-                            <div class="code-content">
-                                <pre data-ng-repeat="(view, code) in codeContent[method.plainName].codeSamples" 
-                                    data-ng-bind-html="code"
-                                    class="{{view}}-view prettyprint">
-                                </pre>
+                            <div class="code-content-window">
+                                <div class="code-content">
+                                    <pre data-ng-repeat="(view, code) in codeContent[method.plainName].codeSamples" 
+                                        data-ng-bind-html="code"
+                                        class="{{view}}-view prettyprint">
+                                    </pre>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -310,8 +462,6 @@ xtype({})     === '{empty_object}';     // @compact: '{empty_object}' is same as
     <div ui-view></div> <!-- dummy child view -->
     
 </section>
-
-
 <content-wrapper code-artifact="api">
 
 
@@ -639,14 +789,14 @@ xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
 </content-wrapper>
 
 
-<section class="screen-content" template-artifact="usage">
+<section id="guide-screen-content" class="screen-content" template-artifact="guide">
     
     <div class="screen-content-links">
         <div class="cols-2">
             <div>
                 <ul>
                     <li data-ng-repeat="contentName in col1Items">
-                        <a screen-link=":{{contentName}}">{{usageContent[contentName].attributes.title}}</a>
+                        <a screen-link=":{{contentName}}">{{guideContent[contentName].attributes.title}}</a>
                     </li>
                 </ul>
             </div>
@@ -655,7 +805,7 @@ xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
             <div>
                 <ul>
                     <li data-ng-repeat="contentName in col2Items">
-                        <a screen-link=":{{contentName}}">{{usageContent[contentName].attributes.title}}</a>
+                        <a screen-link=":{{contentName}}">{{guideContent[contentName].attributes.title}}</a>
                     </li>
                 </ul>
             </div>
@@ -668,10 +818,10 @@ xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
             <div class="content-group">
                 
                 <div class="content-item" 
-                    data-ng-repeat="contentName in AppUtils.keys(usageContent)" 
-                    data-ng-init="contentItem = usageContent[contentName]">
+                    data-ng-repeat="contentName in AppUtils.keys(guideContent)" 
+                    data-ng-init="contentItem = guideContent[contentName]">
                     
-                    <div id="{{contentName}}">
+                    <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
                         
                         <div class="item-title" data-ng-if="contentItem.attributes.title">
                             <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
@@ -691,11 +841,13 @@ xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
                                     <a href="" data-ng-click="switchCodeView(contentName, view)">{{view}}</a>
                                 </li>
                             </ul>
-                            <div class="code-content">
-                                <pre data-ng-repeat="(view, content) in contentItem.codeSamples" 
-                                    data-ng-bind-html="content"
-                                    class="{{view}}-view prettyprint">
-                                </pre>
+                            <div class="code-content-window">
+                                <div class="code-content">
+                                    <pre data-ng-repeat="(view, content) in contentItem.codeSamples" 
+                                        data-ng-bind-html="content"
+                                        class="{{view}}-view prettyprint">
+                                    </pre>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -715,10 +867,7 @@ xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
     <div ui-view></div> <!-- dummy child view -->
     
 </section>
-
-
-
-<content-wrapper code-artifact="usage">
+<content-wrapper code-artifact="guide">
 
 
 <content 
@@ -821,7 +970,7 @@ xtype.type(new Boolean(true)) === '{boolean}';
 // OR is an array AND has exactly one element, 
 // OR is a number AND has an integer value AND is greater than zero.
 
-xtype.is(data, '{non_empty_object}, {single_elem_array}, {positive_integer}');  //@compact #:6:40 The commas can also be ommitted
+xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
 </content>
 
 
@@ -842,7 +991,7 @@ xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]));
 // So, suppose that if a product name is provided, it can be blank and a known
 // default product name will be used instead, then the we could now have: 
 
-xtype.is(value, ['{multi_char_string}, {blank_string}', '{positive_integer}', Product]));
+xtype.is(value, ['{{multi_char_string, blank_string, positive_integer}}', Product]));
 </content>
 
 
@@ -861,7 +1010,7 @@ xtype.isSingleCharString(flag);
 
 // Verify if flag variable is a single character string or positive number value:
 
-xtype.is(flag, '{single_char_string}, {positive_number}');
+xtype.is(flag, '{{single_char_string, positive_number}}');
 xtype.is(flag, xtype.SINGLE_CHAR_STRING | xtype.POSITIVE_NUMBER);
 xtype.is(flag, ['{single_char_string}', xtype.POSITIVE_NUMBER]);
 </content>
@@ -1012,7 +1161,7 @@ xtype.isZero(new Number(0))     === true;
 // for integers. To check that a value is a non-negative integer, we would have
 // to perform a check for both '{non_negative_number}' and '{integer}':
 
-xtype.is(value, '{non_negative_number}, {integer}');
+xtype.is(value, '{{non_negative_number, integer}}');
 
 // OR:
 
@@ -1258,7 +1407,7 @@ xtype.isAny(['hi', 5])             === true;
 xtype.isAny(undefined)             === true;
 
 xtype.is(25, '{object}')           === false;
-xtype.is(25, '{object}, {any}')    === true;          // allows any value to pass type check
+xtype.is(25, '{{object, any}}')    === true;          // allows any value to pass type check
 
 xtype.not.isAny('hello')           === false;         // false for any value
 xtype.all.isAny('hi', 5, true)     === true;          // true for any list of values
@@ -1301,11 +1450,15 @@ xtype.none.isAny(null, 25, false)  === false;         // false for any list of v
 
 
 
-</content-wrapper>
-
-<section class="screen-content" template-artifact="getit">
+</content-wrapper><section id="getit-screen-content" class="screen-content" template-artifact="getit">
     
-    <div class="screen-content-links">
+    <div class="screen-content-links">        
+        <div class="links-section-buttons">
+            <a href="https://github.com/lucono/xtypejs/stargazers" target="_blank">
+                <i class="fa fa-github fa-5x"></i>
+                <!-- Star GitHub Project -->
+            </a>
+        </div>
         <div>
             <h1>Current version {{latestVersion ? '- ' + latestVersion: ''}}</h1>
         </div>
@@ -1317,10 +1470,6 @@ xtype.none.isAny(null, 25, false)  === false;         // false for any list of v
                 <a screen-link=":download">Download</a>
             </li>
         </ul>
-        
-        <div class="links-section-buttons">
-            <a href="https://github.com/lucono/xtypejs/stargazers">Star GitHub Project</a>
-        </div>
     </div>
     
     <div class="screen-content-body">        
@@ -1332,7 +1481,7 @@ xtype.none.isAny(null, 25, false)  === false;         // false for any list of v
                     data-ng-repeat="contentName in AppUtils.keys(getItContent)" 
                     data-ng-init="contentItem = getItContent[contentName]; codeSamples = contentItem.codeSamples;">
                     
-                    <div id="{{contentName}}">
+                    <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
                         
                         <div class="item-title" data-ng-if="contentItem.attributes.title">
                             <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
@@ -1342,19 +1491,21 @@ xtype.none.isAny(null, 25, false)  === false;         // false for any list of v
                             {{contentItem.attributes.description}}
                         </p>
                         
-                        <div class="code-container" data-ng-if="codeSamples">                            
-                            <div class="code-content">
-                                <pre data-ng-repeat="(view, content) in codeSamples" 
-                                    data-ng-bind-html="content"
-                                    class="{{view}}-view prettyprint">
-                                </pre>
+                        <div class="code-container" data-ng-if="codeSamples">
+                            <div class="code-content-window">
+                                <div class="code-content">
+                                    <pre data-ng-repeat="(view, content) in codeSamples" 
+                                        data-ng-bind-html="content"
+                                        class="{{view}}-view prettyprint">
+                                    </pre>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             
                 <div class="content-item">
-                    <div id="download">
+                    <div id="download" section-title="Download">
                         
                         <div class="item-title">
                             <a screen-link=":download">
@@ -1390,10 +1541,6 @@ xtype.none.isAny(null, 25, false)  === false;         // false for any list of v
     <div ui-view></div> <!-- dummy child view -->
     
 </section>
-
-
-
-
 <content-wrapper code-artifact="getit">
 
 

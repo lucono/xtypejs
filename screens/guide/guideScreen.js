@@ -5,17 +5,17 @@
 
 angular.module('xtypejsSite')
 
-    .controller('UsageScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
+    .controller('GuideScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
         $scope.activeViews = {};
         
         $scope.switchCodeView = function(contentName, view) {
             $scope.activeViews[contentName] = view;
         };
         
-        service.getUsageCodeContent(function(usageContent) {
-            $scope.usageContent = usageContent;
+        service.getCodeContent('guide', function(guideContent) {
+            $scope.guideContent = guideContent;
             
-            var contentNames = $rootScope.AppUtils.keys(usageContent),
+            var contentNames = $rootScope.AppUtils.keys(guideContent),
                 col1Items = [],
                 col2Items = [],
                 midIndex = Math.ceil(contentNames.length / 2),
@@ -29,6 +29,6 @@ angular.module('xtypejsSite')
             $scope.col2Items = col2Items;
         });
         
-        $rootScope.activeScreen = 'usage';
-        $rootScope.activeScreenTitle = $rootScope.setPageTitle('Usage and Examples');
+        $rootScope.activeScreen = 'guide';
+        $rootScope.screenTitle = 'Usage Guide';
     }]);

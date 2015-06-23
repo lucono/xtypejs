@@ -1,6 +1,12 @@
-<section class="screen-content" template-artifact="getit">
+<section id="getit-screen-content" class="screen-content" template-artifact="getit">
     
-    <div class="screen-content-links">
+    <div class="screen-content-links">        
+        <div class="links-section-buttons">
+            <a href="https://github.com/lucono/xtypejs/stargazers" target="_blank">
+                <i class="fa fa-github fa-5x"></i>
+                <!-- Star GitHub Project -->
+            </a>
+        </div>
         <div>
             <h1>Current version {{latestVersion ? '- ' + latestVersion: ''}}</h1>
         </div>
@@ -12,10 +18,6 @@
                 <a screen-link=":download">Download</a>
             </li>
         </ul>
-        
-        <div class="links-section-buttons">
-            <a href="https://github.com/lucono/xtypejs/stargazers" target="_blank">Star GitHub Project</a>
-        </div>
     </div>
     
     <div class="screen-content-body">        
@@ -27,7 +29,7 @@
                     data-ng-repeat="contentName in AppUtils.keys(getItContent)" 
                     data-ng-init="contentItem = getItContent[contentName]; codeSamples = contentItem.codeSamples;">
                     
-                    <div id="{{contentName}}">
+                    <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
                         
                         <div class="item-title" data-ng-if="contentItem.attributes.title">
                             <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
@@ -37,19 +39,21 @@
                             {{contentItem.attributes.description}}
                         </p>
                         
-                        <div class="code-container" data-ng-if="codeSamples">                            
-                            <div class="code-content">
-                                <pre data-ng-repeat="(view, content) in codeSamples" 
-                                    data-ng-bind-html="content"
-                                    class="{{view}}-view prettyprint">
-                                </pre>
+                        <div class="code-container" data-ng-if="codeSamples">
+                            <div class="code-content-window">
+                                <div class="code-content">
+                                    <pre data-ng-repeat="(view, content) in codeSamples" 
+                                        data-ng-bind-html="content"
+                                        class="{{view}}-view prettyprint">
+                                    </pre>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             
                 <div class="content-item">
-                    <div id="download">
+                    <div id="download" section-title="Download">
                         
                         <div class="item-title">
                             <a screen-link=":download">
