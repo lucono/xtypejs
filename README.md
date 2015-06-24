@@ -1,229 +1,90 @@
-# xtypejs [![Build Status](https://travis-ci.org/lucono/xtypejs.svg?branch=master)](https://travis-ci.org/lucono/xtypejs)
+### [![xtypejs Logo](http://xtype.js.org/assets/img/xtype-logo.png)](http://xtype.js.org/) <a href="https://travis-ci.org/lucono/xtypejs"><img align="right" src="https://travis-ci.org/lucono/xtypejs.svg?branch=master"></a>
 
-*xtypejs* extends the standard JavaScript types with new data-validating pseudo types, while also normalizing all the irregularities of working with JavaScript types. With data-validating pseudo types, it unifies type checking and some of the most commonly required basic data validations in JavaScript applications, into a single concise and efficient operation.
+### Overview
 
-It is fast and robust, internally employing bitwise operations and memory-efficient memoization techniques to provide good overall performance in small, medium and large applications and libraries.
+- Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript.
+- Improves application efficiency and readability by unifying the most basic but common data and type validations in JavaScript apps, into single, concise, highly optimized operations.
+- Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
+- Supports CommonJS and AMD environments, as well as regular HTML script tag.
 
-## Features
-
-* Implements a rich set of intuitive data-validating pseudo-types.
-* Determines the simple, extended, or custom type of any value.
-* Supports compounding of existing types to produce custom new data-validating types.
-* Supports instance types to provide broader, more complex type and data validation checks. 
-* Very flexible, with custom name schemes and other library options.
-* Supports CommonJS and AMD environments, as well as regular HTML script tag.
-* High performance, with no dependencies.
-* Well tested and documented.
-
-
-## Installation
-
-### npm
-
-```
-npm install xtypejs --save
-```
-
-**From github**
-
-```
-npm install git://github.com/lucono/xtypejs.git
-```
-
-### bower
-
-```
-bower install xtypejs --save
-```
-  
-**From github**
-
-```
-bower install git://github.com/lucono/xtypejs.git
-```
-
-
-## Supported Types
-  
- | | | |
--------------------------- | ---------------------- | ----------------------- | -----------------
-**Basic**                  | **String**             | **Number**              | `positive_integer`
-`null`                     | `string`               | `number`                | `negative_integer`
-`undefined`                | `whitespace`           | `integer`               | `positive_float`
-`nan`                      | `single_char_string`   | `float`                 | `negative_float`
-`symbol`                   | `multi_char_string`    | `positive_number`       | `positive_infinity`
-`function`                 | `empty_string`         | `negative_number`       | `negative_infinity`
-`date`                     | `blank_string`         | `infinite_number`       | `non_positive_number`
-`error`                    | `non_empty_string`     | `zero`                  | `non_negative_number`
-`regexp`                   | `non_blank_string`     | `non_zero_number`       | `non_infinite_number`
-**Object**                 | **Array**              | **Boolean**             | **Other**
-`object`                   | `array`                | `boolean`               | `primitive`
-`empty_object`             | `empty_array`          | `true`                  | `nothing`
-`single_prop_object`       | `single_elem_array`    | `false`                 | `any`
-`multi_prop_object`        | `multi_elem_array`     |                         | `none`
-`non_empty_object`         | `non_empty_array`      |                         |   
-
-There are also *Instance Types*, which include any constructor function, and *Custom Types*, which can be derived from various combinations of the *xtypejs* built-in types.
-  
-**More on the supported types at** ***[xtype.js.org](http://xtype.js.org)*** &nbsp; &lArr;
-
-
-## Sample Usage
+### Go from this:
 
 ```js
-/* Importing the library */
-
-var xtype = require('xtypejs');         // (node.js). See docs for AMD and others.
-```
-
-```js
-/* Getting the simple type of a value */
-
-xtype.type(null)          === 'null';
-xtype.type(undefined)     === 'undefined';
-xtype.type(NaN)           === 'nan';
-xtype.type([])            === 'array';
-xtype.type({})            === 'object';
-xtype.type(new Date())    === 'date';
-xtype.type(function() {}) === 'function';
-```
-
-```js
-/* Getting the extended type of a value */
-
-xtype(5)      === 'positive_integer';    // Value is number, positive and integer
-xtype('')     === 'empty_string';        // Value is string and empty
-xtype({})     === 'empty_object';        // Value is object and has no properties
-
-/*
- * Every type also has a corresponding compact name. So switching to the
- * compact name scheme, a less verbose equivalent of the type checks above:
- */
-
-xtype(5)      === 'int+';               // 'int+' is same as 'positive_integer'
-xtype('')     === 'str0';               // 'str0' is same as 'empty_string'
-xtype({})     === 'obj0';               // 'obj0' is same as 'empty_object'
-```
-
-```js
-/* Validate sets of values */
-
-xtype.none.isNan(7, 2.5, NaN, 0, -5)        === false;
-xtype.any.isZero(7, 2.5, NaN, 0, -5)        === true;
-xtype.all.isPositiveInteger(3, 5.1, 7)      === false;
-
-xtype.some.isFloat(3, 5.5, 7)               === true;       // Some but not all are float
-xtype.some.isFloat(2.5, 8.5, 2.1)           === false;      // All are float, not some
-xtype.all.isNonZeroNumber(4, -20, 8.5)      === true;
-```
-
-```js
-/* Return true if data is any of several types */
-    
-xtype.is(data, 'non_empty_object, single_elem_array, positive_integer');
-    
-/* OR using compact name scheme: */
-    
-xtype.is(data, '-obj0 arr1 int+');
-
-/*
- * Display a product using a received value that must be a product
- * name string, a product Id number, or an actual product instance.
- */
-    
-if (! xtype.is(value, [xtype.MULTI_CHAR_STRING, xtype.POSITIVE_INTEGER, Product])) {
-    // Handle cannot display product
+function searchEmployees(value) {
+    if (typeof value === 'string') {
+         if (value.trim().length > 1) {
+            return EmployeeDB.searchByName(value);
+        } else if (value.trim().length === 1) {
+            return EmployeeDB.searchByMiddleInitial(value);
+        } else {
+            return { error: 'Invalid search value supplied' };
+        }
+    } else if (typeof value === 'object' && value !== null) {
+        if (Object.keys(value).length === 1) {
+            return EmployeeDB.searchByFieldValuePair(value);
+        } else if (Object.keys(value).length > 1) {
+            return { error: 'Search by multiple fields not supported' };
+        } else {
+            return { error: 'Invalid search value supplied' };
+        }
+    } else if (typeof value === 'number') {
+        if (!isNaN(value) && isFinite(value) && value > 0 && value % 1 === 0) {
+            return EmployeeDB.searchByEmployeeNumber(value);
+        } else {
+            return { error: 'Invalid employee number supplied' };
+        }
+    } else if (typeof value === 'undefined' || value === null) {
+        return { error: 'No search value supplied' };
+    } else {
+        return { error: 'Invalid search value supplied' };
+    }
 }
 ```
 
-```js
-/*
- * Switch on the result of xtype.which() to handle only valid input scenarios
- * without first performing extensive type checking and data validations.
- */
-  
-switch (xtype.which(value, ['multi_char_string', 'positive_integer', Product])) {
+### To concise, performant, readable, data validation:
 
-    case 'multi_char_string':
-        // Fetch and display product using value as the product name
-        
-    case 'positive_integer':
-        // Fetch and display product using value as the product id
-        
-    case Product:
-        // value is a Product object, so just display it
-        
-    default:
-        // Handle invalid value.. cannot display product
+```js
+function searchEmployees(value) {
+    switch (xtype.which(value, 'str2+ str1 int+ obj1 obj2+ num nil')) {
+        case 'str2+':
+            return EmployeeDB.searchByName(value);
+        case 'str1':
+            return EmployeeDB.searchByMiddleInitial(value);
+        case 'int+':
+            return EmployeeDB.searchByEmployeeNumber(value);
+        case 'obj1':
+            return EmployeeDB.searchByFieldValuePair(value);
+        case 'obj2+':
+            return { error: 'Search by multiple fields not supported' };
+        case 'num':
+            return { error: 'Invalid employee number supplied' };
+        case 'nil':
+            return { error: 'No search value supplied' };
+        default:
+            return { error: 'Invalid search value supplied' };
+    }
 }
 ```
-  
-**See more usage and examples at** ***[xtype.js.org](http://xtype.js.org)*** &nbsp; &lArr;
+
+## &nbsp;
+
+#### Dependencies
+
+None.
 
 
-## API
+#### Build / Test
 
-*xtypejs* comes with a comprehensive and intuitive API which provides validations, normalized type checking, customization and configuration, as well as extensibility to suit the specific needs of any application.
-  
-**See the API docs at** ***[xtype.js.org](http://xtype.js.org)*** &nbsp; &lArr;
+See [here](https://github.com/lucono/xtypejs/tree/master/test).
 
 
-## Building
+#### License
 
-To build the project, clone it locally and run the following command:
-
-```
-npm install && grunt build
-```
-
-This will install the dev dependencies and then build the library, generating a `dist` directory under the project root, containing the source and minified versions and associated source map file for *xtypejs*. To not bundle the compact name scheme in the final minified version, set the `$XTYPE_JS_BUNDLE_COMPACT_NAME_SCHEME$` global def variable to `false` in the uglify options of the `Gruntfile` before building the project.
+MIT license.
 
 
-## Testing
+#### Website
 
-There are comprehensive tests that cover almost every aspect of the *xtypejs* functionality. The link below can also be used to view and run the tests directly in the browser for the current head version of the library.
-
-For more comprehensive tests with reports, including js lint and code coverage reports, you can clone the project and run the tests. The following command will install the dev dependencies and run the tests:
-
-```
-npm install && npm test
-```
-
-After installing the dependencies, this will first build the library, generating a `dist` directory under the project root, containing minified and source versions of the library, as well as a source map file. It will then perform the following actions:
-
-* Creates a `build` directory under the project root directory.
-* Runs js linting on the source version of *xtypejs* in the `dist` directory and generates an HTML report under the `build` directory.
-* Runs the Jasmine spec tests for the source library in node.
-* Runs the Jasmine spec tests for the minified library in node.
-* Runs the Jasmine spec tests and code coverage for the source library in chrome.
-* Runs the Jasmine spec tests and code coverage for the source library in firefox.
-* Runs the Jasmine spec tests for the minified library in chrome.
-* Runs the Jasmine spec tests for the minified library in firefox.
-
-HTML reports are generated under the `build` directory for the js linting results, the jasmine tests for the source and minified libraries in chrome and firefox, and the code coverage reports for the source library in chrome and firefox.
-
-**Run the tests directly in your browser** ***[here](https://rawgit.com/lucono/xtypejs/master/test/spec/index.html)*** &nbsp; &lArr;
-
-
-## Dependencies
-
-*xtypejs* has no dependencies.
-
-
-## Notes
-
-#### Source vs. Minified version
-
-*xtypejs* is implemented as a single file, which can be used with or without prior minification in both CommonJS and AMD based environments, as well as in a browser via regular script tag.
-
-
-## License
-
-Licensed under the terms of the MIT license.
-
-
-## Website
-
-See the website for the full list and explanation of the various types, API documentation, usage guide, examples, installation and download instructions.
+Visit the website for usage guide, examples, API documentation, and download.
 
 #### **[xtype.js.org](http://xtype.js.org/)**
