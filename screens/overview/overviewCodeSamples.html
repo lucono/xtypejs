@@ -27,9 +27,6 @@ function searchEmployees(value) {
         } else {
             return { error: 'Invalid employee number supplied' };
         }
-    } else if (typeof value === 'number' && !isNaN(value) &&
-            value > 0 && isFinite(value) && value % 1 === 0) {
-        return EmployeeDB.searchByEmployeeNumber(value);
     } else if (typeof value === 'undefined' || value === null) {
         return { error: 'No search value supplied' };
     } else {

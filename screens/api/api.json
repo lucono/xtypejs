@@ -108,7 +108,7 @@
 								},
 								{
 									"type": "array",
-									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, but must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or an OR'ed expression of several type Ids."
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, and must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or a bitwise expression of several type Ids."
 								}
 							]
 						}

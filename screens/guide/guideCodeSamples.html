@@ -93,7 +93,7 @@ xtype.type(new Boolean(true)) === '{boolean}';
 
 
 <content 
-    name="checking_combination_of_types" 
+    name="checking_combinations_of_types" 
     title="Checking values against combinations of various types"
     description="Complex type and data requirements can be concisely validated using combinations of relevant simple and/or extended types.">
 
@@ -117,13 +117,7 @@ xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
 // example validates that the value is either a product name string (multi_char_string),
 // a product Id number (positive_integer), or an actual Product instance:
 
-xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]));
-
-// A type expression can also be used as a unit type entry in the type list.
-// So, suppose that if a product name is provided, it can be blank and a known
-// default product name will be used instead, then the we could now have: 
-
-xtype.is(value, ['{{multi_char_string, blank_string, positive_integer}}', Product]));
+xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]);
 </content>
 
 
