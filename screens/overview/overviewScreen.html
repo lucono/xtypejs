@@ -4,7 +4,7 @@
         <div class="description-pane">
             <div>
                 <span class="title">What</span>
-                Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript.
+                Concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types.
             </div>
             <div>
                 <span class="title">Why</span>
@@ -19,16 +19,15 @@
     
     <div class="code-comparison" 
         data-ng-repeat="demoName in demoCodeSampleList"
-        data-ng-init="jsCodeSamples = codeContent[demoName + '_js'].codeSamples; xtypejsCodeSamples = codeContent[demoName + '_xtypejs'].codeSamples;">
+        data-ng-init="jsCodeSample = codeContent[demoName + '_js']; xtypejsCodeSample = codeContent[demoName + '_xtypejs']">
         
         <div class="code-entry">
-            <div class="code-container default-view">
-                <div class="code-content-window">
-                    <div class="code-content">
-                        <pre data-ng-bind-html="jsCodeSamples.default" class="default-view prettyprint"></pre>
-                    </div>
-                </div>
-            </div>
+            
+            <code-snippet
+                code-item="jsCodeSample"
+                skip-compact-view>
+            </code-snippet>
+            
             <div class="compare-label">
                 <span class="large">go</span>
                 <span>from this..</span>
@@ -45,24 +44,14 @@
                 <span>validation</span>
                 <i class="fa fa-reply fa-2x fa-rotate-180"></i>
             </div>
-            <div class="code-container {{activeViews[demoName] || (xtypejsCodeSamples.compact ? 'compact' : 'default')}}-view">
-                <ul class="code-tabs">
-                    <!-- <li class="tab-label">xtype supports both compact and descriptive type names</li> -->
-                    <li class="{{view}}-view" 
-                        data-ng-repeat="(view, code) in xtypejsCodeSamples" 
-                        data-ng-if="AppUtils.keys(xtypejsCodeSamples).length > 1">
-                        <a href="" data-ng-click="switchCodeView(demoName, view)">{{view === 'compact' ? 'Compact Names' : 'Descriptive Names'}}</a>
-                    </li>
-                </ul>
-                <div class="code-content-window">
-                    <div class="code-content">
-                        <pre data-ng-repeat="(view, code) in xtypejsCodeSamples" 
-                            data-ng-bind-html="code"
-                            class="{{view}}-view prettyprint">
-                        </pre>
-                    </div>
-                </div>
-            </div>
+            
+            <code-snippet 
+                code-item="xtypejsCodeSample" 
+                default-view="compact" 
+                compact-view-label="Compact Names"
+                default-view-label="Descriptive Names"
+                no-info-label>
+            </code-snippet>
         </div>
     </div>
     

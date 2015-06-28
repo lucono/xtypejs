@@ -1,0 +1,197 @@
+
+.code-container {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.code-container pre {
+    margin: 0px;
+    padding: 20px 20px;
+}
+
+.code-container:not(.compact-view) .code-tabs li.default-view a {
+    background-color: #f6f6f6; /* #bfd4e7 #558abb; dde4e9; */
+    border-top: #e8e8e8 1px solid;
+    border-left: #e8e8e8 1px solid;
+    border-right: #e8e8e8 1px solid;
+    padding-bottom: 5px;
+    margin-bottom: -1px;
+}
+
+.code-container.compact-view .code-tabs li.compact-view a {
+    background-color: #f6f6f6; /* #bfd4e7 #558abb; dde4e9; */
+    border-top: #e8e8e8 1px solid;
+    border-left: #e8e8e8 1px solid;
+    border-right: #e8e8e8 1px solid;
+    padding-bottom: 5px;
+    margin-bottom: -1px;
+}
+
+.code-content-window {
+    background-color: #f6f6f6;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    /*
+    border: #e8e8e8 1px solid;
+    padding: 5px;
+    */
+}
+
+#overview-screen-content .code-content-window, 
+#overview-screen-content .code-tabs, 
+#overview-screen-content .code-content {
+    border-width: 5px;
+    border-color: #919999;
+    /*
+    border: #d9d9d9 5px solid;
+    border: #f0f0f0 5px solid;
+    */
+}
+
+#overview-screen-content .code-tabs {
+    padding: 0px;
+}
+
+#overview-screen-content .code-container:not(.compact-view) .code-tabs li.default-view a,
+#overview-screen-content .code-container.compact-view .code-tabs li.compact-view a {
+    margin-bottom: -5px;
+    padding-bottom: 9px;
+    background-color: #919999; /* #f6f6f6 #bfd4e7 #558abb; dde4e9; */
+    border: none !important;
+    color: #fff !important;
+}
+
+.code-content-description {
+    display: block;
+    background-color: #fff;
+    padding: 20px;
+    font-size: 16px;
+    border-top: #e8e8e8 1px solid;
+    border-left: #e8e8e8 1px solid;
+    border-right: #e8e8e8 1px solid;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.code-content-description:only-child {
+    border: #e8e8e8 1px solid;
+    border-radius: 5px;
+}
+
+.code-tabs {
+    display: block;
+    padding-left: 0px;
+    padding-right: 25px;
+    background-color: #fff;
+    white-space: nowrap;
+    margin: 0px;
+    text-align: right;
+}
+
+.code-tabs:not(:first-child) {
+    border-left: #e8e8e8 1px solid;
+    border-right: #e8e8e8 1px solid;
+    padding-left: 15px;
+}
+
+.code-tabs li {
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0px 0px 0px 0px;
+    font-size: 14px;
+    color: #999;
+    /* background-color: #eaeff2;  #dde4e9; #bfd4e7; */
+}
+
+.code-tabs li.tab-label {
+    float: left;
+    color: #999;
+    text-align: left;
+    padding: 4px 5px;
+}
+
+.code-tabs li.tab-label:only-child {
+    float: none;
+    width: 100%;
+}
+
+.code-tabs li.tab-label a {
+    color: #999;
+    text-align: left;
+}
+
+.code-tabs li.tab-label a:hover {
+    color: #000;
+}
+
+.code-tabs li:not(.tab-label) a {
+    display: inline-block;
+    padding: 4px 15px;
+    color: #4D4E56 !important; /* #4D4E56; */
+    background-color: #fff;
+    text-decoration: none;
+    border-radius: 3px 3px 0px 0px;
+    border-top: #fff 1px solid;
+    border-left: #fff 1px solid;
+    border-right: #fff 1px solid;
+}
+
+.code-content {
+    display: block;
+    background-color: #f6f6f6;
+    padding: 5px;
+    border-left: #e8e8e8 1px solid;
+    border-right: #e8e8e8 1px solid;
+    border-bottom: #e8e8e8 1px solid;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.code-content-window.no-description .code-content {
+    border: #e8e8e8 1px solid;
+    border-radius:5px;
+}
+
+.code-content:only-child {
+    border: #e8e8e8 1px solid;
+    border-radius:5px;
+}
+
+.code-content-scroller {
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.code-content-scroller::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.code-content-scroller::-webkit-scrollbar-track {
+    background-color: #f6f6f6;
+}
+
+.code-content-scroller::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 3px;
+}
+
+.code-content-scroller::-webkit-scrollbar-thumb:hover {
+    background-color: #ccc;
+}
+
+/*
+.code-content-scroller::-webkit-scrollbar-corner {
+    display: none;
+}
+*/
+
+.code-content pre {
+    display: none;
+}
+
+.code-container:not(.compact-view) .code-content pre.default-view {
+    display: inline-block;
+}
+
+.code-container.compact-view .code-content pre.compact-view {
+    display: inline-block;
+}

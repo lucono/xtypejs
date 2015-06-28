@@ -6,11 +6,6 @@
 angular.module('xtypejsSite')
     
     .controller('APIScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
-        $scope.activeViews = {};
-        
-        $scope.switchCodeView = function(methodName, view) {
-            $scope.activeViews[methodName] = view;
-        };
         
         service.getCodeContent('api', function(codeContent) {
             $scope.codeContent = codeContent;

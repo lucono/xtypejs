@@ -137,12 +137,9 @@ xtype.is(25, '{zero}, {positive_number} / {float}') === true;
 
 
 
-<content name="noConflict">
-/*
- * To reassign the xtype module to the 'otherName'
- * variable, and return the global 'xtype' variable
- * to its previous value prior to importing xtypejs:
- */
+<content 
+    name="noConflict"
+    description="To reassign the xtype module to the 'otherName' variable, and return the global 'xtype' variable to its previous value prior to importing xtypejs:">
 
 var otherName = xtype.noConflict();
 
@@ -152,15 +149,44 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
 
 
 
-<content name="which">
-/*
- * Switch on the result of xtype.which() to handle only valid data scenarios
- * without first performing extensive type checking and data validations.
- */
- 
-// For instance, in an application or library that receives a varying piece of
-// information with which a product should be displayed, the following example
-// handles three scenarios for the type of product-related information received:
+<content 
+    name="newInstance"
+    description="Create two different xtypejs module instances where one is setup to use the default name scheme whereas the other is setup for the compact name scheme."
+    skip-views="default">
+
+// Obtain original xtypejs instance. Here we use nodejs-style
+// require, but could be any other way of obtaining the module:
+
+var xtype = require('xtypejs');
+
+// Because the 'default' name scheme is the default for new xtypejs
+// module instances, the following statement is not necessary for
+// a newly created instance, but is included here for clarity:
+
+xtype.options.setNameScheme('default');
+
+// Create a new instance (named xtypeCompact in this case)
+// of xtypejs and set it to use the 'compact' name scheme:
+
+var xtypeCompact = xtype.newInstance();
+xtypeCompact.options.setNameScheme('compact');
+
+// Now the original instance (xtype) uses the default descriptive type
+// names of the 'default' scheme, whereas the xtypeCompact instance
+// uses the concise names of the 'compact' name scheme:
+
+xtype(29.3)         === 'positive_float';
+xtypeCompact(29.3)  === '{positive_float}';
+
+// Each can be further configured and used independently of each other.
+</content>
+
+
+
+
+<content 
+    name="which"
+    description="Switch on the result of xtype.which() to handle only valid data scenarios without first performing extensive type checking and data validations. For instance, in an application or library that receives a varying piece of information with which a product should be displayed, the following example handles three scenarios for the type of product-related information received.">
 
 switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
 
@@ -181,15 +207,9 @@ switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product
 
 
 
-<content name="is">
-/*
- * Complex type and data requirements can be concisely validated
- * using combinations of relevant simple and/or extended types.
- */
- 
-// The following two examples return true ONLY if:
-// value is an array AND has exactly one element, 
-// OR is a number AND has an integer value AND is greater than zero.
+<content
+    name="is"
+    description ="Complex type and data requirements can be concisely validated using combinations of relevant simple and/or extended types. The following example returns true only if - data is an object and contains at least one own property, or is an array and has exactly one element, or is a number and has an integer value and is greater than zero.">
 
 xtype.is(value, '{single_elem_array}, {positive_integer}');
 
@@ -282,7 +302,8 @@ xtype.registerTypes({
     non_negative_integer: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER)
 });
 
-// Or to assign both a default name and the compact name '-int-' to the new type: 
+// Or to assign both a default name and the
+// compact name '-int-' to the new type: 
 
 xtype.registerTypes({
     non_negative_integer: {

@@ -11,6 +11,7 @@ find ../assets ../vendor ../screens -name "*.js" -o -name "*.css" -o -name "*.ht
     ../vendor/js/prettify.js \
     ../assets/js/xtype.js \
     ../assets/js/default.js \
+    ../components/code-snippet/code-snippet.js \
     ../screens/overview/overviewScreen.js \
     ../screens/types/typesScreen.js \
     ../screens/api/apiScreen.js \
@@ -19,13 +20,16 @@ find ../assets ../vendor ../screens -name "*.js" -o -name "*.css" -o -name "*.ht
     ../bundles/app-bundle.min.js
 
 
-cat ../assets/css/xtype.css \
+cat \
+    ../assets/css/xtype.css \
+    ../components/code-snippet/code-snippet.css \
     ../vendor/css/prettify-theme.css \
     ../vendor/css/typed.css \
     > ../bundles/app-bundle.min.css
 
 
-cat ../screens/overview/overviewScreen.html \
+cat \
+    ../screens/overview/overviewScreen.html \
     ../screens/overview/overviewCodeSamples.html \
     ../screens/types/typesScreen.html \
     ../screens/types/typeCodeSamples.html \
@@ -35,4 +39,5 @@ cat ../screens/overview/overviewScreen.html \
     ../screens/guide/guideCodeSamples.html \
     ../screens/getit/getitScreen.html \
     ../screens/getit/getitOptions.html \
+    ../components/code-snippet/code-snippet.tpl.html \
     > ../bundles/app-bundle.screens.html

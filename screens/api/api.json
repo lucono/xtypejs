@@ -635,6 +635,19 @@
 			"name": "Other",
 			"methods": [
 				{
+					"name": "newInstance",
+					"signature": "xtype.newInstance()",
+					"description": "Creates a new xtypejs module instance that is independently configurable from all other previously created xtypejs module instances. The initial state and configuration of the new instance will be the xtypejs defaults, and is not affected by the state or configuration of the existing instance on which the creation was called.",
+					"arguments": [],
+					"return": [
+						{
+							"type": "<em>xtypejs</em>",
+							"description": "The newly created xtypejs module instance."
+						}
+					]
+				},
+                
+				{
 					"name": "noConflict",
 					"signature": "xtype.noConflict()",
 					"description": "When xtypejs is imported using a {&lt;script&gt;} tag, this method returns the {'xtype'} global variable to its previous value before xtypejs was imported. Note that this method is only available when xtypejs is imported using a {&lt;script&gt;} tag.",

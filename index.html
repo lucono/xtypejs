@@ -10,23 +10,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <title data-ng-bind="screenTitle + (sectionTitle ? ' - ' + sectionTitle : '')">
-            xtypejs - Efficient data-validating pseudo types for JavaScript
+            xtypejs - Elegant, highly efficient data validation for JavaScript
         </title>
         
-        <meta name="description" content="Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript.">
+        <meta name="description" content="Concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types.">
         
         <meta property="og:type" content="website">
 		<meta property="og:site_name" content="xtypejs">
         <meta property="og:url" content="http://xtype.js.org">
-		<meta property="og:image" content="http://xtype.js.org/assets/img/xtype-logo-padded.png">
-		<meta property="og:title" content="Efficient data-validating pseudo types for JavaScript">
-		<meta property="og:description" content="Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript. Find out more at http://xtype.js.org.">
+		<meta property="og:image" content="http://xtype.js.org/assets/img/xtype-logo-spaced.png.png">
+		<meta property="og:title" content="Elegant, highly efficient data validation for JavaScript">
+		<meta property="og:description" content="Concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types. Find out more at http://xtype.js.org.">
         
-		<meta itemprop="image" content="http://xtype.js.org/assets/img/xtype-logo-padded.png">
-		<meta itemprop="name" content="Efficient data-validating pseudo types for JavaScript">
-		<meta itemprop="description" content="Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript. Find out more at http://xtype.js.org.">
+		<meta itemprop="image" content="http://xtype.js.org/assets/img/xtype-logo-spaced.png.png">
+		<meta itemprop="name" content="Elegant, highly efficient data validation for JavaScript">
+		<meta itemprop="description" content="Concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types. Find out more at http://xtype.js.org.">
         
-        <link href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         
         <link href="bundles/app-bundle.min.css" rel="stylesheet">
@@ -34,6 +34,7 @@
         <link href="vendor/css/typed.css" rel="stylesheet">
         <link href="vendor/css/prettify-theme.css" rel="stylesheet">
         <link href="assets/css/xtype.css" rel="stylesheet">
+        <link href="components/code-snippet/code-snippet.css" rel="stylesheet">
         -->
         
         <script>
@@ -59,13 +60,12 @@
             <div class="top-content-pane">
                 
                 <div class="logo-pane">
-                    <a href="/" class="logo"><img src="assets/img/xtype-logo.png" width="285" height="90"></a>
+                    <a href="/" class="logo"><img src="assets/img/xtypejs-logo.png" width="350" height="110"></a>
                 </div>
                 
                 <div class="lib-title">
-                    Efficient data-validating pseudo types for JavaScript
-                    <!-- <span class="thin-text">for JavaScript</span> -->
-                    <!-- <span class="lib-subtitle">And type normalization for all the regular types.</span> -->
+                    Elegant, highly efficient data validation for JavaScript
+                    <!-- <span class="lib-subtitle">for JavaScript</span> -->
                 </div>
                 
                 <div class="top-links-pane">
@@ -76,16 +76,6 @@
                         </a>
                     </div>
                 </div>
-                    
-                <!--
-                <div class="typing-box">
-                    <span class="invisible">|</span>
-                    <span id="typing-field"></span>
-                    <span class="invisible">|</span>
-                </div>
-                
-                <a screen-link="{{activeScreen}}:menu" class="circle-button down menu-down-button"></a>
-                -->
                 
             </div>
             
@@ -105,15 +95,15 @@
             
         </div>
         
-        <!--
-        <div class="share-buttons">
-            <a share="g-plus"><i class="fa fa-google-plus fa-2x"></i></a>
-            <a share="twitter"><i class="fa fa-twitter fa-2x"></i></a>
-            <a share="email"><i class="fa fa-envelope fa-2x"></i></a>
-            <a share="facebook"><i class="fa fa-facebook fa-2x"></i></a>
-            <a share="linkedin"><i class="fa fa-linkedin fa-2x"></i></a>
+        <div class="share-container">
+            <div class="share-buttons">
+                <a share="twitter"><i class="fa fa-twitter fa-5x"></i></a>
+                <a share="email"><i class="fa fa-envelope fa-5x"></i></a>
+                <a share="facebook"><i class="fa fa-facebook fa-5x"></i></a>
+                <a share="linkedin"><i class="fa fa-linkedin fa-5x"></i></a>
+                <a share="g-plus"><i class="fa fa-google-plus fa-5x"></i></a>
+            </div>
         </div>
-        -->
         
         <div class="footer-container">            
             <div class="footer-section">
@@ -139,6 +129,9 @@
         
         <script src="assets/js/xtype.js"></script>
         <script src="assets/js/default.js"></script>
+        
+        <script src="components/code-snippet/code-snippet.js"></script>
+        
         <script src="screens/overview/overviewScreen.js"></script>
         <script src="screens/types/typesScreen.js"></script>
         <script src="screens/api/apiScreen.js"></script>

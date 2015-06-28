@@ -95,12 +95,7 @@ xtype.type(new Boolean(true)) === '{boolean}';
 <content 
     name="checking_combinations_of_types" 
     title="Checking values against combinations of various types"
-    description="Complex type and data requirements can be concisely validated using combinations of relevant simple and/or extended types.">
-
-// The following example returns true ONLY if:
-// data is an object AND contains at least one own property,
-// OR is an array AND has exactly one element, 
-// OR is a number AND has an integer value AND is greater than zero.
+    description="Complex type and data requirements can be concisely validated using combinations of relevant simple and/or extended types. The following example returns true only if - data is an object and contains at least one own property, or is an array and has exactly one element, or is a number and has an integer value and is greater than zero.">
 
 xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
 </content>
@@ -110,12 +105,8 @@ xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
 
 <content 
     name="checking_instance_and_other_types" 
-    title="Checking instance types along with other types">
-
-// For instance, in an application or library method that receives a varying
-// piece of information with which a product should be displayed, the following
-// example validates that the value is either a product name string (multi_char_string),
-// a product Id number (positive_integer), or an actual Product instance:
+    title="Checking instance types along with other types"
+    description="For instance, in an application or library method that receives a varying piece of information with which a product should be displayed, the following example validates that the value is either a product name string (multi character string), a product Id number (positive integer), or an actual Product instance.">
 
 xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]);
 </content>
@@ -189,11 +180,7 @@ xtype.some.isTrue(values)          === true;
 <content
     name="switching_based_on_value_type"
     title="Switching based on the type of a value"
-    description="Switch on the result of xtype.which() to handle only valid data scenarios without first performing extensive type checking and data validations.">
-
-// For instance, in an application or library that receives a varying piece of
-// information with which a product should be displayed, the following example
-// handles three scenarios for the type of product-related information received:
+    description="Switch on the result of xtype.which() to handle only valid data scenarios without first performing extensive type checking and data validations. For instance, in an application or library that receives a varying piece of information with which a product should be displayed, the following example handles three scenarios for the type of product-related information received.">
 
 switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
 
@@ -235,12 +222,8 @@ xtype.isFalse(new Boolean(false))   === true;       // Object false is actual fa
 
 <content 
     name="application_flag_example" 
-    title="Single character application flag example">
-
-// Suppose a single character application/operation flag is expected
-// as input. The 'single_char_string' extended type will match a string
-// that contains exactly one non-whitespace character, regardless of
-// whether it also contains other whitespace characters. 
+    title="Single character application flag example"
+    description="Suppose a single character application/operation flag is expected as input. The 'single_char_string' extended type will match a string that contains exactly one non-whitespace character, regardless of whether it also contains other whitespace characters.">
 
 xtype.isSingleCharString('t')               === true;
 xtype.isSingleCharString(' g ')             === true;
@@ -383,11 +366,7 @@ xtype.is(flag, '{single_char_string} {positive_number}');
 <content
     name="using_custom_delimiter"
     title="Using a custom delimiter"
-    description="A custom pattern can be used in place of the default type delimiters. This can be useful in applications for which the default delimiters may not be ideal. For instance, if the type expressions are being stored as part of data validation metadata, but the default delimiter characters are problematic for the specific storage format being used.">
- 
-// When a custom type delimiter pattern is used, it should be ensured
-// that the characters allowed by the pattern do not conflict with the
-// characters in the type names of any type name schemes being used.
+    description="A custom pattern can be used in place of the default type delimiters. This can be useful in applications for which the default delimiters may not be ideal. For instance, if the type expressions are being stored as part of data validation metadata, but the default delimiter characters are problematic for the specific storage format being used. When a custom type delimiter pattern is used, it should be ensured that the characters allowed by the pattern do not conflict with the characters in the type names of any type name schemes being used.">
 
 xtype.options.setDelimiterPattern('/');
 
@@ -546,31 +525,9 @@ xtype.none.isAny(null, 25, false)  === false;         // false for any list of v
 
 
 <content 
-    name="checking_for_nan" 
-    title="Checking for NaN"
-    disabled>
-
-    
-</content>
-
-
-
-
-<content 
-    name="using_type_expressions_vs_typeid_expressions" 
-    title="Using type expression strings vs type Id expressions"
-    disabled>
-
-    
-</content>
-
-
-
-
-<content 
     name="reporting_bugs_and_issues" 
     title="Reporting bugs and issues"
-    description="Please report bugs or problems by creating an issue on the GitHub project [issues page](https://github.com/lucono/xtypejs/issues)."
+    description="Please report bugs or problems by creating an issue on the GitHub project <a href='https://github.com/lucono/xtypejs/issues' target='_blank'>Issues Page</a>."
     lang="sh">
 </content>
 

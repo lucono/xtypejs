@@ -27,7 +27,7 @@
             
                 <div class="content-item" 
                     data-ng-repeat="contentName in AppUtils.keys(getItContent)" 
-                    data-ng-init="contentItem = getItContent[contentName]; codeSamples = contentItem.codeSamples;">
+                    data-ng-init="contentItem = getItContent[contentName]">
                     
                     <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
                         
@@ -39,16 +39,8 @@
                             {{contentItem.attributes.description}}
                         </p>
                         
-                        <div class="code-container" data-ng-if="codeSamples">
-                            <div class="code-content-window">
-                                <div class="code-content">
-                                    <pre data-ng-repeat="(view, content) in codeSamples" 
-                                        data-ng-bind-html="content"
-                                        class="{{view}}-view prettyprint">
-                                    </pre>
-                                </div>
-                            </div>
-                        </div>
+                        <code-snippet code-item="contentItem"></code-snippet>
+                        
                     </div>
                 </div>
             

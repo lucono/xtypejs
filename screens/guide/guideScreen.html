@@ -28,37 +28,15 @@
                 
                 <div class="content-item" 
                     data-ng-repeat="contentName in AppUtils.keys(guideContent)" 
-                    data-ng-init="contentItem = guideContent[contentName]">
+                    data-ng-init="codeItem = guideContent[contentName]">
                     
-                    <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
+                    <div id="{{contentName}}" section-title="{{codeItem.attributes.title}}">
                         
-                        <div class="item-title" data-ng-if="contentItem.attributes.title">
-                            <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+                        <div class="item-title" data-ng-if="codeItem.attributes.title">
+                            <a screen-link=":{{contentName}}">{{codeItem.attributes.title}}</a>
                         </div>
                         
-                        <p class="item-description" 
-                            data-ng-bind-html="contentItem.attributes.description" 
-                            data-ng-if="contentItem.attributes.description">
-                        </p>
-                        
-                        <div class="code-container {{activeViews[contentName] || 'default'}}-view" data-ng-if="contentItem.codeSamples">
-                            <ul class="code-tabs">
-                                <li class="tab-label">Example</li>
-                                <li class="{{view}}-view"
-                                    data-ng-repeat="view in AppUtils.keys(contentItem.codeSamples)" 
-                                    data-ng-if="AppUtils.keys(contentItem.codeSamples).length > 1">
-                                    <a href="" data-ng-click="switchCodeView(contentName, view)">{{view}}</a>
-                                </li>
-                            </ul>
-                            <div class="code-content-window">
-                                <div class="code-content">
-                                    <pre data-ng-repeat="(view, content) in contentItem.codeSamples" 
-                                        data-ng-bind-html="content"
-                                        class="{{view}}-view prettyprint">
-                                    </pre>
-                                </div>
-                            </div>
-                        </div>
+                        <code-snippet code-item="codeItem" default-view="compact"></code-snippet>
                     </div>
                 </div>
                 

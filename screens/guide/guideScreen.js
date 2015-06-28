@@ -6,11 +6,6 @@
 angular.module('xtypejsSite')
 
     .controller('GuideScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
-        $scope.activeViews = {};
-        
-        $scope.switchCodeView = function(contentName, view) {
-            $scope.activeViews[contentName] = view;
-        };
         
         service.getCodeContent('guide', function(guideContent) {
             $scope.guideContent = guideContent;

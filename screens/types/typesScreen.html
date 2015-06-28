@@ -22,7 +22,7 @@
                 
                 <div class="content-item"
                     data-ng-repeat="type in typeGroup.types"
-                    data-ng-init="codeSamples = codeContent[type.name].codeSamples; activeView = activeViews[type.name]">
+                    data-ng-init="codeItem = codeContent[type.name]">
                     
                     <div id="{{type.name}}" section-title="{{type.title || type.name}}">
                         
@@ -71,24 +71,9 @@
                                 </div>
                             </div>
                             
-                            <div class="code-container {{activeView || 'default'}}-view" data-ng-if="codeSamples">
-                                <ul class="code-tabs">
-                                    <li class="tab-label">Example</li>
-                                    <li class="{{view}}-view" 
-                                        data-ng-repeat="view in AppUtils.keys(codeSamples)" 
-                                        data-ng-if="AppUtils.keys(codeSamples).length > 1">
-                                        <a href="" data-ng-click="switchCodeView(type.name, view)">{{view}}</a>
-                                    </li>
-                                </ul>
-                                <div class="code-content-window">
-                                    <div class="code-content">
-                                        <pre data-ng-repeat="(view, code) in codeSamples" 
-                                            data-ng-bind-html="code"
-                                            class="{{view}}-view prettyprint">
-                                        </pre>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="item-subtitle" data-ng-if="codeItem.codeSamples">Example</div>
+                            
+                            <code-snippet code-item="codeItem" default-view="compact"></code-snippet>
                         </div>
                     </div>
                 </div>

@@ -157,12 +157,13 @@
                 contentName = $content.attr('name'),
                 contentBody = $content.html().replace(/^([ ]*(\n|\r)+)*/g, '').replace(/([ ]*(\n|\r)+)*[ ]*$/g, ''), // trim extra start and end lines
                 contentEntry = {},
-                contentAttributes = {};
+                contentAttributes = {},
+                htmlAttributes = ['name', 'title', 'description'];
             
             contentEntry.content = contentBody;
             
             $.each(content.attributes, function(index, attr) {
-                contentAttributes[attr.name] = $sce.trustAsHtml(attr.value.replace(/\[([^\[\]]+?)\]\(([^ ]+)\)/g, '<a href="$2">$1</a>'));
+                contentAttributes[attr.name] = (htmlAttributes.indexOf(attr.name) > -1 ? $sce.trustAsHtml(attr.value) : attr.value);
             });
             contentEntry.attributes = contentAttributes;
             contentMap[contentName] = contentEntry;
@@ -210,7 +211,8 @@
 		return window.open(url, 'Share xtypejs', options);
     }
     
-    var screenArtifacts = {
+    var appArtifacts = {
+        /* --- Screens --- */
         overview: {
             template: '/screens/overview/overviewScreen.html',
             code: 'screens/overview/overviewCodeSamples.html'
@@ -233,6 +235,10 @@
             template: '/screens/getit/getitScreen.html',
             code: 'screens/getit/getitOptions.html',
             json: 'https://api.github.com/repos/lucono/xtypejs/releases/latest'
+        },
+        /* --- Components --- */
+        codeSnippet: {
+            template: '/components/code-snippet/code-snippet.tpl.html'
         }
     };
     
@@ -244,18 +250,30 @@
      */
     
     var bundleLoadDeffered = $.Deferred(),
-        bundleLoadPromise = bundleLoadDeffered.promise(),
-        templateCache;
+        bundleLoadPromise = bundleLoadDeffered.promise()
+        //templateCache
+        ;
             
-    function templatePromise(templateUrl) {                
-        return bundleLoadPromise.then(function() {
+    function templatePromise(templateUrl) {
+        return bundleLoadPromise.then(function(templateCache) {
             return templateCache.get(templateUrl);
         });
+        
+        /*
+        var templateDeferred = $.Deferred();
+        
+        bundleLoadPromise.then(function() {
+            templateDeferred.resolve(templateCache.get(templateUrl));
+        });
+        return templateDeferred.promise();
+        */
     }
         
     angular.module('xtypejsSite', ['ui.router'])
     
-    .run(['$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service) {
+    .run([
+        '$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', '$q', '$timeout',
+        function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service, $q, $timeout) {
         
         if (Object.keys($location.search()).length > 0) {
             var screenPath = getScreenPathFromQueryUrl($location.absUrl(), '', 'menu');
@@ -263,6 +281,7 @@
         }
         
         var AppUtils = {};
+        $rootScope.AppUtils = AppUtils;
         
         AppUtils.isArray = Array.isArray;
         
@@ -273,7 +292,14 @@
                 return [];
             }
         };
-        $rootScope.AppUtils = AppUtils;
+        
+        AppUtils.capitalize = function(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        };
+        
+        //var compactNameGuideScreenLink = 'guide:switching_to_compact_name_scheme';
+        //$rootScope.compactCodeTip = 'Tip: <a href=\"' + compactNameGuideScreenLink + '\">Using compact names</a>';
+        
         $rootScope.previousState = '';
         $rootScope.activeScreen = '';
         
@@ -292,10 +318,10 @@
         
         $rootScope.navigateToItem = function(item, defer) {
             if (defer) {
-                setTimeout(function() {
+                $timeout(function() {
                     $rootScope.navigateToItem(item);
                     $rootScope.$apply(); // For deferred case, updates page title with scroll target attribute
-                }, 1000);
+                });
                 return;
             }
             var targetSelector = ('#' + item.replace(/\./g, '\\.')),
@@ -309,15 +335,45 @@
             $rootScope.sectionTitle = (sectionTitle ? sectionTitle : '');
         };
         
+        $rootScope.navigateToScreenAddress = function(screenPath) {
+            if (!screenPath) {
+                return;
+            }
+            var screenSegments = screenPath.split('/'),
+                item = (screenSegments.length > 2 ? screenSegments[2] : ''),
+                currentPath = $location.path();
+            
+            if (screenPath !== currentPath) {
+                var isSameScreenNavigation = (screenSegments[1] === currentPath.split('/')[1]);
+                
+                $location.path(screenPath).search('').hash('');
+                
+                if (!isSameScreenNavigation) {
+                    $('body').addClass('screen-loading');
+                    
+                    $timeout(function() {
+                        $rootScope.$apply();
+                        $('body').removeClass('screen-loading');
+                    });
+                } else {
+                    $rootScope.$apply();
+                }
+            }
+            else if (item) {
+                $rootScope.navigateToItem(item);
+            }
+            return false;
+        };
+        
         var httpCache = $cacheFactory('app-cache');
         $http.defaults.cache = httpCache;
         
         function processScreenBundle(bundleContent) {
-            var fetctTrackers = [],
+            var fetchTrackers = [],
                 $content = $('<div>' + bundleContent + '</div>');
             
-            AppUtils.keys(screenArtifacts).forEach(function(screenName) {
-                var artifacts = screenArtifacts[screenName],
+            AppUtils.keys(appArtifacts).forEach(function(artifactName) {
+                var artifacts = appArtifacts[artifactName],
                     $artifact,
                     artifactContent;
                 
@@ -325,26 +381,32 @@
                     var artifactAddress = artifacts[artifactType];
                     
                     if (artifactAddress) {
-                        $artifact = $content.find('[' + artifactType + '-artifact=\'' + screenName + '\']');
+                        $artifact = $content.find('[' + artifactType + '-artifact=\'' + artifactName + '\']');
                         if ($artifact.length === 1) {
                             artifactContent = $('<div>').append($artifact.clone()).html();                            
                             (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
                         } else {
-                            fetctTrackers.push($http.get(artifactAddress, {
-                                cache: (artifactType === 'template' ? $templateCache : httpCache)
-                            }));
+                            fetchTrackers.push(
+                                $http.get(artifactAddress, {
+                                    cache: true
+                                }).success(function(artifactContent) {
+                                    (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
+                                }));
                         }
                     }
                 });
                 
                 if (artifacts.json) {
-                    $http.get(artifacts.json, {cache: true});
+                    fetchTrackers.push($http.get(artifacts.json, {
+                        cache: true
+                    }).success(function(artifactContent) {
+                        httpCache.put(artifacts.json, artifactContent);
+                    }));
                 }
             });
             
-            $.when.apply(this, fetctTrackers).then(function() {
-                templateCache = $templateCache;
-                bundleLoadDeffered.resolve();
+            $q.all(fetchTrackers).then(function() {
+                bundleLoadDeffered.resolve($templateCache);
             });
         }
         
@@ -357,9 +419,16 @@
         });
     }])
     
-    .controller('scrollToItem', ['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams) {
+    .controller('scrollToItem', ['$rootScope', '$state', '$stateParams', '$timeout', function($rootScope, $state, $stateParams, $timeout) {
         var isSameScreenNavigation = ($rootScope.previousState && $state.includes($rootScope.previousState.name.split('\.')[0]));
-        $rootScope.navigateToItem($stateParams.item, !isSameScreenNavigation);
+        
+        if (isSameScreenNavigation) {
+            $rootScope.navigateToItem($stateParams.item, !isSameScreenNavigation);
+        } else {
+            $timeout(function() {
+                $rootScope.navigateToItem($stateParams.item, !isSameScreenNavigation);
+            });
+        }
     }])
     
     .config([
@@ -372,7 +441,7 @@
                 .state('overview', {
                     url: '/overview',
                     templateProvider: function() {
-                        return templatePromise(screenArtifacts.overview.template);
+                        return templatePromise(appArtifacts.overview.template);
                     },
                     controller: 'OverviewScreenController',
                     deepStateRedirect: true
@@ -383,10 +452,24 @@
                     deepStateRedirect: true
                 })
                 
+                .state('guide', {
+                    url: '/guide',
+                    templateProvider: function() {
+                        return templatePromise(appArtifacts.guide.template);
+                    },
+                    controller: 'GuideScreenController',
+                    deepStateRedirect: true
+                })
+                .state('guide.item', {
+                    url: '/{item:[^/]+}',
+                    controller: 'scrollToItem',
+                    deepStateRedirect: true
+                })
+                
                 .state('types', {
                     url: '/types',
                     templateProvider: function() {
-                        return templatePromise(screenArtifacts.types.template);
+                        return templatePromise(appArtifacts.types.template);
                     },
                     controller: 'TypesScreenController',
                     deepStateRedirect: true
@@ -400,7 +483,7 @@
                 .state('api', {
                     url: '/api',
                     templateProvider: function() {
-                        return templatePromise(screenArtifacts.api.template);
+                        return templatePromise(appArtifacts.api.template);
                     },
                     controller: 'APIScreenController',
                     deepStateRedirect: true
@@ -411,24 +494,10 @@
                     deepStateRedirect: true
                 })
                 
-                .state('guide', {
-                    url: '/guide',
-                    templateProvider: function() {
-                        return templatePromise(screenArtifacts.guide.template);
-                    },
-                    controller: 'GuideScreenController',
-                    deepStateRedirect: true
-                })
-                .state('guide.item', {
-                    url: '/{item:[^/]+}',
-                    controller: 'scrollToItem',
-                    deepStateRedirect: true
-                })
-                
                 .state('getit', {
                     url: '/getit',
                     templateProvider: function() {
-                        return templatePromise(screenArtifacts.getit.template);
+                        return templatePromise(appArtifacts.getit.template);
                     },
                     controller: 'GetItScreenController',
                     deepStateRedirect: true
@@ -451,7 +520,7 @@
             serviceCache = {};
         
         service.getLatestRelease = function(callback) {
-            $http.get(screenArtifacts.getit.json, {
+            $http.get(appArtifacts.getit.json, {
                 cache: true
             }).success(function(responseData) {
                 if (serviceCache.releaseData) {
@@ -464,7 +533,7 @@
         };
         
         service.getTypeData = function(callback) {
-            $http.get(screenArtifacts.types.json, {
+            $http.get(appArtifacts.types.json, {
                 cache: true
             }).success(function(typeData) {
                 if (serviceCache.typeData) {
@@ -494,8 +563,8 @@
         };
         
         service.getCodeContent = function(screenName, callback) {
-            if (screenName in screenArtifacts) {
-                getCodeContent(screenArtifacts[screenName].code, callback);
+            if (screenName in appArtifacts) {
+                getCodeContent(appArtifacts[screenName].code, callback);
             }
         };
         
@@ -525,20 +594,23 @@
                             if (content.trim().length > 0) {
                                 content = content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
                                 
-                                var defaultCode = filterView(content, typeData, 'default'),
-                                    compactCode = filterView(content, typeData, 'compact');
+                                var skippedViews = contentItem.attributes['skip-views'],
+                                    skippedViewList = (skippedViews ? skippedViews.split(/[ ]+/g) : []),
+                                    defaultCode,
+                                    compactCode,
+                                    itemCodeSamples = {};
                                 
-                                var itemCodeSamples = {
-                                    default: $sce.trustAsHtml(prettyPrintCode(defaultCode, contentItem.attributes.lang, false))
-                                };
-                                if (compactCode !== defaultCode) {
-                                    compactCode =
-                                        ('no-compact-switch-prefix' in contentItem.attributes ? '' : 
-                                            '/* Switch to compact name scheme */\n' +
-                                            'xtype.options.setNameScheme(\'compact\');\n\n') +
-                                        compactCode;
-                                        
-                                    itemCodeSamples.compact = $sce.trustAsHtml(prettyPrintCode(compactCode, contentItem.attributes.lang, false));
+                                if (skippedViewList.indexOf('default') < 0) {
+                                    defaultCode = filterView(content, typeData, 'default');
+                                    itemCodeSamples.default = $sce.trustAsHtml(prettyPrintCode(defaultCode, contentItem.attributes.lang, false));
+                                }
+                                
+                                if (skippedViewList.indexOf('compact') < 0) {
+                                    compactCode = filterView(content, typeData, 'compact');
+                                    
+                                    if (!defaultCode || (compactCode !== defaultCode)) {
+                                        itemCodeSamples.compact = $sce.trustAsHtml(prettyPrintCode(compactCode, contentItem.attributes.lang, false));
+                                    }
                                 }
                                 contentItem.codeSamples = itemCodeSamples;
                             }
@@ -554,7 +626,7 @@
         
         service.getApiData = function(callback) {
             service.getTypeData(function(typeData) {
-                $http.get(screenArtifacts.api.json, {
+                $http.get(appArtifacts.api.json, {
                         cache: true
                     }).success(function(apiData) {
                         if (serviceCache.apiData) {
@@ -638,32 +710,55 @@
         return service;
     }])
     
+    /**
+     * ==========
+     * DIRECTIVES
+     * ==========
+     */
+     
     .directive('share', function() {
         return function(scope, element, attrs) {
             if (element.attr('share') === 'email') {
-                element.attr('href', 'mailto:?subject=xtypejs%20-%20Efficient%20data-validating%20pseudo%20types%20for%20JavaScript&body=Extend%20JavaScript%20types%20with%20close%20to%2040%20new,%20efficient,%20data-validating%20pseudo%20types.%20http://xtype.js.org');
+                element.attr('href',
+                    'mailto:?subject=' +
+                    encodeURIComponent('Elegant, highly efficient data validation for JavaScript') +
+                    '&body=' +
+                    encodeURIComponent('Checkout xtypejs - Concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types. Find out more at http://xtype.js.org.'));
                 return;
             }
             var shareParams;
             
             switch (element.attr('share')) {
-                case 'twitter':
-                    shareParams = ['https://twitter.com/home?status=Extend%20JavaScript%20types%20with%20close%20to%2040%20new,%20efficient,%20data-validating%20pseudo%20types.%20http://xtype.js.org', 550, 420];
-                    break;
                 case 'g-plus':
-                    shareParams = ['https://plus.google.com/share?url=http://xtype.js.org', 500, 520];
+                    shareParams = [
+                        'https://plus.google.com/share?url=' + 
+                        encodeURIComponent('http://xtype.js.org'), 
+                        500, 520];
                     break;
                 case 'facebook':
-                    shareParams = ['https://www.facebook.com/sharer/sharer.php?u=http://xtype.js.org', 580, 420];
+                    shareParams = [
+                        'https://www.facebook.com/sharer/sharer.php?u=' + 
+                        encodeURIComponent('http://xtype.js.org'), 
+                        580, 420];
+                    break;
+                case 'twitter':
+                    shareParams = [
+                        'https://twitter.com/home?status=' + 
+                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript. http://xtype.js.org'), 
+                        550, 420];
                     break;
                 case 'linkedin':
-                    shareParams = ['https://www.linkedin.com/shareArticle?mini=true&url=http://xtype.js.org&title=Efficient%20data-validating%20pseudo%20types%20for%20JavaScript&summary=Extend%20JavaScript%20types%20with%20close%20to%2040%20new,%20efficient,%20data-validating%20pseudo%20types.%20http://xtype.js.org&source=', 550, 560];
+                    shareParams = [
+                        'https://www.linkedin.com/shareArticle?mini=true&url=http://xtype.js.org&title=' +
+                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript'), 
+                        550, 560];
                     break;
             }
             
             element
-                .attr('target', '_blank')
                 .attr('rel', 'nofollow')
+                .attr('target', '_blank')
+                .attr('href', shareParams[0])
                 .on('click', function(event) {
                     sharePopup.apply(this, shareParams);
                     event.preventDefault();
@@ -671,7 +766,7 @@
         };
     })
     
-    .directive('screenLink', ['$rootScope', '$state', '$location', function($rootScope, $state, $location) {
+    .directive('screenLink', ['$rootScope', '$state', '$location', '$timeout', function($rootScope, $state, $location, $timeout) {
         return function(scope, element, attrs) {
             if (!element.attr('href')) {        // No auto href installation if href value already manually provided
                 attrs.$observe('screenLink', function(value) {
@@ -679,85 +774,22 @@
                         screen = (target[0] ? target[0] : ''),
                         item = (target[1] ? target[1] : ''),
                         docParam = (screen || $rootScope.activeScreen),
-                        href = (docParam ? ('/?doc=' + docParam + (item ? ('&item=' + item) : '')) : '') || '/';
+                        href = (docParam ? ('/?doc=' + docParam + (item ? ('&item=' + item) : '')) : '') || '/',
+                        screenHref = (docParam ? ('/' + docParam + (item ? ('/' + item) : '')) : '') || '/';
                     
                     element.attr('href', href);
+                    element.attr('screen-href', screenHref);
                 });
             }
             element.on('click', function(event) {
-                var href = element.attr('href');
-                if (!href) {
-                    return;
-                }
-                var item = getURLParam(href, 'item'),
-                    screenPath = getScreenPathFromQueryUrl(href),
-                    currentPath = $location.path();
-                
-                if (screenPath !== currentPath) {
-                    var isSameScreenNavigation = (screenPath.split('/')[1] === currentPath.split('/')[1]);
-                    
-                    $location.path(screenPath).search('').hash('');
-                    
-                    if (!isSameScreenNavigation) {
-                        $('body').addClass('screen-loading');
-                        
-                        setTimeout(function() {
-                            $rootScope.$apply();
-                            $('body').removeClass('screen-loading');
-                        }, 0);
-                    } else {
-                        $rootScope.$apply();
-                    }
-                } else if (item) {
-                    $rootScope.navigateToItem(item);
-                }
+                $rootScope.navigateToScreenAddress(element.attr('screen-href'));
                 event.preventDefault();
             });
         };
-    }])
-    /*
-    .directive('screenTitle', ['$rootScope', '$location', function($rootScope, $location) {
-        return function(scope, element, attrs) {
-            var screenTitle = element.attr('screen-title');
-            
-            if (!screenTitle) {
-                return;
-            }
-            element.on('click', function(event) {
-                $rootScope.pageTitle = screenTitle;
-            });
-        };
-    }])
-    */
-    ;
+    }]);
     
     
     $(document).ready(function() {
-        /*
-        $('#typing-field').typed({
-            strings:[
-                'efficient^500',
-                'flexible^500',
-                'robust^500',
-                'extensible^500',
-                'intuitive^500',
-                'no dependencies^500',
-                'ready for...^2000',
-                'node',
-                'CommonJS',
-                'requireJS',
-                'AMD',
-                'script tag^1500',
-                'ready for your project!^1500',
-                ':)^3000'
-            ],
-            startDelay: 500,
-            typeSpeed: 0,
-            cursorChar: '|',
-            showCursor: false,
-            loop: true
-        });
-        */
         
         $(window).scroll(function() {
             var $navContainer = $('.right-nav-container');
