@@ -1,8 +1,11 @@
-### [![xtypejs Logo](http://xtype.js.org/assets/img/xtype-logo.png)](http://xtype.js.org/) <a href="https://travis-ci.org/lucono/xtypejs"><img align="right" src="https://travis-ci.org/lucono/xtypejs.svg?branch=master"></a>
+[![xtypejs Logo](http://xtype.js.org/assets/img/xtypejs-logo.png)](http://xtype.js.org/) <a href="https://travis-ci.org/lucono/xtypejs"><img align="right" src="https://travis-ci.org/lucono/xtypejs.svg?branch=master"></a>
+#### Elegant, highly efficient data validation for JavaScript
+
+---
 
 ### Overview
 
-- Provides concise, performant, readable, data and type validation, with close to 40 highly efficient, data-validating pseudo types for JavaScript.
+- Provides concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types.
 - Improves application efficiency and readability by unifying the most basic but common data and type validations in JavaScript apps, into single, concise, highly optimized operations.
 - Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
 - Supports CommonJS and AMD environments, as well as regular HTML script tag.

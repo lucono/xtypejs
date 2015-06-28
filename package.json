@@ -1,7 +1,7 @@
 {
   "name": "xtypejs",
   "version": "0.4.2",
-  "description": "Efficient data-validating pseudo types for JavaScript.",
+  "description": "Elegant, highly efficient data validation for JavaScript.",
   "main": "xtype",
   "keywords": [
     "type",
