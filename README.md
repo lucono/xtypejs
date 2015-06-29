@@ -8,7 +8,7 @@
 - Provides concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types.
 - Improves application efficiency and readability by unifying the most basic but common data and type validations in JavaScript apps, into single, concise, highly optimized operations.
 - Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
-- Compatible with nodejs, requirejs, and regular script tag.
+- Ready for nodejs, requirejs, and regular script tag.
 - Website &ndash; **[xtype.js.org](http://xtype.js.org)**
 
 ### Go from this:
@@ -70,14 +70,13 @@ function searchEmployees(value) {
 }
 ```
 
-### Links
+## &nbsp;
+
+#### Links
 
 - [Website](http://xtype.js.org)
 - [Examples And Guide](http://xtype.js.org/?doc=guide)
 - [API Docs](http://xtype.js.org/?doc=api)
-- [Installation](http://xtype.js.org/?doc=getit)
-
-## &nbsp;
 
 #### Installation
 
