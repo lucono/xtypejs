@@ -95,7 +95,11 @@ xtype.type(new Boolean(true)) === '{boolean}';
 <content 
     name="checking_combinations_of_types" 
     title="Checking values against combinations of various types"
-    description="Complex type and data requirements can be concisely validated using combinations of relevant simple and/or extended types. The following example returns true only if - data is an object and contains at least one own property, or is an array and has exactly one element, or is a number and has an integer value and is greater than zero.">
+    description="
+    Complex type and data requirements can be concisely validated using combinations of 
+    relevant simple and/or extended types. The following example returns true only if - 
+    data is an object and contains at least one own property, or is an array and has exactly 
+    one element, or is a number and has an integer value and is greater than zero.">
 
 xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
 </content>
@@ -106,7 +110,11 @@ xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
 <content 
     name="checking_instance_and_other_types" 
     title="Checking instance types along with other types"
-    description="For instance, in an application or library method that receives a varying piece of information with which a product should be displayed, the following example validates that the value is either a product name string (multi character string), a product Id number (positive integer), or an actual Product instance.">
+    description="
+    For instance, in an application or library method that receives a varying 
+    piece of information with which a product should be displayed, the following 
+    example validates that the value is either a product name string (multi character string), 
+    a product Id number (positive integer), or an actual Product instance.">
 
 xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]);
 </content>
@@ -119,13 +127,13 @@ xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]);
     title="Checking values in different ways"
     description="Different ways of checking values provide flexibility based on application needs and constraints.">
 
-// Verify if flag variable is a single character string:
+// Verify if 'flag' variable is a single character string:
 
 xtype.is(flag, '{single_char_string}');
 xtype.is(flag, xtype.SINGLE_CHAR_STRING);
 xtype.isSingleCharString(flag);
 
-// Verify if flag variable is a single character string or positive number value:
+// Verify if 'flag' variable is a single character string or positive number value:
 
 xtype.is(flag, '{{single_char_string, positive_number}}');
 xtype.is(flag, xtype.SINGLE_CHAR_STRING | xtype.POSITIVE_NUMBER);
@@ -180,7 +188,12 @@ xtype.some.isTrue(values)          === true;
 <content
     name="switching_based_on_value_type"
     title="Switching based on the type of a value"
-    description="Switch on the result of xtype.which() to handle only valid data scenarios without first performing extensive type checking and data validations. For instance, in an application or library that receives a varying piece of information with which a product should be displayed, the following example handles three scenarios for the type of product-related information received.">
+    description="
+    Switch on the result of xtype.which() to handle only valid data scenarios without 
+    first performing extensive type checking and data validations. For instance, in an 
+    application or library that receives a varying piece of information with which a 
+    product should be displayed, the following example handles three scenarios for the 
+    type of product-related information received.">
 
 switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
 
@@ -223,7 +236,11 @@ xtype.isFalse(new Boolean(false))   === true;       // Object false is actual fa
 <content 
     name="application_flag_example" 
     title="Single character application flag example"
-    description="Suppose a single character application/operation flag is expected as input. The 'single_char_string' extended type will match a string that contains exactly one non-whitespace character, regardless of whether it also contains other whitespace characters.">
+    description="
+    Suppose a single character application/operation flag is expected as input. 
+    The 'single_char_string' extended type will match a string that contains 
+    exactly one non-whitespace character, regardless of whether it also contains 
+    other whitespace characters.">
 
 xtype.isSingleCharString('t')               === true;
 xtype.isSingleCharString(' g ')             === true;
@@ -263,7 +280,12 @@ xtype.isZero(new Number(0))     === true;
 <content
     name="registering_custom_types"
     title="Registering custom types"
-    description="Any number of custom types can be created by combining several of the xtypejs built-in types in a way that captures the definition of the new type. The newly derived type can then be registered into xtypejs with a unique custom name and optionally, a compact name as well. The type must be unique from any type that already exists in xtypejs, which is determined by having a unique type Id.">
+    description="
+    Any number of custom types can be created by combining several of the xtypejs built-in 
+    types in a way that captures the definition of the new type. The newly derived type can 
+    then be registered into xtypejs with a unique custom name and optionally, a compact name 
+    as well. The type must be unique from any type that already exists in xtypejs, which is 
+    determined by having a unique type Id.">
  
 // xtypejs has the '{non_negative_number}' type as well as the '{integer} type,
 // but does not have a single type specifically for the non-negative equivalent
@@ -351,13 +373,15 @@ xtype.EMPTY_OR_MULTI_CHAR === (xtype.EMPTY_STRING | xtype.MULTI_CHAR_STRING);
 <content
     name="delimiting_types_in_expressions"
     title="Delimiting types in type expression strings"
-    description="By default, a comma or space or pipe character can be used as a delimiter in type expression strings. Additional spaces can be used around delimiters, and are ignored.">
+    description="
+    By default, a comma or space or pipe character can be used as a delimiter in type 
+    expression strings. Additional spaces can be used around delimiters, and are ignored.">
 
-xtype.is(flag, '{single_char_string},{positive_number}');
-xtype.is(flag, '{single_char_string}, {positive_number}');
-xtype.is(flag, '{single_char_string}|{positive_number}');
-xtype.is(flag, '{single_char_string} | {positive_number}');
-xtype.is(flag, '{single_char_string} {positive_number}'); 
+xtype.is(value, '{single_char_string},{positive_number}');
+xtype.is(value, '{single_char_string}, {positive_number}');
+xtype.is(value, '{single_char_string}|{positive_number}');
+xtype.is(value, '{single_char_string} | {positive_number}');
+xtype.is(value, '{single_char_string} {positive_number}'); 
 </content>
 
 
@@ -366,7 +390,13 @@ xtype.is(flag, '{single_char_string} {positive_number}');
 <content
     name="using_custom_delimiter"
     title="Using a custom delimiter"
-    description="A custom pattern can be used in place of the default type delimiters. This can be useful in applications for which the default delimiters may not be ideal. For instance, if the type expressions are being stored as part of data validation metadata, but the default delimiter characters are problematic for the specific storage format being used. When a custom type delimiter pattern is used, it should be ensured that the characters allowed by the pattern do not conflict with the characters in the type names of any type name schemes being used.">
+    description="
+    A custom pattern can be used in place of the default type delimiters. This can be useful in 
+    applications for which the default delimiters may not be ideal. For instance, if the type 
+    expressions are being stored as part of data validation metadata, but the default delimiter 
+    characters are problematic for the specific storage format being used. When a custom type 
+    delimiter pattern is used, it should be ensured that the characters allowed by the pattern 
+    do not conflict with the characters in the type names of any type name schemes being used.">
 
 xtype.options.setDelimiterPattern('/');
 
@@ -411,7 +441,10 @@ xtype.is(25, 'int+')    === true;
 <content
     name="using_custom_name_scheme"
     title="Using a custom name scheme"
-    description="By default, there is the very concise 'compact' name scheme, the less compact 'default' name scheme, and then the flexibility to invent and apply your own scheme according to your liking and the needs of your application.">
+    description="
+    By default, there is the very concise 'compact' name scheme, as well as the more descriptive 
+    'default' name scheme. But also there is the flexibility to create and apply other custom 
+    schemes according to user preference and application needs.">
  
 xtype.options.setNameScheme({
     positive_number: 'pos_num', 
@@ -475,7 +508,10 @@ xtype.options.setNameScheme('default');
 <content 
     name="prevent_name_collisions" 
     title="Preventing name collisions"
-    description="When imported as a script tag, the xtype module is assigned to the global variable 'xtype'. The 'noConflict' method can be used to reassign the xtype module to a different namespace or variable name, and return the global 'xtype' variable to its previous value prior to importing xtypejs.">
+    description="
+    When imported as a script tag, the xtype module is assigned to the global variable 'xtype'. 
+    The 'noConflict' method can be used to reassign the xtype module to a different namespace or variable 
+    name, and return the global 'xtype' variable to its previous value prior to importing xtypejs.">
 
 var otherName = xtype.noConflict();
 
@@ -488,7 +524,13 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
 <content 
     name="using_none_and_any_types" 
     title="Using the none and any types"
-    description="The 'none' type represents the set of no types, which means that no value can actually ever match 'none'. Therefore, xtype.isNone(value) will always be false for any value.">
+    description="
+    The 'none' type represents the set of no types, which means that no value can actually ever match 'none'. 
+    Therefore, xtype.isNone(value) will always be false for any value. The 'any' type is the composite type 
+    consisting of all types, which means that all values will always match 'any'. Therefore, xtype.isAny(value) 
+    will always be true for any value.">
+
+// The 'none' type
 
 xtype.isNone(25)                    === false;
 xtype.isNone(['hi', 5])             === false;
@@ -500,25 +542,23 @@ xtype.some.isNone(null, 25, false)  === false;        // false for any list of v
 xtype.any.isNone(null, 25, false)   === false;        // false for any list of values
 xtype.none.isNone(null, 25, false)  === true;         // true for any list of values
 
-/*
- * The '{any}' type is the composite type consisting of all types, which means
- * that all values will always match 'any'. Therefore, xtype.isAny(value) will always
- * be true for any value. The 'any' type can be added to a validating type expression
- * to temporarily make it fully permissive, therefore accepting all values.
- */
+// The 'any' type
 
 xtype.isAny(25)                    === true;
 xtype.isAny(['hi', 5])             === true;
 xtype.isAny(undefined)             === true;
-
-xtype.is(25, '{object}')           === false;
-xtype.is(25, '{{object, any}}')    === true;          // allows any value to pass type check
 
 xtype.not.isAny('hello')           === false;         // false for any value
 xtype.all.isAny('hi', 5, true)     === true;          // true for any list of values
 xtype.some.isAny(null, 25, false)  === false;         // false for any list of values
 xtype.any.isAny(null, 25, false)   === true;          // true for any list of values
 xtype.none.isAny(null, 25, false)  === false;         // false for any list of values
+
+// The 'any' type can be temporarily added to a validating type expression to 
+// temporarily make it fully permissive, therefore accepting all values.
+
+xtype.is(25, '{object}')           === false;
+xtype.is(25, '{{object, any}}')    === true;          // allows any value to pass validation
 </content>
 
 
@@ -527,8 +567,9 @@ xtype.none.isAny(null, 25, false)  === false;         // false for any list of v
 <content 
     name="reporting_bugs_and_issues" 
     title="Reporting bugs and issues"
-    description="Please report bugs or problems by creating an issue on the GitHub project <a href='https://github.com/lucono/xtypejs/issues' target='_blank'>Issues Page</a>."
-    lang="sh">
+    description="
+    Please report bugs or problems by creating an issue on the GitHub project 
+    <a href='https://github.com/lucono/xtypejs/issues' target='_blank'>Issues Page</a>.">
 </content>
 
 
