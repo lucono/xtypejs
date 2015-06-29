@@ -554,8 +554,8 @@ xtype.some.isAny(null, 25, false)  === false;         // false for any list of v
 xtype.any.isAny(null, 25, false)   === true;          // true for any list of values
 xtype.none.isAny(null, 25, false)  === false;         // false for any list of values
 
-// The 'any' type can be temporarily added to a validating type expression to 
-// temporarily make it fully permissive, therefore accepting all values.
+// The 'any' type can be temporarily added to a validating type expression as a 
+// switch to temporarily make it fully permissive, therefore accepting all values:
 
 xtype.is(25, '{object}')           === false;
 xtype.is(25, '{{object, any}}')    === true;          // allows any value to pass validation
