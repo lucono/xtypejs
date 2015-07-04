@@ -2,7 +2,7 @@
   "name": "xtypejs",
   "version": "0.4.2",
   "homepage": "http://xtype.js.org",
-  "description": "Elegant, highly efficient data validation for JavaScript.",
+  "description": "Elegant, highly efficient data validation for JavaScript Apps.",
   "main": "dist/xtype.js",
   "moduleType": [
     "amd",
