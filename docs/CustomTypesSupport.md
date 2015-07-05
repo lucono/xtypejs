@@ -145,7 +145,7 @@ xtype.is(value, Product);       // Validation still works with constructor as th
 Note that registration is still not required for validating all other non-registered (or even registered) instance types, which can continue to be validated using the constructor function as a type specifier:
 
 ```js
-xtype.is(value, RandomTypeConstructor);     // true if value is an object of (unregistered) RandomTypeConstructor
+xtype.is(value, RandomTypeConstructor);     // true if value is object of RandomTypeConstructor
 ```
 
 Being able to capture instance types in type expression strings provides greater flexibility and new possibilities, such as being able to include instance types in validation specs that are stored (as strings) in configuration, for use in data validation at runtime.
@@ -229,7 +229,9 @@ xtype.registerTypes({
     active_account: {
         definition: {
             validator: function(value) {
-                return (value instanceof Account && value.getStatus() !== 'closed' && value.getDaysSinceLastActivity() < 90);
+                return (value instanceof Account && 
+                        value.getStatus() !== 'closed' && 
+                        value.getDaysSinceLastActivity() < 90);
             }
         },
         compactName: 'actv_acct'
