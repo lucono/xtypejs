@@ -316,7 +316,7 @@
          */
         
         
-        var typeDelimiterRegExp = new RegExp(TYPE_DELIMITER_DEFAULT_PATTERN, 'g'),
+        var typeDelimiterRegExp,
             isAliasMode = false,
             
             /* Type list string memoization cache */
@@ -336,6 +336,8 @@
          */
         
         function init(moduleExport) {
+            setDelimiterPattern(TYPE_DELIMITER_DEFAULT_PATTERN);
+            
             ['Boolean', 'Number', 'String', 'Symbol', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error']
             .forEach(function(objectType) {
                 objToStringToNameMapping['[object ' + objectType + ']'] = objectType.toLowerCase();
@@ -388,10 +390,10 @@
             var compositeType = (typeof types === 'number') ? (ANY_TYPE & types)
                     : (typeof types === 'string' && typeListStringToTypeIdCache[types] !== undefined) ?
                             typeListStringToTypeIdCache[types]
-                    : (typeof types === 'function' && item instanceof types) ? types
                     : getCompositeType(types, item);
             
             return (typeof compositeType === 'function') ||     // Item is a specified instance type
+                    (typeof compositeType === 'object') ||      // Item is a specified custom type
                     !!(getBaseType(item, compositeType));
         }
     
@@ -511,78 +513,142 @@
                 typeString = types;
                 types = types.split(typeDelimiterRegExp);
             } else if (!Array.isArray(types)) {
-                return (typeof types === 'number') ? (ANY_TYPE & types)
-                        : (typeof types === 'function' && item instanceof types) ? types
-                        : 0;
+                types = [types];
             }
             
             var compositeType = 0,
-                requestedType;
+                requestedType,
+                typeDefinition;
             
             for (var typeIndex = 0, typeCount = types.length; typeIndex < typeCount; typeIndex++) {
                 requestedType = types[typeIndex];
+                typeDefinition = typeof requestedType === 'string' ? (aliasToTypeMapping[requestedType] || 0) 
+                        : (typeof requestedType === 'object') ? 
+                                (requestedType !== null && typeof requestedType.validator === 'function' ? requestedType : 0)
+                        : (requestedType || 0);
                 
-                if (typeof requestedType === 'string') {
-                    compositeType = (compositeType | (aliasToTypeMapping[requestedType] || 0));
-                } else if (typeof requestedType === 'number') {
-                    compositeType = (compositeType | (ANY_TYPE & requestedType));
-                } else if (typeof requestedType === 'function' && (item instanceof requestedType)) {
-                    return requestedType;
+                if (typeof typeDefinition === 'number') {
+                    compositeType = (compositeType | (ANY_TYPE & typeDefinition));
+                } else if (typeof typeDefinition === 'function' && (item instanceof typeDefinition)) {
+                    return typeDefinition;
+                } else if (typeof typeDefinition === 'object' && typeDefinition.validator(item) === true) {     // No further need to null-check type definition
+                    return typeDefinition;
                 }
             }
             
-            if (typeString && (typeListStringToTypeIdCacheSize <= MAX_REQUEST_TYPE_CACHE_SIZE)) {
+            if (compositeType && typeString && (typeListStringToTypeIdCacheSize <= MAX_REQUEST_TYPE_CACHE_SIZE)) {
                 typeListStringToTypeIdCache[typeString] = compositeType;
                 typeListStringToTypeIdCacheSize++;
             }
             return compositeType;
         }
         
+        /**
+         * Registers one or more user-defined types into xtypejs.
+         */
         function registerTypes (customTypes) {
+            var customCompactNameScheme = (((arguments.length > 1) && (typeof arguments[1] === 'object')) ? arguments[1] : undefined);  // For deprecated second argument compact names obj. To be removed with next major release.
+            
             if (typeof customTypes !== 'object') {
                 return;
             }
-            var customTypeIds = [],
-                existingCompactNames = [],
+            
+            var existingTypeIdentities = [],
+                existingTypeNames = [],
+                customTypeIdentity,
+                definedCompactNames = [],
                 customScheme = objCreate(null);        
             
-            var customCompactNameScheme = (((arguments.length > 1) && (typeof arguments[1] === 'object')) ? arguments[1] : undefined);  // For deprecated second argument compact names obj. To be removed with next major release.
+            objKeys(TYPE_VALUE_MAPPING).forEach(function(name) {
+                var existingType = TYPE_VALUE_MAPPING[name];
+                
+                customTypeIdentity = (typeof existingType === 'object' ?
+                                (existingType.identity ? existingType.identity : existingType.validator)
+                        : existingType);
+                
+                existingTypeNames.push(name);
+                existingTypeIdentities.push(customTypeIdentity);
+            });
             
             if (compactNameMapping) {
                 objKeys(compactNameMapping).forEach(function(typeName) {
-                    existingCompactNames.push(compactNameMapping[typeName]);
+                    definedCompactNames.push(compactNameMapping[typeName]);
                 });
             }
             
             objKeys(customTypes).forEach(function(customTypeName) {
-                var customTypeValue = customTypes[customTypeName],
-                    customTypeId = (typeof customTypeValue === 'object' ? customTypeValue.typeId : customTypeValue),
-                    compactName = (typeof customTypeValue === 'object' ? customTypeValue.compactName : undefined);
+                if (existingTypeNames.indexOf(customTypeName) > -1) {
+                    throw 'Custom type name "' + customTypeName + '" conflicts with new or existing name';
+                }
                 
-                compactName = (compactName || (customCompactNameScheme ? customCompactNameScheme[customTypeName] : undefined));  // For deprecated second argument compact names obj. To be removed with next major release.
+                var customTypeValue = customTypes[customTypeName],
+                    customTypeDefinition,
+                    composedCustomTypeDefinition,
+                    compactName,
+                    matchMode,
+                    existingTypeIndex;
                 
                 if (!/^([0-9a-z_]+)$/.test(customTypeName)) {
                     throw 'Type name must only contain lowercase alphanumeric characters and underscore';
-                } else if ((typeof customTypeId !== 'number') || (customTypeId & ANY_TYPE) !== customTypeId) {
-                    throw 'Custom type Id can only be derived using built-in types.';
-                } else if (customTypeIds.indexOf(customTypeId) > -1 || (customTypeId in typeToAliasMapping)) {
-                    throw 'Custom type Id "' + customTypeId + '" conflicts with new or existing type Id';
-                } else if (customTypeName in TYPE_VALUE_MAPPING) {
-                    throw 'Custom type name "' + customTypeName + '" conflicts with existing type name';
                 }
                 
-                customTypeIds.push(customTypeId);
+                if (typeof customTypeValue === 'object' && customTypeValue !== null && 
+                        ('definition' in customTypeValue || (/* 'typeId' property deprecated - Remove with next major release */ typeof customTypeValue.typeId === 'number'))) {
+                    customTypeDefinition = (customTypeValue.definition || 
+                            (/* 'typeId' property deprecated - Remove with next major release */ typeof customTypeValue.typeId === 'number' ? customTypeValue.typeId : undefined));
+                    compactName = customTypeValue.compactName;
+                    matchMode = customTypeValue.matchMode;
+                } else {
+                    customTypeDefinition = customTypeValue;
+                }
+
+                compactName = (compactName || (customCompactNameScheme ? customCompactNameScheme[customTypeName] : undefined));  // For deprecated second argument compact names obj. To be removed with next major release.
+                
+                if (typeof customTypeDefinition === 'string') {
+                    customTypeDefinition = composedCustomTypeDefinition = getCustomTypeDefinition(customTypeDefinition, matchMode, customTypeName);
+                }
+                
+                if (typeof customTypeDefinition === 'number') {
+                    if ((customTypeDefinition & ANY_TYPE) !== customTypeDefinition) {
+                        throw 'Custom extended type composite \'' + customTypeName + '\' can only be derived using built-in extended type Ids.';
+                    }
+                } else if (typeof customTypeDefinition === 'object' && customTypeDefinition !== null) {
+                    if (typeof customTypeDefinition.validator !== 'function') {
+                        throw 'Custom type \'' + customTypeName + '\' definition is missing the validator function.';
+                    }
+                    if (composedCustomTypeDefinition !== customTypeDefinition) { // make internal copy of externally supplied object
+                        composedCustomTypeDefinition = objCreate(null);
+                        composedCustomTypeDefinition.validator = customTypeDefinition.validator;
+                        customTypeDefinition = composedCustomTypeDefinition;
+                    }
+                } else if (typeof customTypeDefinition !== 'function') {
+                    throw 'No valid type definition provided for requested custom type \'' + customTypeName + '\'';
+                }
+                
+                customTypeIdentity = (typeof composedCustomTypeDefinition === 'object' ? composedCustomTypeDefinition.identity
+                        : typeof customTypeDefinition === 'object' ? customTypeDefinition.validator 
+                        : customTypeDefinition);
+                
+                existingTypeIndex = existingTypeIdentities.indexOf(customTypeIdentity);
+                
+                if (existingTypeIndex > -1) {
+                    throw 'Custom type \'' + customTypeName + '\' conflicts with other custom type' +
+                            ' \'' + existingTypeNames[existingTypeIndex] + '\' with identical definition';
+                }
+                
+                existingTypeNames.push(customTypeName);
+                existingTypeIdentities.push(customTypeIdentity);                
                 
                 var customType = objCreate(null);
                 
-                customType.typeId = customTypeId;
+                customType.typeValue = customTypeDefinition;
                 
                 if (compactNameMapping && (typeof compactName === 'string')) {
-                    if (existingCompactNames.indexOf(compactName) > 0) {
+                    if (definedCompactNames.indexOf(compactName) > -1) {
                         throw 'Custom compact name "' + compactName + '" conflicts with new or existing name';
                     }
                     customType.compactName = compactName;
-                    existingCompactNames.push(compactName);
+                    definedCompactNames.push(compactName);
                 }
                 customScheme[customTypeName] = customType;
             });
@@ -590,7 +656,7 @@
             objKeys(customScheme).forEach(function(customTypeName) {
                 var customType = customScheme[customTypeName];
                 
-                TYPE_VALUE_MAPPING[customTypeName] = customType.typeId;
+                TYPE_VALUE_MAPPING[customTypeName] = customType.typeValue;
                 
                 if ('compactName' in customType) {
                     compactNameMapping[customTypeName] = customType.compactName;
@@ -624,6 +690,134 @@
          */
         
         /**
+         * Gets a custom type definition from a definition string of component types.
+         */
+        function getCustomTypeDefinition(definitionString, matchMode, customTypeName) {
+            var componentTypes = definitionString.trim().split(/[ ]*[, ][ ]*/g);
+
+            if (componentTypes.length === 0) {
+                throw 'Type definition string for custom type \'' + customTypeName + '\'' +
+                        ' must contain two or more type components';
+            }
+            
+            matchMode = (matchMode === 'all' ? 'all' : 'any');
+            
+            var typeIds = [],
+                instanceTypes = [],
+                customTypes = [];
+            
+            componentTypes.forEach(function(componentTypeName) {
+                var typeValue = TYPE_VALUE_MAPPING[componentTypeName];
+                
+                if (typeof typeValue === 'undefined') {
+                    throw 'Unknown type \'' + componentTypeName + '\' in type definition' +
+                            ' string for custom type \'' + customTypeName + '\'';
+                }
+                
+                if (typeof typeValue === 'number') {
+                    typeIds.push(typeValue);
+                } else if (typeof typeValue === 'function') {
+                    instanceTypes.push(typeValue);
+                } else if (typeof typeValue === 'object') {
+                    customTypes.push(typeValue);
+                }
+            });
+            
+            var compositeTypeId,
+                instanceChecker,
+                customTypeChecker;
+            
+            if (typeIds.length > 0) {
+                compositeTypeId = (matchMode === 'all' ? ANY_TYPE : 0);
+
+                typeIds.forEach(function(typeId) {
+                    compositeTypeId = (matchMode === 'all' ? (compositeTypeId & typeId) : (compositeTypeId | typeId));
+                });
+            }
+            
+            if (instanceTypes.length > 0) {
+                if (matchMode === 'all') {
+                    instanceChecker = function(item) {
+                        for (var index = 0, maxIndex = instanceTypes.length; index < maxIndex; index++) {
+                            if (!(item instanceof instanceTypes[index])) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    };
+                } else {
+                    instanceChecker = function(item) {
+                        for (var index = 0, maxIndex = instanceTypes.length; index < maxIndex; index++) {
+                            if (item instanceof instanceTypes[index]) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+                }
+            }
+            
+            if (customTypes.length > 0) {
+                if (matchMode === 'all') {
+                    customTypeChecker = function(item) {
+                        for (var index = 0, maxIndex = customTypes.length; index < maxIndex; index++) {
+                            if (!customTypes[index].validator(item)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    };
+                } else {
+                    customTypeChecker = function(item) {
+                        for (var index = 0, maxIndex = customTypes.length; index < maxIndex; index++) {
+                            if (customTypes[index].validator(item)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+                }
+            }
+            
+            if ((typeof compositeTypeId === 'undefined') && !instanceChecker && !customTypeChecker) {
+                throw 'Faild to determine valid composite checker for custom type \'' + customTypeName + '\'' +
+                        ' with type definition string \'' + definitionString + '\'';
+            }
+            
+            if ((typeof compositeTypeId !== 'undefined') && !instanceChecker && !customTypeChecker) {
+                return compositeTypeId;
+            }
+            
+            var validator;
+            
+            if (instanceChecker && !compositeTypeId && !customTypeChecker) {
+                if (instanceTypes.length === 1) {
+                    return instanceTypes[0];
+                }
+                validator = instanceChecker;
+            } else if (customTypeChecker && !compositeTypeId && !instanceChecker) {
+                validator = customTypeChecker;
+            } else {
+                validator = function(item) {
+                    return matchMode === 'all' ?
+                            (((typeof compositeTypeId !== 'undefined') ? isType(item, compositeTypeId) : true) &&
+                                    (instanceChecker ? instanceChecker(item) : true) &&
+                                    (customTypeChecker ? customTypeChecker(item) : true))
+                            : (((typeof compositeTypeId !== 'undefined') ? isType(item, compositeTypeId) : false) ||
+                                    (instanceChecker ? instanceChecker(item) : false) ||
+                                    (customTypeChecker ? customTypeChecker(item) : false));
+                };
+            }
+
+            var customTypeDefinition = objCreate(null);
+            
+            customTypeDefinition.validator = validator;
+            customTypeDefinition.identity = (matchMode + ' : ' + componentTypes.sort().join(' '));
+            
+            return customTypeDefinition;
+        }
+        
+        /**
          * Builds an alias map using data in supplied value and alias mappings.
          */
         function buildAliasMappings(aliasMapping) {
@@ -633,7 +827,7 @@
                 usedAliases = objCreate(null);
             
             objKeys(TYPE_VALUE_MAPPING).forEach(function(typeName) {
-                var type = TYPE_VALUE_MAPPING[typeName];
+                var typeValue = TYPE_VALUE_MAPPING[typeName];
                 var aliasName = (aliasMapping ? aliasMapping[typeName] : typeName);
                 aliasName = ((typeof aliasName === 'string' && aliasName.length > 0) ? aliasName : typeName);
                 
@@ -641,8 +835,10 @@
                     throw new Error('Type name conflict: "' + aliasName + '" aliased to "' + 
                             typeName + '" and "' + usedAliases[aliasName] + '"');
                 }
-                typeAliasMapping[type] = aliasName;
-                aliasTypeMapping[aliasName] = type;
+                if (typeof typeValue === 'number') {
+                    typeAliasMapping[typeValue] = aliasName;     // Type Ids used only for built-in simple and extended types (with numeric Ids) 
+                }
+                aliasTypeMapping[aliasName] = typeValue;
                 nameAliasMapping[typeName] = aliasName;
                 
                 usedAliases[aliasName] = typeName;
@@ -660,17 +856,21 @@
          * and interface methods for the specified type.
          */
         function defineType(typeName, hostObj) {
-            Object.defineProperty(hostObj, typeName.toUpperCase(), {
-                value: TYPE_VALUE_MAPPING[typeName],
-                enumerable: true,
-                writable: false,
-                configurable: false
-            });
+            var typeValue = TYPE_VALUE_MAPPING[typeName];
+            
+            if (typeof typeValue === 'number') {
+                Object.defineProperty(hostObj, typeName.toUpperCase(), {
+                    value: TYPE_VALUE_MAPPING[typeName],
+                    enumerable: true,
+                    writable: false,
+                    configurable: false
+                });
+            }
             
             var typeMethodName = getTypeMethodName(typeName);
             
             var typeCheckFunction = function(item) {
-                return isType(item, TYPE_VALUE_MAPPING[typeName]);
+                return isType(item, (TYPE_VALUE_MAPPING[typeName] || typeName));
             };
             
             hostObj[typeMethodName] = typeCheckFunction;
@@ -754,9 +954,11 @@
          * Returns the associated type Id for the specified type name.
          */
         function nameToId(type) {
-            return (typeof type === 'function' ? type                                       // instance type
-                    : typeof type === 'string' ? (aliasToTypeMapping[type] || NONE_TYPE)    // type name
-                    : NONE_TYPE);                                                           // invalid type
+            var typeId = (typeof type === 'string' ? aliasToTypeMapping[type] : NONE_TYPE);
+            
+            return (typeof type === 'function' ? type
+                    : (typeof typeId === 'number') ? typeId   // type name
+                    : NONE_TYPE);
         }
         
         /**
@@ -793,7 +995,7 @@
          * --------------
          */
         
-        optionsModule.setDelimiterPattern = function(delimiterPattern) {
+        function setDelimiterPattern(delimiterPattern) {
             delimiterPattern = ((delimiterPattern === null || delimiterPattern === undefined || delimiterPattern === '') ? 
                     TYPE_DELIMITER_DEFAULT_PATTERN : delimiterPattern);
             
@@ -802,15 +1004,15 @@
             }
             delimiterPattern = ('[ ]*' + delimiterPattern + '[ ]*');
             
-            if (delimiterPattern === typeDelimiterRegExp.source) {
+            if (typeDelimiterRegExp && (delimiterPattern === typeDelimiterRegExp.source)) {
                 return;
             }
             
             typeDelimiterRegExp = new RegExp(delimiterPattern, 'g');
             clearTypeListStringCache();
-        };
+        }
         
-        optionsModule.setNameScheme = function(nameScheme) {
+        function setNameScheme(nameScheme) {
             if (nameScheme === undefined || nameScheme === NAME_SCHEME_DEFAULT_OPTION_VALUE) {
                 buildAliasMappings();
                 return;
@@ -821,9 +1023,9 @@
             if (typeof nameScheme === 'object') {
                 buildAliasMappings(nameScheme);
             }
-        };
+        }
         
-        optionsModule.set = function(options) {
+        function setOptions(options) {
             if (typeof options !== 'object') {
                 return;
             }
@@ -834,7 +1036,11 @@
                     optionMethod(options[optionName]);
                 }
             });
-        };
+        }
+        
+        optionsModule.setDelimiterPattern = setDelimiterPattern;
+        optionsModule.setNameScheme = setNameScheme;
+        optionsModule.set = setOptions;
         
         /*
          * ---------------------
