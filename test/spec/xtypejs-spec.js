@@ -2,10 +2,11 @@
 
     'use strict';
     
-    function specs(xtype) {
+    function specs(origXtype) {
         
-        xtype = (xtype || require('../xtype'));
+        origXtype = (origXtype || require('../xtype'));
         
+        var xtype;      // prevent access to spec-external instance with shadow instance
         
         /*
          * --------------------
@@ -640,6 +641,12 @@
         
         
         describe('xtypejs', function() {
+            
+            var xtype = origXtype.newInstance();
+            
+            afterEach(function() {
+                xtype = origXtype.newInstance();
+            });
             
             describe('Getting all types', function() {
                 
@@ -1439,12 +1446,7 @@
             });
             
             
-            describe('Changing the name scheme', function() {
-                
-                afterEach(function() {
-                    xtype.options.setNameScheme('default');
-                });
-                
+            describe('Changing the name scheme', function() {                
                 
                 it('should change to the compact name scheme using the string \'compact\'', function() {
                     
@@ -1551,12 +1553,7 @@
             });
             
             
-            describe('Registering a custom name scheme', function() {                
-
-                afterEach(function() {
-                    xtype.options.setNameScheme('default');
-                });
-                
+            describe('Registering a custom name scheme', function() {
                 
                 it('should make the name scheme available when setting name scheme by name', function() {
                     
@@ -1597,11 +1594,6 @@
             
             
             describe('Changing the type string delimiter pattern', function() {
-                
-                afterEach(function() {
-                    xtype.options.setDelimiterPattern(null);
-                });
-                
                 
                 it('should change how individual types are identified in a type expression string', function() {
 
@@ -1672,28 +1664,182 @@
             
             describe('Registering a custom type', function() {
                 
-                afterEach(function() {
-                    xtype.options.setNameScheme('default');
+                beforeEach(function() {
+                    xtype.registerTypes({
+                        non_negative_integer: {
+                            typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
+                            compactName: '-int-'
+                        },
+                        
+                        non_positive_integer: {
+                            definition: 'non_positive_number, integer',
+                            matchMode: 'all',
+                            compactName: '-int+'
+                        },
+                        
+                        instance_type: {
+                            definition: CustomInstanceParentType,
+                            compactName: 'inst'
+                        },
+                        
+                        two_prop_obj_custom_type: {
+                            definition: {
+                                validator: function(value) {
+                                    return (typeof value === 'object' && value !== null && Object.keys(value).length === 2);
+                                }
+                            },
+                            compactName: 'obj2'
+                        }
+                    });
+
+                    xtype.registerTypes({ 
+                        num_instance_custom_type_combo: {
+                            definition: 'non_negative_integer, instance_type, two_prop_obj_custom_type',
+                            compactName: 'num_inst_cust_combo'
+                        }
+                    });
                 });
                 
-                xtype.registerTypes({
-                    non_negative_integer: {
-                        typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
-                        compactName: '-int-'
-                    }
-                });
                 
-                
-                it('should create a type Id constant for the registered type', function() {
+                it('should create a type Id constant for registered types' +
+                        ' derived fully from inbuilt types having type Ids', function() {
                     
                     expect(xtype.NON_NEGATIVE_INTEGER).toBeDefined(
                             
                     msg('Expected xtype.NON_NEGATIVE_INTEGER to be defined' +
-                        ' because that is the uppercased name of the custom type that has been registered'));
+                        ' because that is the uppercased name of a registered custom' +
+                        ' type derived fully from inbuilt types having type Ids'));
+                    
+                    expect(xtype.NON_POSITIVE_INTEGER).toBeDefined(
+                            
+                    msg('Expected xtype.NON_POSITIVE_INTEGER to be defined' +
+                        ' because that is the uppercased name of a registered custom' +
+                        ' type derived fully from inbuilt types having type Ids'));
                 });
                 
                 
-                it('should recognize the new type in relevant API calls', function() {
+                it('should create a dedicated is<Type> validator method for the registered custom type', function() {
+                    
+                    var customTypeNames = [
+                           'non_negative_integer', 
+                           'non_positive_integer', 
+                           'instance_type', 
+                           'two_prop_obj_custom_type',
+                           'num_instance_custom_type_combo'];
+                    
+                    customTypeNames.forEach(function(customTypeName) {
+                        var matchingMethod = ('is' + toCapitalizedCamelCase(customTypeName));
+                        
+                        expect(xtype[matchingMethod]).toBeDefined(
+                                
+                        msg('Expected xtype.' + matchingMethod + ' to be defined' +
+                            ' because that is the expected is<Type> method for checking' +
+                            ' the registered custom type \'' + customTypeName + '\''));
+                    });
+                });
+                
+                
+                it('should recognize the new type in \'is\' API calls', function() {
+                    
+                    var typeExpression = 'negative_integer, string, non_negative_integer';
+                    
+                    expect(xtype.is(5, typeExpression)).toBe(true,
+                            
+                    msg('Expected xtype.is(5, ' + str(typeExpression) + ')' +
+                        ' to be true because the typeExpression ' + str(typeExpression) + ' includes' +
+                        ' the registered custom type \'non_negative_integer\''));
+                    
+                    expect(xtype.is(5.5, typeExpression)).toBe(false,
+                            
+                    msg('Expected xtype.is(5.5, ' + str(typeExpression) + ')' +
+                        ' to be false because the typeExpression ' + str(typeExpression) +
+                        ' doesn\'t contain a type for the float value 5.5'));
+                    
+
+                    typeExpression = 'negative_integer, string, non_positive_integer';
+                    
+                    expect(xtype.is(0, typeExpression)).toBe(true,
+                    
+                    msg('Expected xtype.is(0, ' + str(typeExpression) + ')' +
+                        ' to be true because the typeExpression ' + str(typeExpression) + ' includes' +
+                        ' the registered custom type \'non_positive_integer\''));
+                    
+                    expect(xtype.is(5.5, typeExpression)).toBe(false,
+                            
+                    msg('Expected xtype.is(5.5, ' + str(typeExpression) + ')' +
+                        ' to be false because the typeExpression ' + str(typeExpression) +
+                        ' does not contain a type for the float value 5.5'));
+                    
+                    
+                    var customInstance = new CustomInstanceParentType();
+                    typeExpression = 'negative_integer, instance_type, non_positive_integer';
+                    
+                    expect(xtype.is(customInstance, typeExpression)).toBe(true,
+                            
+                    msg('Expected xtype.is(' + str(customInstance) + ', ' + str(typeExpression) + ')' +
+                        ' to be true because the typeExpression ' + str(typeExpression) + ' includes' +
+                        ' the registered custom type \'' + str(customInstance) + '\''));
+
+                    typeExpression = 'negative_integer, non_positive_integer';
+                    
+                    expect(xtype.is(customInstance, typeExpression)).toBe(false,
+                            
+                    msg('Expected xtype.is(' + str(customInstance) + ', ' + str(typeExpression) + ')' +
+                        ' to be false because the typeExpression ' + str(typeExpression) + ' does not include' +
+                        ' the registered custom type \'' + str(customInstance) + '\''));
+                    
+                    
+                    var twoPropObj = {
+                        key1: 'val1',
+                        key2: 'val2'
+                    };
+                    typeExpression = 'negative_integer, two_prop_obj_custom_type, non_positive_integer';
+                    
+                    expect(xtype.is(twoPropObj, typeExpression)).toBe(true,
+                            
+                    msg('Expected xtype.which(' + str(twoPropObj) + ', ' + str(typeExpression) + ')' +
+                        ' to be true because the typeExpression ' + str(typeExpression) + ' includes' +
+                        ' the registered custom type \'' + str(twoPropObj) + '\''));
+
+                    typeExpression = 'negative_integer, non_positive_integer';
+                    
+                    expect(xtype.is(twoPropObj, typeExpression)).toBe(false,
+                            
+                    msg('Expected xtype.which(' + str(twoPropObj) + ', ' + str(typeExpression) + ')' +
+                        ' to be false because the typeExpression ' + str(typeExpression) + ' does not include' +
+                        ' the registered custom type \'' + str(twoPropObj) + '\''));
+                    
+                    
+                    typeExpression = 'num_instance_custom_type_combo';
+                    
+                    expect(xtype.is(5, typeExpression)).toBe(true,
+                            
+                    msg('Expected xtype.is(5, ' + str(typeExpression) + ')' +
+                        ' to be true because the typeExpression ' + str(typeExpression) + ' includes' +
+                        ' the value 5'));
+                    
+                    expect(xtype.is(customInstance, typeExpression)).toBe(true,
+                            
+                    msg('Expected xtype.is(' + str(customInstance) + ', ' + str(typeExpression) + ')' +
+                        ' to be true because the typeExpression ' + str(typeExpression) + ' includes' +
+                        ' the value ' + str(customInstance)));
+                    
+                    expect(xtype.is(twoPropObj, typeExpression)).toBe(true,
+
+                    msg('Expected xtype.is(' + str(twoPropObj) + ', ' + str(typeExpression) + ')' +
+                        ' to be true because the typeExpression ' + str(typeExpression) + ' includes' +
+                        ' the value ' + str(twoPropObj)));
+                    
+                    expect(xtype.is(-5, typeExpression)).toBe(false,
+
+                    msg('Expected xtype.is(-5, ' + str(typeExpression) + ')' +
+                        ' to be false because the typeExpression ' + str(typeExpression) + ' does not include' +
+                        ' the negative values'));
+                    
+                });
+                
+                
+                it('should recognize the new type in \'which\' API calls', function() {
                     
                     expect(xtype.which(5, 'negative_integer, string, non_negative_integer')).toBe('non_negative_integer',
                             
@@ -1701,6 +1847,41 @@
                         ' to be non_negative_integer' +
                         ' because that is the name of the custom type that is the only matching' +
                         ' type for value 5 in the list of provided types in the xtype.which call'));
+                    
+                    
+                    expect(xtype.which(0, 'negative_integer, string, non_positive_integer')).toBe('non_positive_integer',
+                            
+                    msg('Expected xtype.which(-5, "negative_integer, string, non_positive_integer")' +
+                        ' to be non_positive_integer' +
+                        ' because that is the name of the custom type that is the only matching' +
+                        ' type for value -5 in the list of provided types in the xtype.which call'));
+                    
+                    
+                    var customInstance = new CustomInstanceParentType();
+                    
+                    expect(xtype.which(
+                            customInstance, 
+                            'negative_integer, instance_type, non_positive_integer')).toBe('instance_type',
+                            
+                    msg('Expected xtype.which(' + str(customInstance) + ', "instance_type, string, non_positive_integer")' +
+                        ' to be instance_type' +
+                        ' because that is the name of the custom type that is the only matching' +
+                        ' type for value ' + str(customInstance) + ' in the list of provided types in the xtype.which call'));
+                    
+                    
+                    var twoPropObj = {
+                        key1: 'val1',
+                        key2: 'val2'
+                    };
+                    
+                    expect(xtype.which(
+                            twoPropObj, 
+                            'negative_integer, two_prop_obj_custom_type, non_positive_integer')).toBe('two_prop_obj_custom_type',
+                            
+                    msg('Expected xtype.which(' + str(twoPropObj) + ', "two_prop_obj_custom_type, string, non_positive_integer")' +
+                        ' to be two_prop_obj_custom_type' +
+                        ' because that is the name of the custom type that is the only matching' +
+                        ' type for value ' + str(twoPropObj) + ' in the list of provided types in the xtype.which call'));
                 });
                 
                 
