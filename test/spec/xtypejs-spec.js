@@ -1665,7 +1665,7 @@
             describe('Registering a custom type', function() {
                 
                 beforeEach(function() {
-                    xtype.registerTypes({
+                    xtype.ext.registerType({
                         non_negative_integer: {
                             typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
                             compactName: '-int-'
@@ -1692,7 +1692,7 @@
                         }
                     });
 
-                    xtype.registerTypes({ 
+                    xtype.ext.registerType({ 
                         num_instance_custom_type_combo: {
                             definition: 'non_negative_integer, instance_type, two_prop_obj_custom_type',
                             compactName: 'num_inst_cust_combo'
@@ -1900,7 +1900,7 @@
                 it('should throw an exception if the name of the custom type conflicts with that of an existing type', function() {
                     
                     expect(function() {
-                        xtype.registerTypes({
+                        xtype.ext.registerType({
                             number: (xtype.NON_POSITIVE_NUMBER & xtype.INTEGER)
                         });
                     }).toThrow();
@@ -1910,7 +1910,7 @@
                 it('should throw an exception if the compact name of the custom type conflicts that of an existing type', function() {
                     
                     expect(function() {
-                        xtype.registerTypes({
+                        xtype.ext.registerType({
                             non_neg_int: {
                                 typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
                                 compactName: 'int+'
