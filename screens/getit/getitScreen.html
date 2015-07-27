@@ -7,8 +7,12 @@
                 <!-- Star GitHub Project -->
             </a>
         </div>
-        <div>
+        <div class="release-details">
             <h1>Current version {{latestVersion ? '- ' + latestVersion: ''}}</h1>
+            <div data-ng-if="releaseDescription">
+                <span data-ng-if="releaseTitle">{{releaseTitle}} &nbsp;&ndash;&nbsp; </span>
+                {{releaseDescription}}
+            </div>
         </div>
         <ul class="horizontal-links">
             <li data-ng-repeat="contentName in AppUtils.keys(getItContent)" data-ng-init="contentItem = getItContent[contentName]">
@@ -50,11 +54,12 @@
                         <div class="item-title">
                             <a screen-link=":download">
                                 Download
-                                <span class="release-title" data-ng-if="releaseTitle"> &nbsp; &ndash; &nbsp; {{releaseTitle}}</span>
+                                <!-- <span class="release-title" data-ng-if="releaseTitle"> &nbsp; &ndash; &nbsp; {{releaseTitle}}</span> -->
                             </a>
                         </div>
                         
-                        <p class="item-description" data-ng-if="releaseDescription">{{releaseDescription}}</p>
+                        <!-- <p class="item-description" data-ng-if="releaseDescription">{{releaseDescription}}</p> -->
+                        <p class="item-description">The following downloads are available for this release:</p>
                         
                         <ul class="release-assets">
                             <li data-ng-repeat="asset in assets">

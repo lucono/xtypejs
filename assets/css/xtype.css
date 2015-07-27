@@ -739,6 +739,16 @@ code.highlight, .code.highlight {
     border-bottom: #e8e8e8 1px solid;
 }
 
+.release-details div {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 40px; 
+}
+
+.release-details div span {
+    font-weight: bold;
+}
+
 .release-title {
     font-size: 18px;
     font-weight: bold;
