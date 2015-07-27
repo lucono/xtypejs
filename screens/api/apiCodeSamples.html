@@ -139,7 +139,9 @@ xtype.is(25, '{zero}, {positive_number} / {float}') === true;
 
 <content 
     name="noConflict"
-    description="To reassign the xtype module to the 'otherName' variable, and return the global 'xtype' variable to its previous value prior to importing xtypejs:">
+    description="
+    To reassign the xtype module to the 'otherName' variable, and return the 
+    global 'xtype' variable to its previous value prior to importing xtypejs:">
 
 var otherName = xtype.noConflict();
 
@@ -151,8 +153,10 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
 
 <content 
     name="newInstance"
-    description="Create two different xtypejs module instances where one is setup to use the default name scheme whereas the other is setup for the compact name scheme."
-    skip-views="default">
+    skip-views="default"
+    description="
+    Create two different xtypejs module instances where one is setup to use the 
+    default name scheme whereas the other is setup for the compact name scheme.">
 
 // Obtain original xtypejs instance. Here we use nodejs-style
 // require, but could be any other way of obtaining the module:
@@ -186,7 +190,12 @@ xtypeCompact(29.3)  === '{positive_float}';
 
 <content 
     name="which"
-    description="Switch on the result of xtype.which() to handle only valid data scenarios without first performing extensive type checking and data validations. For instance, in an application or library that receives a varying piece of information with which a product should be displayed, the following example handles three scenarios for the type of product-related information received.">
+    description="
+    Switch on the result of xtype.which() to handle only valid data scenarios without 
+    first performing extensive type checking and data validations. For instance, in an 
+    application or library that receives a varying piece of information with which a 
+    product should be displayed, the following example handles three scenarios for the 
+    type of product-related information received.">
 
 switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
 
@@ -209,7 +218,11 @@ switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product
 
 <content
     name="is"
-    description ="Complex type and data requirements can be concisely validated using combinations of relevant simple and/or extended types. The following example returns true only if - data is an object and contains at least one own property, or is an array and has exactly one element, or is a number and has an integer value and is greater than zero.">
+    description ="
+    Complex type and data requirements can be concisely validated using combinations 
+    of relevant simple and/or extended types. The following example returns true only if - 
+    data is an object and contains at least one own property, or is an array and has 
+    exactly one element, or is a number and has an integer value and is greater than zero.">
 
 xtype.is(value, '{single_elem_array}, {positive_integer}');
 
@@ -294,38 +307,132 @@ xtype.isNan(5 / 'hi')                   === true;
 
 
 
-<content name="registerTypes">
-// Register a new type with name 'non_negative_integer'
-// for numbers that are non-negative and also integer:
+<content name="registerType">
 
-xtype.registerTypes({
-    non_negative_integer: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER)
+/*
+ * ---------------------------------------------------------------
+ * REGISTER A DERIVED TYPE THAT MATCHES ALL OF THE COMPONENT TYPES
+ * ---------------------------------------------------------------
+ */
+
+// To register a new type named 'non_negative_integer' and with compact
+// name '-int-', that validates when a data value matches both of the
+// existing 'non_negative_number' and 'integer' types:
+
+
+xtype.registerType('non_negative_integer', {
+    definition: 'non_negative_number, integer',
+    matchMode: 'all',
+    compactName: '-int-'
 });
 
-// Or to assign both a default name and the
-// compact name '-int-' to the new type: 
+xtype.isNonNegativeInteger(value);
+xtype.is(value, '{@type:non_negative_integer:-int-}');
 
-xtype.registerTypes({
-    non_negative_integer: {
-        typeId: (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER),
-        compactName: '-int-'
+/*
+ * ---------------------------------------------------------------
+ * REGISTER A DERIVED TYPE THAT MATCHES ANY OF THE COMPONENT TYPES
+ * ---------------------------------------------------------------
+ */
+
+// To register a new type named 'flag' that validates when a data
+// value is either a positive integer or a single character string:
+
+
+xtype.registerType('flag', {
+    definition: 'positive_integer, single_char_string',
+    // matchMode omitted because 'any' is the default
+    compactName: 'flag'
+});
+
+xtype.isFlag(value);
+xtype.is(value, '{@type:flag:flag}');
+
+
+// But because the default and compact names are both 'flag', the type
+// expression string parameter format makes more sense in this case:
+
+xtype.registerType('flag', 'positive_integer, single_char_string');
+
+
+/*
+ * ------------------------------
+ * REGISTER A SELF-VALIDATED TYPE
+ * ------------------------------
+ */
+
+// To register a type named 'social_security_number'
+// and with compact name 'ssn', that validates SSNs:
+
+
+xtype.registerType('social_security_number', {
+    definition: {
+        validator: function(val) {
+            return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+        },
+        compactName: 'ssn'
     }
-    /* Can contain more Type entries */
 });
 
-// After registration, the new type becomes available for type checking:
+xtype.isSocialSecurityNumber(value);
+xtype.is(value, '{@type:social_security_number:ssn}');
 
-xtype.is(value, '{@type:non_negative_integer:-int-}');  //#:10:14 True for non-negative integers
 
-// A new 'is' method with the camel-cased name of the new type will
-// also become available on the xtype module for checking the new type:
- 
-xtype.isNonNegativeInteger(value);      // True if value is non-negative integer
+/*
+ * -------------------------
+ * REGISTER AN INSTANCE TYPE
+ * -------------------------
+ */
 
-// Also, a new type Id constant will become available on the xtype module
-// with the uppercased name of the new type and the value of its type Id:
+// To register an instance type constructor function, Product,
+// using the default name 'product' and the compact name 'prod':
 
-xtype.NON_NEGATIVE_INTEGER === (xtype.NON_NEGATIVE_NUMBER & xtype.INTEGER);
+xtype.registerType('product', {
+    definition: Product,
+    compactName: 'prod'
+});
+
+xtype.isProduct(value);
+xtype.is(value, '{@type:product:prod}');
+
+
+// To register it simply with a single name 'prod' as both the default 
+// and compact names, then the function parameter format can be used:
+
+xtype.registerType('prod', Product);
+
+xtype.is(value, 'prod');
+xtype.isProd(value);
+
+
+/*
+ * -------------------------------
+ * REGISTER MULTIPLE TYPES AT ONCE
+ * -------------------------------
+ */
+
+xtype.registerType({
+
+    non_negative_integer: {                             // Derived type
+        definition: 'non_negative_number, integer',
+        matchMode: 'all',
+        compactName: '-int-'
+    },
+    
+    social_security_number: {                           // Self-validated type
+        definition: {
+            validator: function(val) {
+                return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+            },
+            compactName: 'ssn'
+        }
+    },
+    
+    flag: 'positive_integer, single_char_string',       // Derived type
+    
+    product: Product                                    // Instance type
+});
+
 </content>
 
 

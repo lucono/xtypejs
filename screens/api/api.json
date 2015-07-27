@@ -309,7 +309,7 @@
 								},
 								{
 									"type": "array",
-									"description": "An array of any combination of the type names or Ids, and/or instance types against which {value} is to be matched."
+									"description": "An array of any combination of the type names or Ids, type expression string or type Id expression, and/or instance types against which {value} is to be matched."
 								},
 								{
 									"type": "number *",
@@ -346,7 +346,7 @@
 			"methods": [
 				{
 					"name": "nameToId",
-					"signature": "xtype.nameToId({type})",
+					"signature": "xtype.util.nameToId({type})",
 					"description": "Gets the type Id/constant corresponding to the specific type name in the active name scheme.",
 					"arguments": [
 						{
@@ -369,7 +369,7 @@
 				
 				{
 					"name": "idToName",
-					"signature": "xtype.idToName({type})",
+					"signature": "xtype.util.idToName({type})",
 					"description": "Gets the type name in the active name scheme corresponding to the specified type Id.",
 					"arguments": [
 						{
@@ -392,7 +392,7 @@
 				
 				{
 					"name": "typeNames",
-					"signature": "xtype.typeNames()",
+					"signature": "xtype.util.typeNames()",
 					"description": "Gets a list of the names of all types.",
 					"new": true,
 					"arguments": [],
@@ -406,7 +406,7 @@
 				
 				{
 					"name": "typeIds",
-					"signature": "xtype.typeIds()",
+					"signature": "xtype.util.typeIds()",
 					"description": "Gets a list of the type Ids of all types.",
 					"new": true,
 					"arguments": [],
@@ -424,46 +424,86 @@
 			"name": "Extension",
 			"methods": [
 				{
-					"name": "registerTypes",
-					"signature": "xtype.registerTypes({typesData})",
-					"description": "Adds one or more custom types to xtypejs.",
+					"name": "registerType",
+					"signature": "xtype.ext.registerType({typeName}, {typeDetails})",
+					"description": "Adds one or more user-defined type to xtypejs.",
 					"arguments": [
 						{
-							"name": "typesData",
+							"name": "typeName",
 							"types": [					
 								{
+									"type": "string",
+									"description": "The default name of the user-defined type to be added. It must be all lowercase, can only contain alphanumeric characters and the underscore character, and must not conflict with the name of any already existing type in xtypejs."
+								},
+								{
 									"type": "object",
-									"description": "An object containing the custom types to be added."
+									"description": "If an object is provided for the {typeName} argument, then each key in the object will be treated as though it were the {typeName} argument, and each corresponding value as though it were the corresponding {typeDetails} argument. This allows for the registration of multiple types in a single call. Also, when an object is provided for the {typeName} argument, the {typeDetails} argument, if also present, will be ignored."
+								}
+							]
+						},
+						{
+							"name": "typeDetails",
+							"types": [					
+								{
+									"type": "string",
+									"description": "A type expression string with the default names of any set of already existing types from which the type being registered is to be derived. The newly registered derived type will validate a data value when it matches any of the underlying component types."
+								},					
+								{
+									"type": "function",
+									"description": "An instance type constructor function which will be registered as type name {typeName}."
+								},				
+								{
+									"type": "object <sup>(1)</sup>",
+									"description": "If registering a self-validated type, this is an object which must have a {'validator'} property whose value must contain the validator function for the type being registered. The validator function must be able to accept as the first argument, the value being validated, and return true (not a truthy value) if the value is considered valid."
+								},				
+								{
+									"type": "object <sup>(2)</sup>",
+									"description": "For this object argument version, see object property and value details in {typeDetails} argument section below."
 								}
 							]
 						}
 					],
 					"argumentDetails": [
 						{
-							"name": "typesData",
+							"name": "typesDetails",
 							"properties": [
 								{
-									"name": "<em>object properties</em>",
+									"name": "definition",
 									"types": [
 										{
-											"type": "-",
-											"required": "-",
-											"description": "Each key in the {typesData} object represents the name of a new custom type to be added. The names must be all lowercase, can only contain alphanumeric characters and the underscore character, and must not conflict with the names of any of the existing types in xtypejs. The uppercased version of this name becomes available as an xtype property for the type Id, for each successfully registered type."
-										}
-									]
-								},
-								{
-									"name": "<em>object values</em>",
-									"types": [
-										{
-											"type": "number",
+											"type": "string",
 											"required": "yes",
-											"description": "The value of a binary combination of existing xtypejs type Ids that yields a unique type Id value for the new custom type to be registered."
+											"description": "Same as the <em>string</em> argument value for {typeDetails}."
+										},
+										{
+											"type": "function",
+											"required": "yes",
+											"description": "Same as the <em>function</em> argument value for {typeDetails}."
 										},
 										{
 											"type": "object",
 											"required": "yes",
-											"description": "An object with a required {'typeId'} property having the value of the type Id of the new custom type, and an optional {'compactName'} property having a string value which will be used as the compact name of the registered custom type. The compact name must not conflict with any of the existing compact names in xtypejs."
+											"description": "Same as the <em>object <sup>(1)</sup></em> argument value for {typeDetails}."
+										}
+									]
+								},
+								{
+									"name": "compactName",
+									"types": [
+										{
+											"type": "string",
+											"required": "no",
+											"description": "The compact name to be used for the type being registered, and must not conflict with the compact name of any already existing type. Defaults to the value of the {typeName} argument if omitted."
+										}
+									]
+								},
+								{
+									"name": "matchMode",
+									"types": [
+										{
+											"type": "string",
+											"required": "no",
+											"description": "Only applies when registering derived types. When the value is {'all'}, indicates that the derived type being registered should validate data values only when they match <em>all</em> of the underlying component types. When the value is {'any'}, indicates that it should validate data values if they match <em>any</em> of the underlying types. The default when not provided, is {'any'}."
 										}
 									]
 								}
@@ -479,7 +519,7 @@
 				},
 				{
 					"name": "registerNameScheme",
-					"signature": "xtype.registerNameScheme({schemeName}, {aliases})",
+					"signature": "xtype.ext.registerNameScheme({schemeName}, {aliases})",
 					"description": "Adds a new name scheme to xtypejs. It does not automatically switch to the new scheme.",
 					"new": true,
 					"arguments": [
@@ -543,7 +583,7 @@
 			"name": "Options",
 			"methods": [
 				{
-					"name": "options.setDelimiterPattern",
+					"name": "setDelimiterPattern",
 					"signature": "xtype.options.setDelimiterPattern({delimiterPattern})",
 					"description": "Sets the regular expression pattern used in recognizing how individual type names are delimited in type name expression strings.",
 					"new": true,
@@ -567,7 +607,7 @@
 				},
 				
 				{
-					"name": "options.setNameScheme",
+					"name": "setNameScheme",
 					"signature": "xtype.options.setNameScheme({nameScheme})",
 					"description": "Sets the scheme to be used for type names.",
 					"new": true,
@@ -599,7 +639,7 @@
 				},
 				
 				{
-					"name": "options.set",
+					"name": "set",
 					"signature": "xtype.options.set({optionsData})",
 					"description": "Sets multiple options in a single operation.",
 					"new": true,

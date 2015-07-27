@@ -53,15 +53,18 @@
                                    <span>{{type.category}} type</span>
                                 </div>
                                 <div>
-                                   <span>composite</span>
-                                   <span>{{(type.composite === true || type.composition.length > 0) ? 'yes' : 'no'}}</span>
+                                   <span>derived</span>
+                                   <span>{{(type.derived === true || type.derivation.length > 0) ? 'yes' : 'no'}}</span>
                                 </div>
-                                <div data-ng-if="AppUtils.isArray(type.composition) ? type.composition.length > 0 : type.composition">
-                                    <span>composition</span>
+                                <div data-ng-if="AppUtils.isArray(type.derivation) ? type.derivation.length > 0 : type.derivation">
+                                    <span>derivation</span>
                                     <span>
-                                        <span data-ng-if="!AppUtils.isArray(type.composition)" data-ng-bind-html="type.composition"></span>
-                                        <span data-ng-if="AppUtils.isArray(type.composition)">
-                                            <a data-ng-repeat="compositeTypeName in type.composition" 
+                                        <span data-ng-if="!AppUtils.isArray(type.derivation)" data-ng-bind-html="type.derivation"></span>
+                                        <span data-ng-if="AppUtils.isArray(type.derivation)">
+                                            <span class="type-label title">
+                                                <code>Match Any:</code>
+                                            </span>
+                                            <a data-ng-repeat="compositeTypeName in type.derivation" 
                                                 screen-link=":{{compositeTypeName}}" 
                                                 class="type-label">
                                                 <code>{{compositeTypeName}}</code>

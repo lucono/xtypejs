@@ -15,8 +15,13 @@
      */
      
     function getTypeComposition(typeName) {
-        var composition = [],
-            typeId = xtype.nameToId(typeName);
+        var composition = [];
+        
+        if (!isCompositeType(typeName)) {
+            return composition;
+        }
+        
+        var typeId = xtype.nameToId(typeName);
         
         xtype.typeNames().forEach(function(candidateType) {
             if (candidateType !== typeName && !isCompositeType(candidateType) && (typeId & xtype.nameToId(candidateType)) > 0) {                        
@@ -93,8 +98,7 @@
         });
         
         // Filter grouped {{type expression}} tokens
-        filteredCode = filteredCode.replace(/^(.*?)({{[ ]*([^{}]+?)[ ]*}})([^=;]*)(=+)?([^;]*?;)([ ]*(\/\/|\/\*)?.*?([\n\r]|$))/gm,
-        //filteredCode = filteredCode.replace(/{{[ ]*([^{}]+?)[ ]*}}/g,
+        filteredCode = filteredCode.replace(/^(.*?)({{[ ]*([^{}]+?)[ ]*}})([^=;]*)(=+)?([^;]*?;?)([ ]*(\/\/|\/\*)?.*?([\n\r]|$))/gm,
             function(match, preExpr, exprWithCurly, defaultExpression, preEqualSign, equalSign, postEqualToStmtEnd, postStmtToLineEnd, commentStart) {
                 var lengthFix;
                 
@@ -116,7 +120,7 @@
                         typeList[typeIndex] = typesByName[typeName].compactName;
                     }
                 }
-                var compactExpression = typeList.join(' ');
+                var compactExpression = typeList.join(' ').trim();
                 
                 lengthFix = new Array((exprWithCurly.length - compactExpression.length) + 1).join(' ');
                 
@@ -172,7 +176,7 @@
     }
     
     function getLinkFriendlyForm(str) {
-        return $('<span>' + str + '</span>').text(); //.replace(/\./g, '_');
+        return $('<span>' + str + '</span>').text();
     }
     
     function getURLParam(url, paramName) {
@@ -190,10 +194,15 @@
         return (code ? global.prettyPrintOne(code, lang, numbered) : '');
     }
 
-    function sharePopup(url, popupWidth, popupHeight) {
-		var popupLeft = (screen.width / 2) - (popupWidth / 2);
-		var popupTop = (screen.height/2) - (popupHeight / 2);
-		
+    function sharePopup(url, popupWidth, popupHeight) { 
+        if (!popupWidth || !popupHeight) {
+            window.open(url);
+            return;
+        }
+		       
+        var popupTop = (screen.height/2) - (popupHeight / 2);
+    	var popupLeft = (screen.width / 2) - (popupWidth / 2);
+            
 		var options = 
 			'toolbar=no,' +
 			' location=no,' +
@@ -250,23 +259,12 @@
      */
     
     var bundleLoadDeffered = $.Deferred(),
-        bundleLoadPromise = bundleLoadDeffered.promise()
-        //templateCache
-        ;
+        bundleLoadPromise = bundleLoadDeffered.promise();
             
     function templatePromise(templateUrl) {
         return bundleLoadPromise.then(function(templateCache) {
             return templateCache.get(templateUrl);
         });
-        
-        /*
-        var templateDeferred = $.Deferred();
-        
-        bundleLoadPromise.then(function() {
-            templateDeferred.resolve(templateCache.get(templateUrl));
-        });
-        return templateDeferred.promise();
-        */
     }
         
     angular.module('xtypejsSite', ['ui.router'])
@@ -297,8 +295,7 @@
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
         
-        //var compactNameGuideScreenLink = 'guide:switching_to_compact_name_scheme';
-        //$rootScope.compactCodeTip = 'Tip: <a href=\"' + compactNameGuideScreenLink + '\">Using compact names</a>';
+        $rootScope.libDescription = 'Concise, performant, readable, data and type validation for JavaScript apps, using built-in and user-defined data-validating pseudo types.';
         
         $rootScope.previousState = '';
         $rootScope.activeScreen = '';
@@ -549,7 +546,7 @@
                         type.compactName = compactTypeNames[type.name];
                         type.friendlyName = (type.friendlyName ? type.friendlyName : type.name.replace(/_/g, ' '));
                         type.description = $sce.trustAsHtml(type.description);
-                        type.composition = (typeof type.composition === 'string' ? $sce.trustAsHtml(type.composition) : getTypeComposition(type.name));
+                        type.derivation = (typeof type.derivation === 'string' ? $sce.trustAsHtml(type.derivation) : getTypeComposition(type.name));
                         
                         if (type.builtInType !== false) {
                             typesByName[type.name] = type;
@@ -716,14 +713,14 @@
      * ==========
      */
      
-    .directive('share', function() {
+    .directive('share', ['$rootScope', function($rootScope) {
         return function(scope, element, attrs) {
             if (element.attr('share') === 'email') {
                 element.attr('href',
                     'mailto:?subject=' +
-                    encodeURIComponent('Elegant, highly efficient data validation for JavaScript') +
+                    encodeURIComponent('Elegant, highly efficient data validation for JavaScript Apps') +
                     '&body=' +
-                    encodeURIComponent('Checkout xtypejs - Concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types. Find out more at http://xtype.js.org.'));
+                    encodeURIComponent('Checkout xtypejs - ' + $rootScope.libDescription + ' Find out more at http://xtype.js.org.'));
                 return;
             }
             var shareParams;
@@ -744,14 +741,20 @@
                 case 'twitter':
                     shareParams = [
                         'https://twitter.com/home?status=' + 
-                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript. http://xtype.js.org'), 
+                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript Apps. http://xtype.js.org'), 
                         550, 420];
                     break;
                 case 'linkedin':
                     shareParams = [
                         'https://www.linkedin.com/shareArticle?mini=true&url=http://xtype.js.org&title=' +
-                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript'), 
+                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript Apps'), 
                         550, 560];
+                    break;
+                case 'reddit':
+                    shareParams = [
+                        'https://www.reddit.com/submit?url=' + 
+                        encodeURIComponent('http://xtype.js.org')
+                    ];
                     break;
             }
             
@@ -764,7 +767,7 @@
                     event.preventDefault();
                 });
         };
-    })
+    }])
     
     .directive('screenLink', ['$rootScope', '$state', '$location', '$timeout', function($rootScope, $state, $location, $timeout) {
         return function(scope, element, attrs) {

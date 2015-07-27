@@ -4,7 +4,7 @@
         <div class="description-pane">
             <div>
                 <span class="title">What</span>
-                Concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types.
+                {{libDescription}}
             </div>
             <div>
                 <span class="title">Why</span>
@@ -17,27 +17,30 @@
         </div>
     </div>
     
-    <div class="code-comparison" 
-        data-ng-repeat="demoName in demoCodeSampleList"
-        data-ng-init="jsCodeSample = codeContent[demoName + '_js']; xtypejsCodeSample = codeContent[demoName + '_xtypejs']">
+    <div class="code-comparison"
+        data-ng-repeat="codeSnippets in [codeContent]">
         
-        <div class="code-entry">
+        <div class="code-entry" id="before_code">
             
             <code-snippet
-                code-item="jsCodeSample"
+                code-item="codeSnippets.before"
                 skip-compact-view>
             </code-snippet>
             
             <div class="compare-label">
-                <span class="large">go</span>
+                <span>
+                    <a screen-link=":before_code" class="large">go</a>
+                </span>
                 <span>from this..</span>
                 <i class="fa fa-share fa-2x fa-rotate-180"></i>
             </div>
         </div>
         
-        <div class="code-entry">
+        <div class="code-entry right" id="after_code">
             <div class="compare-label">
-                <span class="large">..to</span>
+                <span>
+                    <a screen-link=":after_code" class="large">..to</a>
+                </span>
                 <span>concise</span>
                 <span>performant</span>
                 <span>readable</span>
@@ -46,7 +49,27 @@
             </div>
             
             <code-snippet 
-                code-item="xtypejsCodeSample" 
+                code-item="codeSnippets.after" 
+                default-view="compact" 
+                compact-view-label="Compact Names"
+                default-view-label="Descriptive Names"
+                no-info-label>
+            </code-snippet>
+        </div>
+        
+        <div class="code-entry right" id="add_your_own">
+            
+            <div class="compare-label">
+                <span>
+                    <a screen-link=":add_your_own" class="large">and,</a>
+                </span>
+                <span>even add custom</span>
+                <span>validation types</span>
+                <span>of your own</span>
+            </div>
+            
+            <code-snippet 
+                code-item="codeSnippets.add_your_own" 
                 default-view="compact" 
                 compact-view-label="Compact Names"
                 default-view-label="Descriptive Names"

@@ -300,18 +300,27 @@
                     "name": "instance_types",
                     "title": "Instance Types",
                     "category": "instance",
-                    "composite": false,
+                    "derived": false,
                     "description": "Any constructor function is an Instance type. Each constructor function is the Instance type for objects of that constructor.",
                     "builtInType": false
                 },
                 {
-                    "typeId": "<em>derived from composition</em>",
-                    "name": "custom_types",
-                    "title": "Custom Types",
-                    "category": "extended",
-                    "composite": true,
-                    "composition": "<em>user defined</em>",
-                    "description": "Any number of custom types can be derived from various combinations of the xtypejs built-in types. Each derived custom type must be a numeric value of a derivation from the type Ids of a number of existing xtypejs types, resulting in a new unique type Id value for which there is not an already existing value in xtypejs. Derived custom types can be fully registered into the xtypejs API by using the <em>xtype.registerTypes</em> API method.",
+                    "typeId": "<em>not applicable</em>",
+                    "name": "self_validated_types",
+                    "title": "Self-Validated Types",
+                    "category": "self-validated",
+                    "derived": false,
+                    "description": "Self-validated types are user-defined types that provide an implementation of the arbitrary custom validation used in validating that type. Any number of self-validated types can be created and used like, and/or together with, all other types.",
+                    "builtInType": false
+                },
+                {
+                    "typeId": "<em>based on composition - only applicable for derivations using only built-in types</em>",
+                    "name": "derived_types",
+                    "title": "Derived Types",
+                    "category": "derived",
+                    "derived": true,
+                    "derivation": "<em>component types</em>",
+                    "description": "Derived types are types created from a combination of multiple types, and may be created to validate either on a match of all the component types, or of any of the component types.",
                     "builtInType": false
                 }
             ]

@@ -583,7 +583,7 @@ ul.right-nav.fixed {
     white-space: nowrap;
 }
 
-.code-comparison .code-entry:last-child {
+.code-comparison .code-entry.right {
     text-align: right;
 }
 
@@ -596,7 +596,9 @@ ul.right-nav.fixed {
     font-size: 36px;
     font-weight: bold;
     color: #266D75; /* #4d4e56; */
+    /*
     margin-top: -40px;
+    */
 }
 
 .code-comparison .compare-label span {
@@ -605,9 +607,11 @@ ul.right-nav.fixed {
     text-align: center;
 }
 
-.code-comparison .compare-label span.large {
+.code-comparison .compare-label span a.large {
     font-size: 120px;
-    color: #40BCC9; /* #d9e8fc; */
+    color: #40BCC9 !important; /* #d9e8fc; */
+    text-decoration: none;
+    outline: none;
 }
 
 .code-comparison .compare-label i {
@@ -679,6 +683,13 @@ code.highlight, .code.highlight {
 
 .type-label.squeezed {
     margin: 0px;
+}
+
+.type-label.title code {
+    background-color: #C5E0DC; /* #E8EBCC */
+    /*
+    color: #fff;
+    */
 }
 
 .content-group {

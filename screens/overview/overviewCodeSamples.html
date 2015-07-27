@@ -2,7 +2,7 @@
 <content-wrapper code-artifact="overview">
 
 
-<content name="switch_example_js">
+<content name="before_code">
 
 function searchEmployees(value) {
     if (typeof value === 'string') {
@@ -36,7 +36,7 @@ function searchEmployees(value) {
 </content>
 
 
-<content name="switch_example_xtypejs" no-compact-switch-prefix>
+<content name="after_code">
 
 function searchEmployees(value) {
     switch (xtype.which(value, '{{multi_char_string, single_char_string, positive_integer, single_prop_object, multi_prop_object, number, nothing}}')) {
@@ -60,21 +60,27 @@ function searchEmployees(value) {
 }
 </content>
 
-<!--
-<content name="switch_example_xtypejs" no-compact-switch-prefix>
 
-function findEmployee(value) {
-    var type = xtype.which(value, '{{multi_char_string, single_char_string, single_prop_object, positive_integer, number, nothing}}');
-    return type === '{multi_char_string}' ? EmployeeDB.searchByName(value)
-        : type === '{single_char_string}' ? EmployeeDB.searchByMiddleInitial(value)
-        : type === '{single_prop_object}' ? EmployeeDB.searchByFieldValuePair(value)
-        : type === '{positive_integer}' ? EmployeeDB.searchByEmployeeNumber(value)
-        : type === '{number}' ? { error: 'Employee number must be positive integer' }
-        : type === '{nothing}' ? { error: 'No search value supplied' }
-        : { error: 'Invalid search value supplied' };
+<content name="add_your_own_code">
+
+xtype.registerType('ssn', {
+    validator: function(val) {
+        return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+    }
+});
+
+function searchEmployees(value) {
+    switch (xtype.which(value, '{{positive_integer, ssn, multi_char_string}}')) {
+        case '{positive_integer}':
+            return EmployeeDB.searchByEmployeeNumber(value);
+        case 'ssn':
+            return EmployeeDB.searchBySSN(value);
+        case '{multi_char_string}':
+            return EmployeeDB.searchByName(value);
+        default:
+            return { error: 'Invalid search value supplied' };
     }
 }
 </content>
--->
 
 </content-wrapper>
