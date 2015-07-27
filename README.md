@@ -101,4 +101,4 @@ MIT license.
 
 Visit the website for usage guide, examples, API docs, and installation.
 
-#### **[xtype.js.org](http://xtype.js.org/)**
+**[xtype.js.org](http://xtype.js.org/)**
