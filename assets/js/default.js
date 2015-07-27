@@ -752,8 +752,9 @@
                     break;
                 case 'reddit':
                     shareParams = [
-                        'https://www.reddit.com/submit?url=' + 
-                        encodeURIComponent('http://xtype.js.org')
+                        'https://www.reddit.com/submit' +
+                        '?url=' + encodeURIComponent('http://xtype.js.org') +
+                        '&title=' + encodeURIComponent('xtypejs')
                     ];
                     break;
             }
@@ -763,6 +764,12 @@
                 .attr('target', '_blank')
                 .attr('href', shareParams[0])
                 .on('click', function(event) {
+                    if (element.attr('share') === 'reddit') {
+                        shareParams[0] = 
+                                'https://www.reddit.com/submit' +
+                                '?url=' + encodeURIComponent(window.location) +
+                                '&title=' + encodeURIComponent('xtypejs: ' + window.document.title);
+                    }
                     sharePopup.apply(this, shareParams);
                     event.preventDefault();
                 });
