@@ -5,7 +5,7 @@
 
 ### Overview
 
-- Provides concise, performant, readable, data and type validation for JavaScript, using close to 40 highly efficient, data-validating pseudo types.
+- Provides concise, performant, readable, data and type validation for JavaScript apps, using built-in and user-defined data-validating pseudo types.
 - Improves application efficiency and readability by unifying the most basic but common data and type validations in JavaScript apps, into single, concise, highly optimized operations.
 - Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
 - Ready for nodejs, requirejs, and regular script tag.
@@ -64,6 +64,29 @@ function searchEmployees(value) {
             return { error: 'Invalid employee number supplied' };
         case 'nil':
             return { error: 'No search value supplied' };
+        default:
+            return { error: 'Invalid search value supplied' };
+    }
+}
+```
+
+### And even add custom validation types of your own:
+
+```js
+xtype.registerType('ssn', {
+    validator: function(val) {
+        return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+    }
+});
+
+function searchEmployees(value) {
+    switch (xtype.which(value, 'positive_integer, ssn, multi_char_string')) {
+        case 'positive_integer':
+            return EmployeeDB.searchByEmployeeNumber(value);
+        case 'ssn':
+            return EmployeeDB.searchBySSN(value);
+        case 'multi_char_string':
+            return EmployeeDB.searchByName(value);
         default:
             return { error: 'Invalid search value supplied' };
     }
