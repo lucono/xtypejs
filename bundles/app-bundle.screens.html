@@ -53,7 +53,7 @@
                 default-view="compact" 
                 compact-view-label="Compact Names"
                 default-view-label="Descriptive Names"
-                no-info-label>
+                info-label="Choose name scheme &nbsp; &rarr;">
             </code-snippet>
         </div>
         
@@ -73,7 +73,7 @@
                 default-view="default" 
                 compact-view-label="Compact Names"
                 default-view-label="Descriptive Names"
-                no-info-label>
+                info-label="Choose name scheme &nbsp; &rarr;">
             </code-snippet>
         </div>
     </div>
@@ -152,11 +152,11 @@ xtype.registerType('ssn', {
 });
 
 function searchEmployees(value) {
-    switch (xtype.which(value, '{{positive_integer, ssn, multi_char_string}}')) {
-        case '{positive_integer}':
-            return EmployeeDB.searchByEmployeeNumber(value);
+    switch (xtype.which(value, '{{ssn, positive_integer, multi_char_string}}')) {
         case 'ssn':
             return EmployeeDB.searchBySSN(value);
+        case '{positive_integer}':
+            return EmployeeDB.searchByEmployeeNumber(value);
         case '{multi_char_string}':
             return EmployeeDB.searchByName(value);
         default:
