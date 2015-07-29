@@ -378,6 +378,19 @@ xtype.isSocialSecurityNumber(value);
 xtype.is(value, '{@type:social_security_number:ssn}');
 
 
+// To register it simply with a single name 'ssn' as both the 
+// default and compact names, then the registration can just be:
+
+xtype.registerType('ssn', {
+    validator: function(val) {
+        return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+    }
+});
+
+xtype.isSsn(value);
+xtype.is(value, 'ssn');
+
+
 /*
  * -------------------------
  * REGISTER AN INSTANCE TYPE
@@ -401,8 +414,8 @@ xtype.is(value, '{@type:product:prod}');
 
 xtype.registerType('prod', Product);
 
-xtype.is(value, 'prod');
 xtype.isProd(value);
+xtype.is(value, 'prod');
 
 
 /*
