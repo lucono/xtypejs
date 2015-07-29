@@ -831,7 +831,7 @@ xtype.is(value, 'prod');
 
 xtype.registerType({
 
-    non_negative_integer: {                             // Derived type
+    non_negative_integer: {                             // Derived type: match all
         definition: 'non_negative_number, integer',
         matchMode: 'all',
         compactName: '-int-'
@@ -846,7 +846,7 @@ xtype.registerType({
         }
     },
     
-    flag: 'positive_integer, single_char_string',       // Derived type
+    flag: 'positive_integer, single_char_string',       // Derived type: match any
     
     product: Product                                    // Instance type
 });
