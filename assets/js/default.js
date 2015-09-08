@@ -599,7 +599,7 @@
                                 
                                 if (skippedViewList.indexOf('default') < 0) {
                                     defaultCode = filterView(content, typeData, 'default');
-                                    itemCodeSamples.default = $sce.trustAsHtml(prettyPrintCode(defaultCode, contentItem.attributes.lang, false));
+                                    itemCodeSamples['default'] = $sce.trustAsHtml(prettyPrintCode(defaultCode, contentItem.attributes.lang, false));
                                 }
                                 
                                 if (skippedViewList.indexOf('compact') < 0) {
@@ -674,8 +674,8 @@
                                         });
                                     });
                                 }
-                                if (method.return) {
-                                    method.return.forEach(function(returnType) {
+                                if (method['return']) {
+                                    method['return'].forEach(function(returnType) {
                                         ['type', 'description'].forEach(function(prop) {
                                             returnType[prop] = $sce.trustAsHtml(returnType[prop].replace(/{(.*?)}/g, '<code>$1</code>'));
                                         });
@@ -751,11 +751,7 @@
                         550, 560];
                     break;
                 case 'reddit':
-                    shareParams = [
-                        'https://www.reddit.com/submit' +
-                        '?url=' + encodeURIComponent('http://xtype.js.org') +
-                        '&title=' + encodeURIComponent('xtypejs')
-                    ];
+                    shareParams = ['https://www.reddit.com/r/node/comments/3bqwyf'];
                     break;
             }
             
@@ -764,12 +760,6 @@
                 .attr('target', '_blank')
                 .attr('href', shareParams[0])
                 .on('click', function(event) {
-                    if (element.attr('share') === 'reddit') {
-                        shareParams[0] = 
-                                'https://www.reddit.com/submit' +
-                                '?url=' + encodeURIComponent(window.location) +
-                                '&title=' + encodeURIComponent('xtypejs: ' + window.document.title);
-                    }
                     sharePopup.apply(this, shareParams);
                     event.preventDefault();
                 });
