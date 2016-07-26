@@ -1,8 +1,8 @@
 {
-  "name": "xtypejs",
+  "name": "xtypejs-extension-custom-types",
   "version": "0.5.0",
   "description": "Elegant, highly efficient data validation for JavaScript Apps.",
-  "main": "dist/xtype",
+  "main": "dist/xtypejs-extension-custom-types",
   "keywords": [
     "type",
     "xtype",
@@ -11,10 +11,10 @@
     "data-type",
     "validation"
   ],
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/lucono/xtypejs/blob/master/LICENSE"
+  "author": {
+    "name": "Lucas Ononiwu"
   },
+  "license": "MIT",
   "homepage": "http://xtype.js.org",
   "repository": {
     "type": "git",

@@ -8,3 +8,7 @@ before_script:
   - npm install -g grunt-cli
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+env:
+  - TEST_DIR=project/xtypejs
+  - TEST_DIR=project/extensions/xtypejs-extension-custom-types
+script: cd $TEST_DIR && npm install && npm test

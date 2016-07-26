@@ -1,7 +1,5 @@
-/spec/
-/node_modules/
-/build/
-/lab/
 /.idea/
-/.project
+/.project/
 /.settings/
+/.vscode/
+/wip/

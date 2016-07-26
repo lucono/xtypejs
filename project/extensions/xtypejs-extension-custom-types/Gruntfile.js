@@ -6,29 +6,36 @@ module.exports = function (grunt) {
     jshint: {
       all: [
         "Gruntfile.js",
-        "dist/xtype.js",
-        "test/spec/**/*-spec.js"
+        "dist/xtypejs-extension-custom-types.js",
+        "test/**/*-spec.js"
       ],
       options: {
-        jshintrc: 'test/config/.jshintrc',
+        jshintrc: 'test/.jshintrc',
         reporter: require('jshint-html-reporter'),
         reporterOutput: 'build/jslint-report.html'
       }
     },
     karma: {
       options: {
-        configFile: 'test/config/karma.conf.js'
+        configFile: 'test/karma.conf.js'
       },
       source_lib: {
         files: [
-          { src: ['dist/xtype.js', 'test/spec/**/*-spec.js'] }
+          {
+            src: [
+              '../../../shared/test/test-util.js', 
+              '../../xtypejs/dist/xtype.js', 
+              'dist/xtypejs-extension-custom-types.js', 
+              'test/**/*-spec.js'
+            ] 
+          }
         ],
         reporters: ['progress', 'spec', 'coverage', 'html'],
         htmlReporter: {
           outputDir: 'build/test-reports-source-lib',
           focusOnFailures: true,
           namedFiles: true,
-          pageTitle: 'xtypejs - Source Lib Test Report',
+          pageTitle: 'xtypejs-extension-custom-types - Source Lib Test Report',
           urlFriendlyName: true,
           preserveDescribeNesting: true,
           foldAll: true
@@ -41,42 +48,25 @@ module.exports = function (grunt) {
           }
         },
         preprocessors: {
-          'dist/xtype.js': ['coverage']
-        }
-      },
-      minified_lib: {
-        files: [
-          { src: ['dist/**/*.min.js', 'test/spec/**/*-spec.js'] }
-        ],
-        reporters: ['progress', 'spec', 'html'],
-        htmlReporter: {
-          outputDir: 'build/test-reports-minified-lib',
-          focusOnFailures: true,
-          namedFiles: true,
-          pageTitle: 'xtypejs - Minified Lib Test Report',
-          urlFriendlyName: true,
-          preserveDescribeNesting: true,
-          foldAll: true
+          'dist/xtypejs-extension-custom-types.js': ['coverage']
         }
       }
     },
     uglify: {
       options: {
         compress: {
-          global_defs: {
-            "$XTYPE_JS_BUNDLE_COMPACT_NAME_SCHEME$": true
-          },
+          global_defs: {},
           dead_code: true
         }
       },
       main: {
         options: {
           sourceMap: true,
-          sourceMapName: 'dist/xtype.js.map',
+          sourceMapName: 'dist/xtypejs-extension-custom-types.js.map',
           preserveComments: 'some'
         },
         files: {
-          'dist/xtype.min.js': ['dist/xtype.js']
+          'dist/xtypejs-extension-custom-types.min.js': ['dist/xtypejs-extension-custom-types.js']
         }
       }
     },
@@ -91,7 +81,7 @@ module.exports = function (grunt) {
           },
           {
             expand: true,
-            src: ['xtype.js'],
+            src: ['xtypejs-extension-custom-types.js'],
             flatten: true,
             dest: 'dist/',
             filter: 'isFile'
@@ -103,17 +93,14 @@ module.exports = function (grunt) {
         build: ['build', 'dist']
     },
     shell: {
-      jasmine_node_test_source_lib: {
-        command: './node_modules/jasmine/bin/jasmine.js test/spec/typejs-spec-node-source.js JASMINE_CONFIG_PATH=test/config/jasmine.json'
-      },
-      jasmine_node_test_minified_lib: {
-        command: './node_modules/jasmine/bin/jasmine.js test/spec/typejs-spec-node-minified.js JASMINE_CONFIG_PATH=test/config/jasmine.json'
+      jasmine_node_test: {
+        command: './node_modules/jasmine/bin/jasmine.js test/xtypejs-extension-custom-types-spec.js JASMINE_CONFIG_PATH=test/jasmine.json'
       }
     },
     'string-replace': {
       version: {
         files: {
-          'dist/': ['dist/xtype.js']
+          'dist/': ['dist/xtypejs-extension-custom-types.js']
         },
         options: {
           replacements: [
@@ -135,7 +122,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-string-replace');
   
-  grunt.registerTask('test-node', ['shell:jasmine_node_test_source_lib', 'shell:jasmine_node_test_minified_lib']);
+  grunt.registerTask('test-node', ['shell:jasmine_node_test']);
   grunt.registerTask('test', ['jshint', 'test-node', 'karma']);
   grunt.registerTask('build', ['clean', 'copy', 'string-replace', 'uglify']);
   grunt.registerTask('default', ['build', 'test']);
