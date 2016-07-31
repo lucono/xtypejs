@@ -642,6 +642,7 @@
                 nonMatchingTestValuesByType: nonMatchingTestValuesByType,
                 CustomInstanceParentType: CustomInstanceParentType,
                 CustomInstanceChildType: CustomInstanceChildType,
+                expectedTypeCount: expectedTypeCount,
                 noneType: noneType
             },
             helpers: {
@@ -654,15 +655,15 @@
         };
     
     
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
-            exports = module.exports = moduleExport;
-        }
-    } else if (typeof define === 'function' && define.amd) {
+    if (typeof module === 'object' && module.exports) {
+        exports = module.exports = moduleExport;
+    }
+    else if (typeof define === 'function' && define.amd) {
         define(function() {
             return moduleExport;
         });
-    } else {
+    }
+    else {
         global[EXPORT_NAME] = moduleExport;
     }
 

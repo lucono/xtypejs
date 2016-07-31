@@ -1,4 +1,4 @@
-/** @license | xtypejs v{{ VERSION }} | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs v{{ LIB_VERSION }} | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -34,8 +34,8 @@
     */
     
     var LIB_NAME = 'xtype',
-        VERSION = '{{ VERSION }}',
-        UNSPECIFIED_VERSION = 'unspecified',
+        LIB_VERSION = '{{ LIB_VERSION }}',
+        
         TYPE_DELIMITER_DEFAULT_PATTERN = '[|, ]',
         NAME_SCHEME_DEFAULT_OPTION_VALUE = 'default',
         OBJECT_CLASS_REGEX = /^\[object\s(.*)\]$/,
@@ -822,7 +822,7 @@
             moduleRefreshHandlers.push(refreshCoreModule);
             
             Object.defineProperty(moduleExport, 'VERSION', {
-                value: (/\s*{{[^}]*}}\s*/g.test(VERSION) ? UNSPECIFIED_VERSION : VERSION),
+                value: (/\s*{{[^}]*}}\s*/g.test(LIB_VERSION) ? 'unspecified' : LIB_VERSION),
                 enumerable: true,
                 writable: false,
                 configurable: false

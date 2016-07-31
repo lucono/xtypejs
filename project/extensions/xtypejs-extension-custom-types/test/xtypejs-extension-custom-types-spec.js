@@ -28,11 +28,11 @@
          */
         
         
-        describe('xtypejs', function() {
+        describe('xtypejs-extension-custom-types', function() {
             
-            var xtype = xtypejs.newInstance();
+            var xtype;
             
-            afterEach(function() {
+            beforeEach(function() {
                 xtype = xtypejs.newInstance();
             });
             

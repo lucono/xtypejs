@@ -116,7 +116,7 @@ module.exports = function (grunt) {
         options: {
           replacements: [
             {
-              pattern: /{{\s*VERSION\s*}}/g,
+              pattern: /{{\s*LIB_VERSION\s*}}/g,
               replacement: '<%= pkg.version %>'
             }
           ]

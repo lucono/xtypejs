@@ -75,7 +75,7 @@ module.exports = function (grunt) {
         files: [
           {
             expand: true,
-            src: ['LICENSE'],
+            src: ['../../../LICENSE'],
             dest: 'dist/',
             filter: 'isFile'
           },
@@ -105,7 +105,7 @@ module.exports = function (grunt) {
         options: {
           replacements: [
             {
-              pattern: /{{\s*VERSION\s*}}/g,
+              pattern: /{{\s*LIB_VERSION\s*}}/g,
               replacement: '<%= pkg.version %>'
             }
           ]

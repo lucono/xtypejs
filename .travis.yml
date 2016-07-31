@@ -9,6 +9,14 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 env:
-  - TEST_DIR=project/xtypejs
-  - TEST_DIR=project/extensions/xtypejs-extension-custom-types
-script: cd $TEST_DIR && npm install && npm test
+  - PROJECT_DIR=project/xtypejs
+  # xtypejs extensions
+  - PROJECT_DIR=project/extensions/xtypejs-extension-custom-types
+  - PROJECT_DIR=project/extensions/xtypejs-extension-typename-utils
+  - PROJECT_DIR=project/extensions/xtypejs-extension-autocamel-name-scheme
+  # xtypejs name schemes
+  - PROJECT_DIR=project/name-schemes/xtypejs-name-scheme-compact
+  - PROJECT_DIR=project/name-schemes/xtypejs-name-scheme-camel
+  - PROJECT_DIR=project/name-schemes/xtypejs-name-scheme-shortened
+  - PROJECT_DIR=project/name-schemes/xtypejs-name-scheme-shortened-camel
+script: cd $PROJECT_DIR && npm install && npm test

@@ -1,7 +1,7 @@
 {
   "name": "xtypejs-extension-custom-types",
-  "version": "0.5.0",
-  "description": "Elegant, highly efficient data validation for JavaScript Apps.",
+  "version": "0.1.0",
+  "description": "xtypejs Extension - Custom types",
   "main": "dist/xtypejs-extension-custom-types",
   "keywords": [
     "type",

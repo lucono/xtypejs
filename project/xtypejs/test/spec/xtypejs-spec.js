@@ -32,9 +32,9 @@
         
         describe('xtypejs', function() {
             
-            var xtype = xtypejs.newInstance();
+            var xtype;
             
-            afterEach(function() {
+            beforeEach(function() {
                 xtype = xtypejs.newInstance();
             });
             
@@ -61,12 +61,13 @@
                 describe('Individual type-checking module method definitions', function() {
                     
                     allNonInstanceTypes.forEach(function(testType) {
-                        
-                        var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(testType)),
-                            propertyType = (typeof xtype[expectedMatchingMethodForType]);
-                        
+                                
+                        var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(testType));
+                    
                         it('should define type-checking method: ' + str(expectedMatchingMethodForType), function() {                        
                             
+                            var propertyType = (typeof xtype[expectedMatchingMethodForType]);
+                        
                             expect(propertyType).toBe('function',
                                     
                             msg('Expected type of xtype[' + str(expectedMatchingMethodForType) + '] to be "function"' +
@@ -83,12 +84,13 @@
                     describe('interface module \'' + interfaceModule + '\'', function() {
                         
                         allNonInstanceTypes.forEach(function(testType) {
-                            
-                            var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(testType)),
-                                propertyType = (typeof xtype[interfaceModule][expectedMatchingMethodForType]);
+                                    
+                            var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(testType));
                             
                             it('should define type-checking method: ' + str(interfaceModule + '.' + expectedMatchingMethodForType), function() {                        
                                 
+                                var propertyType = (typeof xtype[interfaceModule][expectedMatchingMethodForType]);
+                            
                                 expect(propertyType).toBe('function',
                                         
                                 msg('Expected type of xtype[' + interfaceModule + '][' + str(expectedMatchingMethodForType) + '] to be "function"' +
@@ -748,7 +750,7 @@
                 
                 
                 it('should throw an exception if a custom name scheme causes a name conflict with an existing type', function() {
-                    
+                     
                     expect(function() {
                         xtype.setOptions({ nameScheme: { number: 'integer' } });
                     }).toThrow();

@@ -1,4 +1,4 @@
-/** @license | xtypejs v{{ VERSION }} | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs-extension-custom-types v{{ LIB_VERSION }} | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -27,8 +27,8 @@
     
     'use strict';
 
-    var VERSION = '{{ VERSION }}',
-        TARGET_XTYPE_VERSION = '0.6.0';
+    var LIB_NAME = 'xtypejsCustomTypesExtension',
+        LIB_VERSION = '{{ LIB_VERSION }}';
 
     function init(xtype) {
 
@@ -198,7 +198,7 @@
         function getCustomTypeDefinition(definitionString, matchMode, customTypeName) {
             var componentTypes = definitionString.trim().split(/[ ]*[, ][ ]*/g);
 
-            if (componentTypes.length === 0) {
+            if (componentTypes.length < 2) {
                 throw 'Type definition string for custom type \'' + customTypeName + '\'' +
                         ' must contain two or more type components';
             }
@@ -333,13 +333,10 @@
      * Export extension module
      */
 
-    var LIB_NAME = 'xtypejsCustomTypesExtension',
-
-        moduleExport = {
+    var moduleExport = {
             name: LIB_NAME,
-            version: VERSION,
+            version: (/\s*{{[^}]*}}\s*/g.test(LIB_VERSION) ? 'unspecified' : LIB_VERSION),
             type: 'xtypejs',
-            typeVersion: TARGET_XTYPE_VERSION,
             init: init
         };
     
