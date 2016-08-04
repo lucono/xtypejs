@@ -63,7 +63,7 @@ function searchEmployees(value) {
 
 <content name="add_your_own_code">
 
-xtype.registerType('ssn', {
+xtype.ext.registerType('ssn', {
     validator: function(val) {
         return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
     }
