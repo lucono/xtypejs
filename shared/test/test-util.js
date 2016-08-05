@@ -623,8 +623,12 @@
         allNonInstanceTypes.forEach(function(type) {     // Gather list of matching and non-matching test values by type
             var targetList = (data.matchingTypes.indexOf(type) > -1 ? matchingTestValuesByType : nonMatchingTestValuesByType);
             
-            targetList[type] = (targetList[type] || []);
-            targetList[type].push(data.testValue);
+            targetList[type] = (targetList[type] || {});
+            targetList[type].data = (targetList[type].data || []);
+            targetList[type].values = (targetList[type].values || []);
+            
+            targetList[type].data.push(data);
+            targetList[type].values.push(data.testValue);
         });
     });
 

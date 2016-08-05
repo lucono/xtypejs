@@ -44,7 +44,6 @@
         /* --- Extensions and Module Refresh --- */
 
         registeredExtensions = [],
-        moduleRefreshHandlers = [],
         
         /* --- Localized function references --- */
 
@@ -251,7 +250,8 @@
     
     function newModuleInstance() {
         
-        var nameSchemes = newObj(),
+        var moduleRefreshHandlers = [],
+            nameSchemes = newObj(),
             activeNameScheme,
             isAliasMode = false,
             typeDelimiterRegExp,
@@ -707,17 +707,25 @@
             function refreshExtensions(requestingHandlers) {
                 moduleRefreshHandlers.forEach(function(handler) {
                     /*
-                    * To help avoid potential refresh loops by badly implemented 
-                    * extensions which may trigger a refresh and repeatedly respond 
-                    * to their own refresh with a new refresh request, don't invoke 
-                    * handlers belonging to the extension which triggers a refresh.
-                    */
-                    if (requestingHandlers.indexOf(handler) === -1) {
+                     * Don't invoke handlers belonging to extensions 
+                     * that requested the current refresh.
+                     */
+                    if (requestingHandlers.indexOf(handler) < 0) {
                         handler.call();
                     }
                 });
             }
 
+            /*
+             * Handles extensions' refresh requests by bunching all refresh 
+             * requests made during an active refresh into a single subsequent
+             * refresh operation performed on completion of the active refresh.
+             * Also, when the subsequent refresh is processed, excludes handlers 
+             * of all the extensions which requested the refresh, in order to 
+             * prevent potential cyclic refresh loops in poorly implemented 
+             * extensions which may trigger new refreshes while responding to 
+             * refresh requests originated by themselves.
+             */
             return function (requestingHandler) {
                 isModuleRefreshRequested = true;
 

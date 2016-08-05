@@ -2,7 +2,7 @@
 
 ### Building
 
-To build the project, clone it locally and run the following command:
+To build the project, clone it locally and run the following command from the *xtypejs* project root:
 
 ```
 npm install && grunt build
@@ -34,7 +34,7 @@ After installing the dependencies, this will first build the library, generating
 
 HTML reports are generated under the `build` directory for the js linting results, the jasmine tests for the source and minified libraries in chrome and firefox, and the code coverage reports for the source library in chrome and firefox.
 
-**[Run the tests directly in your browser](https://rawgit.com/lucono/xtypejs/master/test/spec/index.html)**
+**[Run the tests directly in your browser](https://rawgit.com/lucono/xtypejs/master/project/xtypejs/test/index.html)**
 
 
 ### Website

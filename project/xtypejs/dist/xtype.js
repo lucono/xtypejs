@@ -1,4 +1,4 @@
-/** @license | xtypejs v0.5.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs v0.6.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -34,8 +34,8 @@
     */
     
     var LIB_NAME = 'xtype',
-        VERSION = '0.5.0',
-        UNSPECIFIED_VERSION = 'unspecified',
+        LIB_VERSION = '0.6.0',
+        
         TYPE_DELIMITER_DEFAULT_PATTERN = '[|, ]',
         NAME_SCHEME_DEFAULT_OPTION_VALUE = 'default',
         OBJECT_CLASS_REGEX = /^\[object\s(.*)\]$/,
@@ -44,7 +44,6 @@
         /* --- Extensions and Module Refresh --- */
 
         registeredExtensions = [],
-        moduleRefreshHandlers = [],
         
         /* --- Localized function references --- */
 
@@ -251,7 +250,8 @@
     
     function newModuleInstance() {
         
-        var nameSchemes = newObj(),
+        var moduleRefreshHandlers = [],
+            nameSchemes = newObj(),
             activeNameScheme,
             isAliasMode = false,
             typeDelimiterRegExp,
@@ -707,17 +707,25 @@
             function refreshExtensions(requestingHandlers) {
                 moduleRefreshHandlers.forEach(function(handler) {
                     /*
-                    * To help avoid potential refresh loops by badly implemented 
-                    * extensions which may trigger a refresh and repeatedly respond 
-                    * to their own refresh with a new refresh request, don't invoke 
-                    * handlers belonging to the extension which triggers a refresh.
-                    */
-                    if (requestingHandlers.indexOf(handler) === -1) {
+                     * Don't invoke handlers belonging to extensions 
+                     * that requested the current refresh.
+                     */
+                    if (requestingHandlers.indexOf(handler) < 0) {
                         handler.call();
                     }
                 });
             }
 
+            /*
+             * Handles extensions' refresh requests by bunching all refresh 
+             * requests made during an active refresh into a single subsequent
+             * refresh operation performed on completion of the active refresh.
+             * Also, when the subsequent refresh is processed, excludes handlers 
+             * of all the extensions which requested the refresh, in order to 
+             * prevent potential cyclic refresh loops in poorly implemented 
+             * extensions which may trigger new refreshes while responding to 
+             * refresh requests originated by themselves.
+             */
             return function (requestingHandler) {
                 isModuleRefreshRequested = true;
 
@@ -822,7 +830,7 @@
             moduleRefreshHandlers.push(refreshCoreModule);
             
             Object.defineProperty(moduleExport, 'VERSION', {
-                value: (/\s*{{[^}]*}}\s*/g.test(VERSION) ? UNSPECIFIED_VERSION : VERSION),
+                value: (/\s*{{[^}]*}}\s*/g.test(LIB_VERSION) ? 'unspecified' : LIB_VERSION),
                 enumerable: true,
                 writable: false,
                 configurable: false
@@ -843,6 +851,7 @@
             moduleExport.newInstance = newModuleInstance;
 
             moduleExport.ext.registerExtension = function(extensions) {
+                extensions = (arguments.length > 1 ? arraySlice.call(arguments) : extensions);
                 registerExtensions(extensions, moduleExport);
             };
             
@@ -873,7 +882,7 @@
         });
     }
     else if (typeof module === 'object' && module.exports) {
-            module.exports = moduleExport;
+        module.exports = moduleExport;
     }
     else {
         moduleExport.noConflict = (function(previouslyDefinedValue) {

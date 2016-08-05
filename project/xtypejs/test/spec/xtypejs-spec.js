@@ -377,7 +377,7 @@
                         // there are no is-methods for instance types and no matching values for 'none' type
                         subtractList(allNonInstanceTypes, ['none']).forEach(function(type) {
                             
-                            var testList = matchingTestValuesByType[type].slice(-3);                            
+                            var testList = matchingTestValuesByType[type].values.slice(-3);
                             
                             it('should match for type: ' + type, function() {
                                 var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(type));
@@ -396,8 +396,8 @@
                         // there are no is-methods for instance types, no matching values for 'none' type, and no non-matching values for 'any' type
                         subtractList(allNonInstanceTypes, ['none', 'any']).forEach(function(type) {
                             
-                            var matchingValues = matchingTestValuesByType[type].slice(-1),
-                                nonMatchingValues = nonMatchingTestValuesByType[type].slice(-3),
+                            var matchingValues = matchingTestValuesByType[type].values.slice(-1),
+                                nonMatchingValues = nonMatchingTestValuesByType[type].values.slice(-3),
                                 testList = addList(matchingValues, nonMatchingValues);                            
                             
                             it('should match for type: ' + type, function() {
@@ -418,7 +418,7 @@
                         // there are no is-methods for instance types and no non-matching values for 'any' type
                         subtractList(allNonInstanceTypes, ['any']).forEach(function(type) {
                             
-                            var testList = nonMatchingTestValuesByType[type].slice(-3);                            
+                            var testList = nonMatchingTestValuesByType[type].values.slice(-3);                            
                             
                             it('should not match for type: ' + type, function() {
                                 var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(type));
@@ -440,7 +440,7 @@
                         // there are no is-methods for instance types and no matching values for 'none' type
                         subtractList(allNonInstanceTypes, ['none']).forEach(function(type) {
                             
-                            var testList = matchingTestValuesByType[type].slice(-3);                            
+                            var testList = matchingTestValuesByType[type].values.slice(-3);                            
                             
                             it('should not match for type: ' + type, function() {
                                 var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(type));
@@ -459,8 +459,8 @@
                         // there are no is-methods for instance types, no matching values for 'none' type, and no non-matching values for 'any' type
                         subtractList(allNonInstanceTypes, ['none', 'any']).forEach(function(type) {
                             
-                            var matchingValues = matchingTestValuesByType[type].slice(-1),
-                                nonMatchingValues = nonMatchingTestValuesByType[type].slice(-3),
+                            var matchingValues = matchingTestValuesByType[type].values.slice(-1),
+                                nonMatchingValues = nonMatchingTestValuesByType[type].values.slice(-3),
                                 testList = addList(matchingValues, nonMatchingValues);                            
                             
                             it('should not match for type: ' + type, function() {
@@ -481,7 +481,7 @@
                         // there are no is-methods for instance types and no non-matching values for 'any' type
                         subtractList(allNonInstanceTypes, ['any']).forEach(function(type) {
                             
-                            var testList = nonMatchingTestValuesByType[type].slice(-3);                            
+                            var testList = nonMatchingTestValuesByType[type].values.slice(-3);                            
                             
                             it('should match for type: ' + type, function() {
                                 var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(type));
@@ -503,7 +503,7 @@
                         // there are no is-methods for instance types and no matching values for 'none' type
                         subtractList(allNonInstanceTypes, ['none']).forEach(function(type) {
                             
-                            var testList = matchingTestValuesByType[type].slice(-3);                            
+                            var testList = matchingTestValuesByType[type].values.slice(-3);                            
                             
                             it('should not match for type: ' + type, function() {
                                 var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(type));
@@ -522,8 +522,8 @@
                         // there are no is-methods for instance types, no matching values for 'none' type, and no non-matching values for 'any' type
                         subtractList(allNonInstanceTypes, ['none', 'any']).forEach(function(type) {
                             
-                            var matchingValues = matchingTestValuesByType[type].slice(-3),
-                                nonMatchingValues = nonMatchingTestValuesByType[type].slice(-1),
+                            var matchingValues = matchingTestValuesByType[type].values.slice(-3),
+                                nonMatchingValues = nonMatchingTestValuesByType[type].values.slice(-1),
                                 testList = addList(matchingValues, nonMatchingValues);                            
                             
                             it('should match for type: ' + type, function() {
@@ -544,7 +544,7 @@
                         // there are no is-methods for instance types and no non-matching values for 'any' type
                         subtractList(allNonInstanceTypes, ['any']).forEach(function(type) {
                             
-                            var testList = nonMatchingTestValuesByType[type].slice(-3);                            
+                            var testList = nonMatchingTestValuesByType[type].values.slice(-3);                            
                             
                             it('should not match for type: ' + type, function() {
                                 var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(type));
@@ -566,7 +566,7 @@
                         // there are no is-methods for instance types and no matching values for 'none' type
                         subtractList(allNonInstanceTypes, ['none']).forEach(function(type) {
                             
-                            var testList = matchingTestValuesByType[type].slice(-3);                            
+                            var testList = matchingTestValuesByType[type].values.slice(-3);                            
                             
                             it('should match for type: ' + type, function() {
                                 var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(type));
@@ -585,8 +585,8 @@
                         // there are no is-methods for instance types, no matching values for 'none' type, and no non-matching values for 'any' type
                         subtractList(allNonInstanceTypes, ['none', 'any']).forEach(function(type) {
                             
-                            var matchingValues = matchingTestValuesByType[type].slice(-3),
-                                nonMatchingValues = nonMatchingTestValuesByType[type].slice(-1),
+                            var matchingValues = matchingTestValuesByType[type].values.slice(-3),
+                                nonMatchingValues = nonMatchingTestValuesByType[type].values.slice(-1),
                                 testList = addList(matchingValues, nonMatchingValues);                            
                             
                             it('should not match for type: ' + type, function() {
@@ -607,7 +607,7 @@
                         // there are no is-methods for instance types and no non-matching values for 'any' type
                         subtractList(allNonInstanceTypes, ['any']).forEach(function(type) {
                             
-                            var testList = nonMatchingTestValuesByType[type].slice(-3);                            
+                            var testList = nonMatchingTestValuesByType[type].values.slice(-3);                            
                             
                             it('should not match for type: ' + type, function() {
                                 var expectedMatchingMethodForType = ('is' + toCapitalizedCamelCase(type));
