@@ -73,7 +73,7 @@ function searchEmployees(value) {
 ### And even add custom validation types of your own:
 
 ```js
-xtype.registerType('ssn', {
+xtype.ext.registerType('ssn', {
     validator: function(val) {
         return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
     }

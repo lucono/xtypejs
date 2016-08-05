@@ -326,7 +326,7 @@
 
         specs(
             require('../../../../shared/test/test-util'), 
-            require('../../../xtypejs/dist/xtype'), 
+            require('../../../xtypejs/xtype'), 
             require('../dist/xtypejs-extension-custom-types'));
     }
     else if (typeof define === 'function' && define.amd) {
@@ -334,7 +334,7 @@
 
         define([
                 '../../../../shared/test/test-util.js',
-                '../../../xtypejs/dist/xtype.js',
+                '../../../xtypejs/xtype.js',
                 '../dist/xtypejs-extension-custom-types.js'
             ],
             function(xtypejsTestUtil, xtypejs, xtypeCustomTypesExtension) {

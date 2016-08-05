@@ -112,8 +112,8 @@
 
         specs(
             require('../../../../shared/test/test-util'), 
-            require('../../../xtypejs/dist/xtype'), 
-            require('../../xtypejs-extension-custom-types/dist/xtypejs-extension-custom-types'),
+            require('../../../xtypejs/xtype'), 
+            require('../../xtypejs-extension-custom-types/xtypejs-extension-custom-types'),
             require('../dist/xtypejs-extension-autocamel-name-scheme'));
     }
     else if (typeof define === 'function' && define.amd) {
@@ -121,8 +121,8 @@
 
         define([
                 '../../../../shared/test/test-util.js',
-                '../../../xtypejs/dist/xtype.js',
-                '../../xtypejs-extension-custom-types/dist/xtypejs-extension-custom-types.js',
+                '../../../xtypejs/xtype.js',
+                '../../xtypejs-extension-custom-types/xtypejs-extension-custom-types.js',
                 '../dist/xtypejs-extension-autocamel-name-scheme.js'
             ],
             function(xtypejsTestUtil, xtypejs, xtypeCustomTypesExtension, xtypejsAutoCamelNameSchemeExtension) {
@@ -135,7 +135,7 @@
         specs(
             typeof xtypejsTestUtil !== 'undefined' ? xtypejsTestUtil : undefined,
             typeof xtype !== 'undefined' ? xtype : undefined,
-            typeof xtypejsCustomTypesExtension != 'undefined' ? xtypejsCustomTypesExtension : undefined,
+            typeof xtypejsCustomTypesExtension !== 'undefined' ? xtypejsCustomTypesExtension : undefined,
             typeof xtypejsAutoCamelNameSchemeExtension !== 'undefined' ? xtypejsAutoCamelNameSchemeExtension : undefined);
     }
 })();

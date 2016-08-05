@@ -24,7 +24,8 @@ module.exports = function (grunt) {
           {
             src: [
               '../../../shared/test/test-util.js', 
-              '../../xtypejs/dist/xtype.js', 
+              '../../xtypejs/xtype.js', 
+              '../xtypejs-extension-custom-types/xtypejs-extension-custom-types.js', 
               'dist/xtypejs-extension-autocamel-name-scheme.js', 
               'test/**/*-spec.js'
             ] 

@@ -29,7 +29,7 @@
 
         specs(
             require('../../../../shared/test/test-util'), 
-            require('../../../xtypejs/dist/xtype'), 
+            require('../../../xtypejs/xtype'), 
             require('../dist/xtypejs-name-scheme-compact'));
     }
     else if (typeof define === 'function' && define.amd) {
@@ -37,7 +37,7 @@
 
         define([
                 '../../../../shared/test/test-util.js',
-                '../../../xtypejs/dist/xtype.js',
+                '../../../xtypejs/xtype.js',
                 '../dist/xtypejs-name-scheme-compact.js'
             ],
             function(xtypejsTestUtil, xtypejs, xtypejsCompactNameScheme) {

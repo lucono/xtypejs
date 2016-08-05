@@ -24,7 +24,7 @@ module.exports = function (grunt) {
           {
             src: [
               '../../../shared/test/test-util.js', 
-              '../../xtypejs/dist/xtype.js', 
+              '../../xtypejs/xtype.js', 
               'dist/xtypejs-name-scheme-compact.js', 
               'test/**/*-spec.js'
             ] 
