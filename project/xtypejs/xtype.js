@@ -760,7 +760,7 @@
                     throwError('Invalid extension - "type" property must be "xtypejs" and "init" property must be a function');
                 }
                 registeredExtensions.push(extension.init);
-                applyExtension(extension.init, moduleExport);
+                applyExtension(extension.init, xtypeModule);
             });
         }
 

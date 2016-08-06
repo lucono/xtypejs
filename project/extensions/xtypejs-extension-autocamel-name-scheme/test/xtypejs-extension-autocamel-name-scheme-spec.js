@@ -100,7 +100,7 @@
                     expect(xtype.which(5, expectedCamelName)).toBe(expectedCamelName,
                     
                     msg('Expected xtype.which(5, ' + str(expectedCamelName) + ') to be ' + str(expectedCamelName) +
-                        ' because that is the name scheme alias of the expected type of ' + str(typeName)));
+                        ' because that is the name scheme alias of the expected type ' + str(typeName)));
                 });
             });
         });
