@@ -10,7 +10,7 @@
             
             // Import Test Helper Functions
             testHelpers = xtypejsTestUtil.helpers,
-            toCapitalizedCamelCase = testHelpers.toCapitalizedCamelCase,
+            toCamelCase = testHelpers.toCamelCase,
             msg = testHelpers.printMsg,
             str = testHelpers.toString;
         
@@ -55,8 +55,8 @@
 
                         xtype.options.setNameScheme('auto-camel');
 
-                        var expectedSimpleName = toCapitalizedCamelCase(simpleType),
-                            expectedExtendedName = toCapitalizedCamelCase(extendedType);
+                        var expectedSimpleName = toCamelCase(simpleType),
+                            expectedExtendedName = toCamelCase(extendedType);
                         
                         expect(xtype.type(sampleValue)).toBe(expectedSimpleName,
                                 
@@ -95,7 +95,7 @@
                     
                     xtype.options.setNameScheme('auto-camel');
 
-                    var expectedCamelName = toCapitalizedCamelCase(typeName);
+                    var expectedCamelName = toCamelCase(typeName);
                     
                     expect(xtype.which(5, expectedCamelName)).toBe(expectedCamelName,
                     

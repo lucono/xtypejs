@@ -21,6 +21,13 @@
     }
     
     
+    function toCamelCase(str) { 
+        return str.toLowerCase().replace(/([^a-z0-9])(.)/g, function(match, segmenterChar, camelChar) {
+            return camelChar.toUpperCase();
+        });
+    }
+    
+    
     function toCapitalizedCamelCase(str) { 
         return str.toLowerCase().replace(/(^|[^a-z0-9])(.)/g, function(match, segmenterChar, camelChar) {
             return camelChar.toUpperCase();
@@ -652,6 +659,7 @@
             helpers: {
                 addList: addList,
                 subtractList: subtractList,
+                toCamelCase: toCamelCase,
                 toCapitalizedCamelCase: toCapitalizedCamelCase,
                 printMsg: printMsg,
                 toString: toString

@@ -50,7 +50,7 @@
 
             if (typeof typeDefinitions === 'object') {
                 Object.keys(typeDefinitions).forEach(function(typeName) {
-                    schemeContainer[typeName] = toCapitalizedCamelCase(typeName);
+                    schemeContainer[typeName] = toCamelCase(typeName);
                 });
             }
             return schemeContainer;
@@ -76,8 +76,8 @@
     }
 
 
-    function toCapitalizedCamelCase(str) { 
-        return str.toLowerCase().replace(/(^|[^a-z0-9])(.)/g, function(match, segmenterChar, camelChar) {
+    function toCamelCase(str) { 
+        return str.toLowerCase().replace(/([^a-z0-9])(.)/g, function(match, segmenterChar, camelChar) {
             return camelChar.toUpperCase();
         });
     }
