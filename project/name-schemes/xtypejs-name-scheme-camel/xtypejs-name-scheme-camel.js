@@ -54,7 +54,7 @@
             non_blank_string: 'nonBlankString',
             
             // -- Number --
-            number: 'num',
+            number: 'number',
             positive_number: 'positiveNumber', 
             negative_number: 'negativeNumber',
             zero: 'zero',
