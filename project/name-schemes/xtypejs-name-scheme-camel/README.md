@@ -1,9 +1,9 @@
 # xtypejs - Name scheme: `camel`
 
-### Scheme Type Names
+### Type names in Scheme
 ---
 
-Type Default Name    | Scheme Name
+Type Default Name    | Name in Scheme
 :------------------  | ------------
 `null`               | `null`
 `undefined`          | `undefined`
@@ -13,11 +13,9 @@ Type Default Name    | Scheme Name
 `date`               | `date`
 `error`              | `error`
 `regexp`             | `regexp`
-                     |
 `boolean`            | `boolean`
 `true`               | `true`
 `false`              | `false`
-                     |
 `string`             | `string`
 `whitespace`         | `whitespace`
 `single_char_string` | `singleCharString`
@@ -26,7 +24,6 @@ Type Default Name    | Scheme Name
 `blank_string`       | `blankString`
 `non_empty_string`   | `nonEmptyString`
 `non_blank_string`   | `nonBlankString`
-                     |
 `number`             | `number`
 `positive_number`    | `positiveNumber`
 `negative_number`    | `negativeNumber`
@@ -44,19 +41,16 @@ Type Default Name    | Scheme Name
 `positive_infinity`  | `positiveInfinity`
 `negative_infinity`  | `negativeInfinity`
 `non_infinite_number`| `nonInfiniteNumber`
-                     |
 `array`              | `array`
 `empty_array`        | `emptyArray`
 `single_elem_array`  | `singleElemArray`
 `multi_elem_array`   | `multiElemArray`
 `non_empty_array`    | `nonEmptyArray`
-                     |
 `object`             | `object`
 `empty_object`       | `emptyObject`
 `single_prop_object` | `singlePropObject`
 `multi_prop_object`  | `multiPropObject`
 `non_empty_object`   | `nonEmptyObject`
-                     |
 `primitive`          | `primitive`
 `nothing`            | `nothing`
 `any`                | `any`

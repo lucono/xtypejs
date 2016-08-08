@@ -78,17 +78,17 @@
             
             // -- Array --
             array: 'arr', 
-            empty_array: 'empArr', 
+            empty_array: 'emptyArr', 
             single_elem_array: 'oneElemArr',
             multi_elem_array: 'multiElemArr',
-            non_empty_array: 'nonEmpArr',
+            non_empty_array: 'nonEmptyArr',
             
             // -- Object --
             object: 'obj', 
-            empty_object: 'empObj',
+            empty_object: 'emptyObj',
             single_prop_object: 'onePropObj',
             multi_prop_object: 'multiPropObj',
-            non_empty_object: 'nonEmpObj',
+            non_empty_object: 'nonEmptyObj',
             
             // -- Other --
             symbol: 'symb',

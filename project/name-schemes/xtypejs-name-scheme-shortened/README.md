@@ -1,9 +1,9 @@
 # xtypejs - Name scheme: `shortened`
 
-### Scheme Type Names
+### Type names in Scheme
 ---
 
-Type Default Name    | Scheme Name
+Type Default Name    | Name in Scheme
 :------------------  | ------------
 `null`               | `null`
 `undefined`          | `undef`
@@ -13,11 +13,9 @@ Type Default Name    | Scheme Name
 `date`               | `date`
 `error`              | `err`
 `regexp`             | `regex`
-                     |
 `boolean`            | `bool`
 `true`               | `true`
 `false`              | `false`
-                     |
 `string`             | `str`
 `whitespace`         | `space`
 `single_char_string` | `one_char_str`
@@ -26,7 +24,6 @@ Type Default Name    | Scheme Name
 `blank_string`       | `blank_str`
 `non_empty_string`   | `non_empty_str`
 `non_blank_string`   | `non_blank_str`
-                     |
 `number`             | `num`
 `positive_number`    | `pos_num`
 `negative_number`    | `neg_num`
@@ -44,19 +41,16 @@ Type Default Name    | Scheme Name
 `positive_infinity`  | `pos_inf`
 `negative_infinity`  | `neg_inf`
 `non_infinite_number`| `non_inf_num`
-                     |
 `array`              | `arr`
-`empty_array`        | `emp_arr`
+`empty_array`        | `empty_arr`
 `single_elem_array`  | `one_elem_arr`
 `multi_elem_array`   | `multi_elem_arr`
-`non_empty_array`    | `non_emp_arr`
-                     |
+`non_empty_array`    | `non_empty_arr`
 `object`             | `obj`
-`empty_object`       | `emp_obj`
+`empty_object`       | `empty_obj`
 `single_prop_object` | `one_prop_obj`
 `multi_prop_object`  | `multi_prop_obj`
-`non_empty_object`   | `non_emp_obj`
-                     |
+`non_empty_object`   | `non_empty_obj`
 `primitive`          | `prim`
 `nothing`            | `nil`
 `any`                | `any`

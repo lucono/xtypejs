@@ -1,9 +1,9 @@
 # xtypejs - Name scheme: `compact`
 
-### Scheme Type Names
+### Type names in Scheme
 ---
 
-Type Default Name    | Scheme Name
+Type Default Name    | Name in Scheme
 :------------------  | ------------
 `null`               | `null`
 `undefined`          | `undef`
@@ -13,11 +13,9 @@ Type Default Name    | Scheme Name
 `date`               | `date`
 `error`              | `err`
 `regexp`             | `regex`
-                     |
 `boolean`            | `bool`
 `true`               | `true`
 `false`              | `false`
-                     |
 `string`             | `str`
 `whitespace`         | `str_`
 `single_char_string` | `str1`
@@ -26,7 +24,6 @@ Type Default Name    | Scheme Name
 `blank_string`       | `str0_`
 `non_empty_string`   | `-str0`
 `non_blank_string`   | `-str0_`
-                     |
 `number`             | `num`
 `positive_number`    | `num+`
 `negative_number`    | `num-`
@@ -44,19 +41,16 @@ Type Default Name    | Scheme Name
 `positive_infinity`  | `inf+`
 `negative_infinity`  | `inf-`
 `non_infinite_number`| `-inf`
-                     |
 `array`              | `arr`
 `empty_array`        | `arr0`
 `single_elem_array`  | `arr1`
 `multi_elem_array`   | `arr2+`
 `non_empty_array`    | `-arr0`
-                     |
 `object`             | `obj`
 `empty_object`       | `obj0`
 `single_prop_object` | `obj1`
 `multi_prop_object`  | `obj2+`
 `non_empty_object`   | `-obj0`
-                     |
 `primitive`          | `prim`
 `nothing`            | `nil`
 `any`                | `any`
