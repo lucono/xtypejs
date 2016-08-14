@@ -56,7 +56,7 @@ For general documentation on using custom name schemes, see:
 ---
 
 Type Default Name    | Name in Scheme
-:------------------  | ------------
+:------------------  | :------------
 `null`               | `null`
 `undefined`          | `undefined`
 `nan`                | `nan`

@@ -103,7 +103,7 @@ var myAutoCamel = xtypejsAutoCamelNameSchemeExtension.noConflict();
 ---
 
 Type Default Name    | Name in Scheme
-:------------------  | ------------
+:------------------  | :------------
 `null`               | `null`
 `undefined`          | `undefined`
 `nan`                | `nan`
