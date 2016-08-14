@@ -42,15 +42,15 @@ angular.module('xtypejsSite')
             nameSchemes = [
                 {
                     name: 'xtypejs-name-scheme-compact',
-                    description: 'Provides a concise, abbreviated, name scheme for the xtypejs built-in types.'
-                },
-                {
-                    name: 'xtypejs-name-scheme-camel',
-                    description: 'Provides a camel-cased name scheme for the xtypejs built-in types.'
+                    description: 'Provides a name scheme with very concise type names for the xtypejs built-in types.'
                 },
                 {
                     name: 'xtypejs-name-scheme-shortened',
                     description: 'Provides a name scheme which uses shortened versions of the default names for the xtypejs built-in types.'
+                },
+                {
+                    name: 'xtypejs-name-scheme-camel',
+                    description: 'Provides a camel-cased name scheme for the xtypejs built-in types.'
                 },
                 {
                     name: 'xtypejs-name-scheme-shortened-camel',
