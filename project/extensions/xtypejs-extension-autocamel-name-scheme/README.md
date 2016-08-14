@@ -64,9 +64,11 @@ If the extension script needs to be included before the xtypejs script, or the `
 </script>
 ```
 
-### Usage Example
+### Usage
 
 When the `auto-camel` name scheme is the active scheme, all types, including newly registered custom types, will automatically use a camel-version of the name of the type.
+
+*Example*:
 
 ```js
 xtype.options.setNameScheme('auto-camel');
@@ -77,6 +79,11 @@ xtype.options.setNameScheme('auto-camel');
 xtype.registerType('app_flag', 'positive_integer, single_char_string');
 xtype.which('g', 'appFlag') === 'appFlag';    // 'app_flag' type uses camel name 'appFlag'
 ```
+
+For other related documentation for working with name schemes, also see:
+
+* [Switching back to the default name scheme](http://xtype.js.org/guide/switching_back_to_default_name_scheme)
+* [setNameScheme method](http://xtype.js.org/api/setNameScheme)
 
 ### Preventing name collisions
 

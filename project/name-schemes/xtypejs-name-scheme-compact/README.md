@@ -43,6 +43,15 @@ xtype.options.setNameScheme('compact');
 </script>
 ```
 
+### Usage
+
+For general documentation on using custom name schemes, see:
+
+* [Registering a custom name scheme](http://xtype.js.org/guide/registering_custom_name_scheme)
+* [Switching back to the default name scheme](http://xtype.js.org/guide/switching_back_to_default_name_scheme)
+* [registerNameScheme method](http://xtype.js.org/api/registerNameScheme)
+* [setNameScheme method](http://xtype.js.org/api/setNameScheme)
+
 ### Type names in scheme
 ---
 

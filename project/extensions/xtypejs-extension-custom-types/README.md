@@ -2,10 +2,6 @@
 
 This extension provides the xtypejs custom types functionality, by providing the xtypejs `registerType` API method.
 
-### Usage
-
-For usage details, see the xtypejs `registerType` API method *[documentation](http://xtype.js.org/api/registerType)*.
-
 ### Installation with npm
 
 ```sh
@@ -56,6 +52,10 @@ If the extension script needs to be included before the xtypejs script, or the `
     // xtype.ext.registerType method is now available here
 </script>
 ```
+
+### Usage
+
+For usage details, see the xtypejs `registerType` API method *[documentation](http://xtype.js.org/api/registerType)*.
 
 ### Preventing name collisions
 
