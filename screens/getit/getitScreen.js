@@ -27,15 +27,15 @@ angular.module('xtypejsSite')
             extensions = [
                 {
                     name: 'xtypejs-extension-custom-types',
-                    description: 'Provides the \'xtype.ext.registerType\' xtypejs API method which provides the official xtypejs custom types functionality.'
+                    description: 'Provides the \'xtype.ext.registerType\' xtypejs API method which provides the xtypejs custom types functionality.'
                 },
                 {
                     name: 'xtypejs-extension-typename-utils',
-                    description: 'Provides the xtypejs type name utility API methods which provide a way to enumerate all available types in xtypejs, either by name or by id, or to convert between them.'
+                    description: 'Provides the xtypejs type name utility API methods which provide a way to enumerate all available types in xtypejs by name or id, and to convert between them.'
                 },
                 {
                     name: 'xtypejs-extension-autocamel-name-scheme',
-                    description: 'Provides a virtual name scheme with name \'auto-camel\', which when is the active name scheme, automatically assigns a camel-cased type name to all types in xtypejs, including all default and custom types.'
+                    description: 'Provides an auto-generating name scheme \'auto-camel\', which assigns camel-cased versions of the default names for all types in xtypejs, including all built-in and custom types.'
                 }
             ],
 
@@ -46,15 +46,15 @@ angular.module('xtypejsSite')
                 },
                 {
                     name: 'xtypejs-name-scheme-shortened',
-                    description: 'Provides a name scheme which uses shortened versions of the default names for the xtypejs built-in types.'
+                    description: 'Provides a name scheme with shortened versions of the default names for the xtypejs built-in types.'
                 },
                 {
                     name: 'xtypejs-name-scheme-camel',
-                    description: 'Provides a camel-cased name scheme for the xtypejs built-in types.'
+                    description: 'Provides a name scheme with camel-cased versions of the default names for the xtypejs built-in types.'
                 },
                 {
                     name: 'xtypejs-name-scheme-shortened-camel',
-                    description: 'Provides a name scheme which uses shortened camel-cased versions of the default names for the xtypejs built-in types.'
+                    description: 'Provides a name scheme with shortened camel-cased versions of the default names for the xtypejs built-in types.'
                 }
             ];
 
