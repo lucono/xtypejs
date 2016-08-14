@@ -43,7 +43,7 @@ xtype.options.setNameScheme('shortened-camel');
 </script>
 ```
 
-### Type names in Scheme
+### Type names in scheme
 ---
 
 Type Default Name    | Name in Scheme

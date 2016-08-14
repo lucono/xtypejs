@@ -1,6 +1,8 @@
 # xtypejs Extension - Auto Camel Name Scheme
 
-This extension provides a virtual name scheme named `auto-camel`, which when is the active name scheme, automatically assigns a cemel-cased type name to all types in xtypejs, including all default and custom types.
+This extension provides a virtual name scheme named `auto-camel`, which when is the active name scheme, automatically assigns a camel-cased type name to all types in xtypejs, including all default and custom types. This happens automatically, so that even custom types registered in xtypejs only after the extension has been applied to xtypejs, will also each automatically acquire a camel-cased version of their respective type names in the `auto-camel` name scheme, which is how the `auto-camel` name scheme provided by this extension differs from the regular xtypejs `camel` name scheme module.
+
+Note that this is an xtypejs extension, not an xtypejs name scheme. It therefore must be registered to xtypejs using the `xtype.ext.registerExtension` method, and cannot be registered with the `xtype.ext.registerNameScheme` method.
 
 ### Installation with npm
 
@@ -62,7 +64,7 @@ If the extension script needs to be included before the xtypejs script, or the `
 
 ### Usage Example
 
-All types, including newly registered custom types, will automatically use a camel-version of the type name if the `auto-camel` name scheme is the active scheme.
+When the `auto-camel` name scheme is the active scheme, all types, including newly registered custom types, will automatically use a camel-version of the name of the type.
 
 ```js
 xtype.options.setNameScheme('auto-camel');
