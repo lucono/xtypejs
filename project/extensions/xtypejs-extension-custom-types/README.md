@@ -1,8 +1,10 @@
 # xtypejs Extension - Custom Types
 
-This extension provides the xtypejs registerType API, and custom types functionality.
+This extension provides the xtypejs custom types functionality, by providing the xtypejs `registerType` API method.
 
-See the xtypejs [registerType API](http://xtype.js.org/api/registerType) for usage documentation.
+### Usage
+
+For usage details, see the xtypejs `registerType` API method *[documentation](http://xtype.js.org/api/registerType)*.
 
 ### Installation with npm
 

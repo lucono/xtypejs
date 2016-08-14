@@ -2,12 +2,14 @@
 
 This extension provides the xtypejs type name utility API methods, which provides a way to enumerate all available types in xtypejs either by name or by id, and to convert between them.
 
-The methods provided by this extension are:
+### Methods and usage
 
-* `xtype.util.nameToId` - ([doc](http://xtype.js.org/api/nameToId))
-* `xtype.util.idToName` - ([doc](http://xtype.js.org/api/idToName))
-* `xtype.util.typeNames` - ([doc](http://xtype.js.org/api/typeNames))
-* `xtype.util.typeIds` - ([doc](http://xtype.js.org/api/typeIds))
+The methods provided, along with usage docs, are:
+
+* `xtype.util.nameToId` - *[doc](http://xtype.js.org/api/nameToId)*
+* `xtype.util.idToName` - *[doc](http://xtype.js.org/api/idToName)*
+* `xtype.util.typeNames` - *[doc](http://xtype.js.org/api/typeNames)*
+* `xtype.util.typeIds` - *[doc](http://xtype.js.org/api/typeIds)*
 
 ### Installation with npm
 
