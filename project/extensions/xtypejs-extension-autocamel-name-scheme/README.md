@@ -2,13 +2,13 @@
 
 This extension provides a virtual name scheme named `auto-camel`, which when is the active name scheme, automatically assigns a cemel-cased type name to all types in xtypejs, including all default and custom types.
 
-### Installation
+### Installation with npm
 
 ```sh
 npm install xtypejs-extension-autocamel-name-scheme --save
 ```
 
-### NodeJS import and setup
+### NodeJs import and setup
 
 ```js
 var xtype = require('xtypejs');

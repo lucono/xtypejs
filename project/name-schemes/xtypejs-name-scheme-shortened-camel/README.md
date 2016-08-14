@@ -1,12 +1,12 @@
 # xtypejs - Name scheme: `shortened-camel`
 
-### Installation
+### Installation with npm
 
 ```sh
 npm install xtypejs-name-scheme-shortened-camel --save
 ```
 
-### NodeJS import and setup
+### NodeJs import and setup
 
 ```js
 var xtype = require('xtypejs');

@@ -1,12 +1,12 @@
 # xtypejs - Name scheme: `compact`
 
-### Installation
+### Installation with npm
 
 ```sh
 npm install xtypejs-name-scheme-compact --save
 ```
 
-### NodeJS import and setup
+### NodeJs import and setup
 
 ```js
 var xtype = require('xtypejs');

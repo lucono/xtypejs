@@ -9,13 +9,13 @@ The methods provided by this extension are:
 * `xtype.util.typeNames` - ([doc](http://xtype.js.org/api/typeNames))
 * `xtype.util.typeIds` - ([doc](http://xtype.js.org/api/typeIds))
 
-### Installation
+### Installation with npm
 
 ```sh
 npm install xtypejs-extension-typename-utils --save
 ```
 
-### NodeJS import and setup
+### NodeJs import and setup
 
 ```js
 var xtype = require('xtypejs');

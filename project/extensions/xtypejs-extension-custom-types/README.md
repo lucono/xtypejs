@@ -4,13 +4,13 @@ This extension provides the xtypejs registerType API, and custom types functiona
 
 See the xtypejs [registerType API](http://xtype.js.org/api/registerType) for usage documentation.
 
-### Installation
+### Installation with npm
 
 ```sh
 npm install xtypejs-extension-custom-types --save
 ```
 
-### NodeJS import and setup
+### NodeJs import and setup
 
 ```js
 var xtype = require('xtypejs');

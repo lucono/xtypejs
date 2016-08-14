@@ -1,12 +1,12 @@
 # xtypejs - Name scheme: `shortened`
 
-### Installation
+### Installation with npm
 
 ```sh
 npm install xtypejs-name-scheme-shortened --save
 ```
 
-### NodeJS import and setup
+### NodeJs import and setup
 
 ```js
 var xtype = require('xtypejs');
