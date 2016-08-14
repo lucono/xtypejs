@@ -1,3 +1,4 @@
+#!/bin/bash
 
 rm ../bundles/*
 find ../assets ../vendor ../screens -name "*.js" -o -name "*.css" -o -name "*.html" | xargs dos2unix
