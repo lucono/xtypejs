@@ -83,7 +83,7 @@ module.exports = function (grunt) {
         files: [
           {
             expand: true,
-            src: ['../../LICENSE'],
+            src: ['LICENSE'],
             dest: 'dist/',
             filter: 'isFile'
           },
