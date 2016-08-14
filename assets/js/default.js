@@ -21,10 +21,10 @@
             return composition;
         }
         
-        var typeId = xtype.nameToId(typeName);
+        var typeId = xtype.util.nameToId(typeName);
         
-        xtype.typeNames().forEach(function(candidateType) {
-            if (candidateType !== typeName && !isCompositeType(candidateType) && (typeId & xtype.nameToId(candidateType)) > 0) {                        
+        xtype.util.typeNames().forEach(function(candidateType) {
+            if (candidateType !== typeName && !isCompositeType(candidateType) && (typeId & xtype.util.nameToId(candidateType)) > 0) {                        
                 composition.push(candidateType);
             }
         });
@@ -32,7 +32,7 @@
     }
 
     function isCompositeType(typeName) {
-        var typeId = xtype.nameToId(typeName),
+        var typeId = xtype.util.nameToId(typeName),
             memberTypeCount;
             
         for (memberTypeCount = 0; typeId != 0; memberTypeCount++) {
@@ -42,20 +42,20 @@
     }
     
     function getCompactTypeNames() {        
-        var typeIds = xtype.typeIds(),
+        var typeIds = xtype.util.typeIds(),
             compactTypeNames = {},
             compactNameMapping = {};
         
-        xtype.setOptions({nameScheme:'compact'});
+        xtype.options.set({nameScheme:'compact'});
         
         typeIds.forEach(function (typeId) {
-            compactTypeNames[typeId] = xtype.idToName(typeId);
+            compactTypeNames[typeId] = xtype.util.idToName(typeId);
         });
         
-        xtype.setOptions({nameScheme:'default'});
+        xtype.options.set({nameScheme:'default'});
         
         typeIds.forEach(function (typeId) {
-            compactNameMapping[xtype.idToName(typeId)] = compactTypeNames[typeId];
+            compactNameMapping[xtype.util.idToName(typeId)] = compactTypeNames[typeId];
         });
         return compactNameMapping;
     }

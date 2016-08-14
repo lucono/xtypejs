@@ -579,7 +579,10 @@ xtype.options.setNameScheme('default');
 // Create a new instance (named xtypeCompact in this case)
 // of xtypejs and set it to use the 'compact' name scheme:
 
+var compactNameScheme = require('xtypejs-name-scheme-compact');
+
 var xtypeCompact = xtype.newInstance();
+xtypeCompact.ext.registerNameScheme('compact', compactNameScheme);
 xtypeCompact.options.setNameScheme('compact');
 
 // Now the original instance (xtype) uses the default descriptive type
@@ -859,14 +862,14 @@ xtype.registerType({
 
 
 <content name="idToName">
-xtype.idToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
+xtype.util.idToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
 </content>
 
 
 
 
 <content name="nameToId">
-xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
+xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
 </content>
 
 
@@ -1324,22 +1327,22 @@ xtype.isZero(new Number(0))     === true;
  * -------------------------------------------------------------
  */
 
-// To create a new type named 'non_negative_integer' and with compact
-// name '-int-', that validates when a data value matches both of the
-// existing 'non_negative_number' and 'integer' types:
+// To create a new type named 'non_negative_integer', that validates
+// when a data value matches both of the existing 'non_negative_number'
+// and 'integer' types:
 
 
 xtype.registerType('non_negative_integer', {
     definition: 'non_negative_number, integer',
-    matchMode: 'all',
-    compactName: '-int-'
+    matchMode: 'all'
 });
 
 
 // The type expression value of the 'definition' property may include any
 // existing types, including built-in types, registered instance types and
 // other already registered custom and derived types. However, it must use the
-// default scheme names of the component types and not their compact names.
+// default type names of the component types and not those of any name scheme that
+// was registered in xtypejs, such as for example, the 'compact' name scheme.
 
 
 /*
@@ -1351,33 +1354,48 @@ xtype.registerType('non_negative_integer', {
 // The value of the 'matchMode' property can be 'all' to match all the
 // component types, or 'any' (the default when omitted) to match any
 // of the component types. For instance, to register a new type named
-// 'flag' that validates when a data value is either a positive integer
+// 'app_flag' that validates when a data value is either a positive integer
 // or a single character string:
 
 
-xtype.registerType('flag', {
+xtype.registerType('app_flag', {
     definition: 'positive_integer, single_char_string',
-    matchMode: 'any',
-    compactName: 'flag'
+    matchMode: 'any'
 });
 
 
 // However, because 'any' is the default value for matchMode,
-// for creating our 'flag' type we can just have:
+// for creating our 'app_flag' type we can just have:
 
 
-xtype.registerType('flag', {
-    definition: 'positive_integer, single_char_string',
-    compactName: 'flag'
+xtype.registerType('app_flag', {
+    definition: 'positive_integer, single_char_string'
 });
 
 
-// But again, because we're using the same name 'flag' for the default
-// and compact names, so only need one name for both, we can just have:
+// But again, because only the 'definition' attribute is used in the 
+// type registration, we can simply have:
 
 
-xtype.registerType('flag', 'positive_integer, single_char_string');
+xtype.registerType('app_flag', 'positive_integer, single_char_string');
 
+
+/*
+ * ----------------------------------------------------------------
+ * PROVIDING TYPE NAMES FOR THE CUSTOM TYPE IN VARIOUS NAME SCHEMES
+ * ----------------------------------------------------------------
+ */
+
+// Using the 'schemeAliases' key, we can provide the names to be used 
+// for the newly registered type for various custom name schemes that 
+// are registered with xtypejs:
+
+xtype.ext.registerType('app_flag', {
+    definition: 'positive_integer, single_char_string',
+    schemeAliases: {
+        compact: 'flag'
+    }
+});
 
 /*
  * ---------------------------------
@@ -1389,7 +1407,7 @@ xtype.registerType('flag', 'positive_integer, single_char_string');
 
 
 xtype.is(value, '{@type:non_negative_integer:-int-}');
-xtype.is(value, '{@type:flag:flag}');
+xtype.is(value, '{@type:app_flag:flag}');
 
 
 // New 'is' methods with the camel-cased name of the new types will
@@ -1397,7 +1415,7 @@ xtype.is(value, '{@type:flag:flag}');
 
  
 xtype.isNonNegativeInteger(value);
-xtype.isFlag(value);
+xtype.isAppFlag(value);
 
 </content>
 
@@ -1422,7 +1440,9 @@ xtype.registerType('social_security_number', {
         validator: function(val) {
             return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
         },
-        compactName: 'ssn'
+        schemeAliases: {
+            compact: 'ssn'
+        }
     }
 });
 
@@ -1462,11 +1482,14 @@ xtype.isSsn(value);
     expression strings, much like all other types.">
 
 // To register an instance type constructor function, Product,
-// using the default name 'product' and the compact name 'prod':
+// using the default name 'product' and the name 'prod' for 
+// the 'compact' name scheme:
 
 xtype.registerType('product', {
     definition: Product,
-    compactName: 'prod'
+    schemeAliases: {
+        compact: 'prod'
+    }
 });
 
 
@@ -1476,15 +1499,6 @@ xtype.registerType('product', {
 xtype.isProduct(value);
 xtype.is(value, '{@type:product:prod}');
 xtype.is(value, '{{multi_char_string, positive_integer,}} {@type:product:prod}');
-
-
-// However, if we just wanted to register it simply with a single name 'prod' as 
-// both the default and compact names, then the registration could just be:
-
-xtype.registerType('prod', Product);
-
-xtype.is(value, 'prod');
-xtype.isProd(value);
 
 </content>
 
@@ -1540,6 +1554,14 @@ xtype.is(25, '{zero}, {positive_number} / {float}') === true;
     name="switching_to_compact_name_scheme"
     title="Switching to the compact name scheme">
 
+/*
+ * --- NOTE ---
+ * The 'compact' name scheme is provided by the 'xtypejs-name-scheme-compact' module,
+ * and needs to be registered in xtypejs to make the sceheme available.
+ * (See: https://github.com/lucono/xtypejs/blob/master/project/name-schemes/xtypejs-name-scheme-compact)
+ * ---
+ */
+
 // With the regular 'default' name scheme:
 
 xtype({})                           === 'empty_object';
@@ -1548,8 +1570,11 @@ xtype.is({}, 'empty_object')        === true;
 xtype.is(25, 'positive_integer')    === true;
 
 
-// Switch to the bundled 'compact' name scheme:
+// Switch to the 'compact' name scheme:
 
+var compactNameScheme = require('xtypejs-name-scheme-compact');
+
+xtype.ext.registerNameScheme('compact', compactNameScheme);
 xtype.options.setNameScheme('compact');
 
 xtype({})               === 'obj0';     // Compact scheme uses 'obj0' for 'empty_object'
@@ -1565,9 +1590,10 @@ xtype.is(25, 'int+')    === true;
     name="using_custom_name_scheme"
     title="Using a custom name scheme"
     description="
-    By default, there is the very concise 'compact' name scheme, as well as the more descriptive 
-    'default' name scheme. But also there is the flexibility to create and apply other custom 
-    schemes according to user preference and application needs.">
+    By default, there is the descriptive 'default' name scheme. But there is also the flexibility 
+    to create and apply other custom schemes according to user preference and application needs.
+    A number of useful custom name schemes are also already available as modules and can easily
+    be registered to xtypejs.">
  
 xtype.options.setNameScheme({
     positive_number: 'pos_num', 
@@ -1765,6 +1791,12 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
             <li>
                 <a screen-link=":download">Download</a>
             </li>
+            <li>
+                <a screen-link=":extensions">Extensions</a>
+            </li>
+            <li>
+                <a screen-link=":name_schemes">Name Schemes</a>
+            </li>
         </ul>
     </div>
     
@@ -1807,10 +1839,65 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
                         
                         <ul class="release-assets">
                             <li data-ng-repeat="asset in assets">
-                                <a href="{{asset.browser_download_url}}"><i class="fa fa-2x fa-{{asset.content_type.indexOf('zip') > 0 ? 'file-archive-o' : 'file-o'}}"></i> &nbsp; {{asset.name}}</a>
+                                <a href="{{asset.browser_download_url}}">
+                                    <i class="fa fa-2x fa-{{asset.content_type.indexOf('zip') > 0 ? 'file-archive-o' : 'file-o'}}"></i>
+                                    <div>
+                                        {{asset.name}}
+                                    </div>
+                                </a>
                             </li>
                             <li data-ng-if="!assets">
                                 <a href="{{fallbackDownloadUrl}}" target="_blank"><i class="fa fa-2x fa-folder-open-o"></i> &nbsp; latest release</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="extensions" section-title="Extensions">
+                        
+                        <div class="item-title">
+                            <a screen-link=":extensions">
+                                Extensions
+                            </a>
+                        </div>
+                        
+                        <p class="item-description">The following official extensions are provided as separate modules:</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="extension in extensions">
+                                <a href="{{extension.url}}">
+                                    <i class="fa fa-2x fa-puzzle-piece"></i>
+                                    <div>
+                                        {{extension.name}}
+                                        <div class="asset-description">{{extension.description}}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="name_schemes" section-title="Name Schemes">
+                        
+                        <div class="item-title">
+                            <a screen-link=":name_schemes">
+                                Name Schemes
+                            </a>
+                        </div>
+                        
+                        <p class="item-description">The following official name schemes are provided as separate modules:</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="nameScheme in nameSchemes">
+                                <a href="{{nameScheme.url}}">
+                                    <i class="fa fa-2x fa-puzzle-piece"></i>
+                                    <div>
+                                        {{nameScheme.name}}
+                                        <div class="asset-description">{{nameScheme.description}}</div>
+                                    </div>
+                                </a>
                             </li>
                         </ul>
                     </div>

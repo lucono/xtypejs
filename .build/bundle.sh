@@ -10,6 +10,8 @@ find ../assets ../vendor ../screens -name "*.js" -o -name "*.css" -o -name "*.ht
     ../vendor/js/jquery.smooth-scroll.js \
     ../vendor/js/prettify.js \
     ../assets/js/xtype.js \
+    ../assets/js/xtypejs-extension-typename-utils.js\
+    ../assets/js/xtypejs-name-scheme-compact.js\
     ../assets/js/default.js \
     ../components/code-snippet/code-snippet.js \
     ../screens/overview/overviewScreen.js \
