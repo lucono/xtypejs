@@ -1,5 +1,48 @@
 # xtypejs - Name scheme: `compact`
 
+### Installation
+
+```sh
+npm install xtypejs-name-scheme-compact --save
+```
+
+### NodeJS import and setup
+
+```js
+var xtype = require('xtypejs');
+var xtypejsCompactNameScheme = require('xtypejs-name-scheme-compact');
+
+// Either: Simple setup
+
+xtype.options.setNameScheme(xtypejsCompactNameScheme);
+
+// Or: To first register name scheme internally for later
+// reference by name, for switching between name schemes:
+
+xtype.ext.registerNameScheme('compact', xtypejsCompactNameScheme);
+xtype.options.setNameScheme('compact');
+
+// Scheme is now active here
+```
+
+### HTML script tag import and setup
+
+```html
+<!--
+    Include name scheme script after xtypejs script 
+    to automatically register the name scheme into
+    xtypejs with the default scheme name: 'compact'
+-->
+
+<script src="path/to/xtype.js"></script>
+<script src="path/to/xtypejs-name-scheme-compact.js"></script>
+
+<script>
+    xtype.options.setNameScheme('compact');
+    // Scheme is now active here
+</script>
+```
+
 ### Type names in Scheme
 ---
 

@@ -1,7 +1,7 @@
 {
   "name": "xtypejs-extension-custom-types",
   "version": "0.1.0",
-  "description": "xtypejs Extension - Custom types",
+  "description": "xtypejs Extension - Custom Types",
   "main": "dist/xtypejs-extension-custom-types",
   "keywords": [
     "type",

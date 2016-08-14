@@ -1,5 +1,48 @@
 # xtypejs - Name scheme: `shortened`
 
+### Installation
+
+```sh
+npm install xtypejs-name-scheme-shortened --save
+```
+
+### NodeJS import and setup
+
+```js
+var xtype = require('xtypejs');
+var xtypejsShortenedNameScheme = require('xtypejs-name-scheme-shortened');
+
+// Either: Simple setup
+
+xtype.options.setNameScheme(xtypejsShortenedNameScheme);
+
+// Or: To first register name scheme internally for later
+// reference by name, for switching between name schemes:
+
+xtype.ext.registerNameScheme('shortened', xtypejsShortenedNameScheme);
+xtype.options.setNameScheme('shortened');
+
+// Scheme is now active here
+```
+
+### HTML script tag import and setup
+
+```html
+<!--
+    Include name scheme script after xtypejs script 
+    to automatically register the name scheme into
+    xtypejs with the default scheme name: 'shortened'
+-->
+
+<script src="path/to/xtype.js"></script>
+<script src="path/to/xtypejs-name-scheme-shortened.js"></script>
+
+<script>
+    xtype.options.setNameScheme('shortened');
+    // Scheme is now active here
+</script>
+```
+
 ### Type names in Scheme
 ---
 

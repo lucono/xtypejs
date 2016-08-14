@@ -1,5 +1,48 @@
 # xtypejs - Name scheme: `camel`
 
+### Installation
+
+```sh
+npm install xtypejs-name-scheme-camel --save
+```
+
+### NodeJS import and setup
+
+```js
+var xtype = require('xtypejs');
+var xtypejsCamelNameScheme = require('xtypejs-name-scheme-camel');
+
+// Either: Simple setup
+
+xtype.options.setNameScheme(xtypejsCamelNameScheme);
+
+// Or: To first register name scheme internally for later
+// reference by name, for switching between name schemes:
+
+xtype.ext.registerNameScheme('camel', xtypejsCamelNameScheme);
+xtype.options.setNameScheme('camel');
+
+// Scheme is now active here
+```
+
+### HTML script tag import and setup
+
+```html
+<!--
+    Include name scheme script after xtypejs script 
+    to automatically register the name scheme into
+    xtypejs with the default scheme name: 'camel'
+-->
+
+<script src="path/to/xtype.js"></script>
+<script src="path/to/xtypejs-name-scheme-camel.js"></script>
+
+<script>
+    xtype.options.setNameScheme('camel');
+    // Scheme is now active here
+</script>
+```
+
 ### Type names in Scheme
 ---
 

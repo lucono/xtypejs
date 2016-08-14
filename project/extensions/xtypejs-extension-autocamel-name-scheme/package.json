@@ -1,7 +1,7 @@
 {
   "name": "xtypejs-extension-autocamel-name-scheme",
   "version": "0.1.0",
-  "description": "xtypejs Extension - Auto-Camel Name Scheme",
+  "description": "xtypejs Extension - Auto Camel Name Scheme",
   "main": "dist/xtypejs-extension-autocamel-name-scheme",
   "keywords": [
     "type",
