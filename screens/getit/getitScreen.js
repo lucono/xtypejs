@@ -22,7 +22,8 @@ angular.module('xtypejsSite')
 
 
 
-        var baseNpmPackageUrl = 'https://www.npmjs.com/package/',
+        var extensionsBaseUrl = 'https://github.com/lucono/xtypejs/tree/master/project/extensions/',
+            nameSchemesBaseUrl = 'https://github.com/lucono/xtypejs/tree/master/project/name-schemes/',
 
             extensions = [
                 {
@@ -59,11 +60,11 @@ angular.module('xtypejsSite')
             ];
 
         extensions.forEach(function(extension) {
-            extension.url = (extension.url || baseNpmPackageUrl + extension.name);
+            extension.url = (extension.url || extensionsBaseUrl + extension.name);
         });
 
         nameSchemes.forEach(function(nameScheme) {
-            nameScheme.url = (nameScheme.url || baseNpmPackageUrl + nameScheme.name);
+            nameScheme.url = (nameScheme.url || nameSchemesBaseUrl + nameScheme.name);
         });
         
         $rootScope.extensions = extensions;
