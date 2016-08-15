@@ -762,19 +762,32 @@ ul.release-assets {
 }
 
 ul.release-assets li {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
-ul.release-assets a {
+ul.release-assets li a {
+    display: table-row;
     color: #aaa;
 }
 
-ul.release-assets a:hover {
+ul.release-assets li a:hover {
     color: #40BCC9;
 }
 
-ul.release-assets a i {
+ul.release-assets li a > i {
+    display: table-cell;
     color: #EE8167;
+}
+
+ul.release-assets li a > div {
+    display: table-cell;
+    padding-left: 20px;
+}
+
+ul.release-assets li a .asset-description {
+    font-size: 14px;
+    font-weight: 300;
+    color: #aaa;
 }
 
 .release-assets a > * {

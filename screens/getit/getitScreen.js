@@ -19,6 +19,55 @@ angular.module('xtypejsSite')
         service.getCodeContent('getit', function(getItContent) {
             $scope.getItContent = getItContent;
         });
+
+
+
+        var baseNpmPackageUrl = 'https://www.npmjs.com/package/',
+
+            extensions = [
+                {
+                    name: 'xtypejs-extension-custom-types',
+                    description: 'Provides the \'xtype.ext.registerType\' xtypejs API method which provides the xtypejs custom types functionality.'
+                },
+                {
+                    name: 'xtypejs-extension-typename-utils',
+                    description: 'Provides the xtypejs type name utility API methods which provide a way to enumerate all available types in xtypejs by name or id, and to convert between them.'
+                },
+                {
+                    name: 'xtypejs-extension-autocamel-name-scheme',
+                    description: 'Provides an auto-generating name scheme \'auto-camel\', which assigns camel-cased versions of the default names for all types in xtypejs, including all built-in and custom types.'
+                }
+            ],
+
+            nameSchemes = [
+                {
+                    name: 'xtypejs-name-scheme-compact',
+                    description: 'Provides a name scheme with very concise type names for the xtypejs built-in types.'
+                },
+                {
+                    name: 'xtypejs-name-scheme-shortened',
+                    description: 'Provides a name scheme with shortened versions of the default names for the xtypejs built-in types.'
+                },
+                {
+                    name: 'xtypejs-name-scheme-camel',
+                    description: 'Provides a name scheme with camel-cased versions of the default names for the xtypejs built-in types.'
+                },
+                {
+                    name: 'xtypejs-name-scheme-shortened-camel',
+                    description: 'Provides a name scheme with shortened camel-cased versions of the default names for the xtypejs built-in types.'
+                }
+            ];
+
+        extensions.forEach(function(extension) {
+            extension.url = (extension.url || baseNpmPackageUrl + extension.name);
+        });
+
+        nameSchemes.forEach(function(nameScheme) {
+            nameScheme.url = (nameScheme.url || baseNpmPackageUrl + nameScheme.name);
+        });
+        
+        $rootScope.extensions = extensions;
+        $rootScope.nameSchemes = nameSchemes;
         
         $rootScope.activeScreen = 'getit';
         $rootScope.screenTitle = 'Get It';

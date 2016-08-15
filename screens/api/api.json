@@ -575,6 +575,28 @@
 							"description": "The name scheme previously associated with {schemeName} if any."
 						}
 					]
+				},
+				{
+					"name": "registerExtension",
+					"signature": "xtype.ext.registerExtension({extensionModule})",
+					"description": "Applies an xtypejs extension, enhancing xtypejs with the extension's functionality.",
+					"arguments": [
+						{
+							"name": "extensionModule",
+							"types": [					
+								{
+									"type": "object",
+									"description": "The extension module to be applied to xtypejs."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
 				}
 			]
 		},
@@ -617,7 +639,7 @@
 							"types": [
 								{
 									"type": "string",
-									"description": "The name of an in-built type name scheme to be used for type names. This can be {'default'} for the default name scheme, or {'compact'} for the compact name scheme."
+									"description": "The name of a type name scheme to be used for type names. This can be {'default'} for the default name scheme, or the name of a name scheme previously registered in xtypejs using the {xtype.ext.registerNameScheme} method."
 								},
 								{
 									"type": "object",

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Constants
 SERVICE_URL=http://closure-compiler.appspot.com/compile
 #NEWFILE="c`date +"%d%m%y"`.js"

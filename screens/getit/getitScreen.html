@@ -21,6 +21,12 @@
             <li>
                 <a screen-link=":download">Download</a>
             </li>
+            <li>
+                <a screen-link=":extensions">Extensions</a>
+            </li>
+            <li>
+                <a screen-link=":name_schemes">Name Schemes</a>
+            </li>
         </ul>
     </div>
     
@@ -63,10 +69,65 @@
                         
                         <ul class="release-assets">
                             <li data-ng-repeat="asset in assets">
-                                <a href="{{asset.browser_download_url}}"><i class="fa fa-2x fa-{{asset.content_type.indexOf('zip') > 0 ? 'file-archive-o' : 'file-o'}}"></i> &nbsp; {{asset.name}}</a>
+                                <a href="{{asset.browser_download_url}}">
+                                    <i class="fa fa-2x fa-{{asset.content_type.indexOf('zip') > 0 ? 'file-archive-o' : 'file-o'}}"></i>
+                                    <div>
+                                        {{asset.name}}
+                                    </div>
+                                </a>
                             </li>
                             <li data-ng-if="!assets">
                                 <a href="{{fallbackDownloadUrl}}" target="_blank"><i class="fa fa-2x fa-folder-open-o"></i> &nbsp; latest release</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="extensions" section-title="Extensions">
+                        
+                        <div class="item-title">
+                            <a screen-link=":extensions">
+                                Extensions
+                            </a>
+                        </div>
+                        
+                        <p class="item-description">The following official extensions are provided as separate modules:</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="extension in extensions">
+                                <a href="{{extension.url}}">
+                                    <i class="fa fa-2x fa-puzzle-piece"></i>
+                                    <div>
+                                        {{extension.name}}
+                                        <div class="asset-description">{{extension.description}}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="name_schemes" section-title="Name Schemes">
+                        
+                        <div class="item-title">
+                            <a screen-link=":name_schemes">
+                                Name Schemes
+                            </a>
+                        </div>
+                        
+                        <p class="item-description">The following official name schemes are provided as separate modules:</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="nameScheme in nameSchemes">
+                                <a href="{{nameScheme.url}}">
+                                    <i class="fa fa-2x fa-puzzle-piece"></i>
+                                    <div>
+                                        {{nameScheme.name}}
+                                        <div class="asset-description">{{nameScheme.description}}</div>
+                                    </div>
+                                </a>
                             </li>
                         </ul>
                     </div>

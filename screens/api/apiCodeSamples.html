@@ -172,7 +172,10 @@ xtype.options.setNameScheme('default');
 // Create a new instance (named xtypeCompact in this case)
 // of xtypejs and set it to use the 'compact' name scheme:
 
+var compactNameScheme = require('xtypejs-name-scheme-compact');
+
 var xtypeCompact = xtype.newInstance();
+xtypeCompact.ext.registerNameScheme('compact', compactNameScheme);
 xtypeCompact.options.setNameScheme('compact');
 
 // Now the original instance (xtype) uses the default descriptive type
@@ -452,14 +455,14 @@ xtype.registerType({
 
 
 <content name="idToName">
-xtype.idToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
+xtype.util.idToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
 </content>
 
 
 
 
 <content name="nameToId">
-xtype.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
+xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
 </content>
 
 
