@@ -21,7 +21,7 @@ module.exports = function (grunt) {
       },
       source_lib: {
         files: [
-          { src: ['../../shared/test/test-util.js', 'dist/xtype.js', 'test/spec/**/*-spec.js'] }
+          { src: ['build/shared/test/test-util.js', 'dist/xtype.js', 'test/spec/**/*-spec.js'] }
         ],
         reporters: ['progress', 'spec', 'coverage', 'html'],
         htmlReporter: {
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
       },
       minified_lib: {
         files: [
-          { src: ['../../shared/test/test-util.js', 'dist/**/*.min.js', 'test/spec/**/*-spec.js'] }
+          { src: ['build/shared/test/test-util.js', 'dist/**/*.min.js', 'test/spec/**/*-spec.js'] }
         ],
         reporters: ['progress', 'spec', 'html'],
         htmlReporter: {
@@ -98,9 +98,13 @@ module.exports = function (grunt) {
       },
     },
     clean: {
-        build: ['build', 'dist']
+        build: ['./dist', './build'],
+        test:  ['./build']
     },
     shell: {
+      copy_shared_test_files: {
+        command: 'mkdir build; mkdir build/shared; cp -rp --remove-destination ../../shared/test/ ./build/shared'
+      },
       jasmine_node_test_source_lib: {
         command: './node_modules/jasmine/bin/jasmine.js test/spec/xtypejs-spec-node-source.js JASMINE_CONFIG_PATH=test/config/jasmine.json'
       },
@@ -134,7 +138,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-string-replace');
   
   grunt.registerTask('test-node', ['shell:jasmine_node_test_source_lib', 'shell:jasmine_node_test_minified_lib']);
-  grunt.registerTask('test', ['jshint', 'test-node', 'karma']);
+  grunt.registerTask('test', ['jshint', 'shell:copy_shared_test_files', 'test-node', 'karma']);
   grunt.registerTask('build', ['clean', 'copy', 'string-replace', 'uglify']);
   grunt.registerTask('default', ['build', 'test']);
 };

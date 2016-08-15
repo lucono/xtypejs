@@ -1,6 +1,6 @@
 
 (function() {
-    var xtypejsTestUtil = require('../../../../shared/test/test-util'),
+    var xtypejsTestUtil = require('../../build/shared/test/test-util'),
         xtypejsMinified = require('../../dist/xtype.min'),
         specs = require('./xtypejs-spec');
     

@@ -15,43 +15,6 @@ module.exports = function (grunt) {
         reporterOutput: 'build/jslint-report.html'
       }
     },
-    karma: {
-      options: {
-        configFile: 'test/karma.conf.js'
-      },
-      source_lib: {
-        files: [
-          {
-            src: [
-              '../../../shared/test/test-util.js', 
-              '../../xtypejs/xtype.js', 
-              'dist/xtypejs-name-scheme-camel.js', 
-              'test/**/*-spec.js'
-            ] 
-          }
-        ],
-        reporters: ['progress', 'spec', 'coverage', 'html'],
-        htmlReporter: {
-          outputDir: 'build/test-reports-source-lib',
-          focusOnFailures: true,
-          namedFiles: true,
-          pageTitle: 'xtypejs-name-scheme-camel - Source Lib Test Report',
-          urlFriendlyName: true,
-          preserveDescribeNesting: true,
-          foldAll: true
-        },
-        coverageReporter: {
-          type: 'html',
-          dir: 'build/coverage-reports',
-          subdir: function(browser) {
-            return browser.toLowerCase().split(/[ /-]/)[0] + '-coverage-report';
-          }
-        },
-        preprocessors: {
-          'dist/xtypejs-name-scheme-camel.js': ['coverage']
-        }
-      }
-    },
     uglify: {
       options: {
         compress: {
@@ -116,14 +79,13 @@ module.exports = function (grunt) {
   
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-string-replace');
   
   grunt.registerTask('test-node', ['shell:jasmine_node_test']);
-  grunt.registerTask('test', ['jshint', 'test-node', 'karma']);
+  grunt.registerTask('test', ['jshint', 'test-node']);
   grunt.registerTask('build', ['clean', 'copy', 'string-replace', 'uglify']);
   grunt.registerTask('default', ['build', 'test']);
 };
