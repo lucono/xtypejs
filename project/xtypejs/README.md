@@ -112,7 +112,7 @@ None.
 
 #### Build / Test
 
-See [here](https://github.com/lucono/xtypejs/tree/master/test).
+See [here](https://github.com/lucono/xtypejs/tree/master/project/xtypejs/test).
 
 
 #### License
