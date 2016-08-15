@@ -1,0 +1,16 @@
+# git ignored files
+/spec/
+/node_modules/
+/bower_components/
+/build/
+/.idea/
+/.project/
+/.settings/
+/.vscode/
+/jsconfig.json
+
+# npm ignored files
+/test/
+/.gitignore
+/.npmignore
+/*.js
