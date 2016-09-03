@@ -150,7 +150,6 @@
 					"interface": "not",
 					"signature": "xtype.not.is<em>Type</em> ({value})",
 					"description": "Checks if {value} is not of the referenced type.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "value",
@@ -175,7 +174,6 @@
 					"interface": "none",
 					"signature": "xtype.none.is<em>Type</em> ({values})",
 					"description": "Checks if none of a list of values are of the referenced type.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "values",
@@ -204,7 +202,6 @@
 					"interface": "any",
 					"signature": "xtype.any.is<em>Type</em> ({values})",
 					"description": "Checks if any of a list of values are of the referenced type.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "values",
@@ -233,7 +230,6 @@
 					"interface": "some",
 					"signature": "xtype.some.is<em>Type</em> ({values})",
 					"description": "Checks if some, but not all, of a list of values are of the referenced type.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "values",
@@ -262,7 +258,6 @@
 					"interface": "all",
 					"signature": "xtype.all.is<em>Type</em> ({values})",
 					"description": "Checks if all of a list of values are of the referenced type.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "values",
@@ -346,6 +341,7 @@
 			"methods": [
 				{
 					"name": "nameToId",
+					"extension": "xtypejs-extension-typename-utils",
 					"signature": "xtype.util.nameToId({type})",
 					"description": "Gets the type Id/constant corresponding to the specific type name in the active name scheme.",
 					"arguments": [
@@ -369,6 +365,7 @@
 				
 				{
 					"name": "idToName",
+					"extension": "xtypejs-extension-typename-utils",
 					"signature": "xtype.util.idToName({type})",
 					"description": "Gets the type name in the active name scheme corresponding to the specified type Id.",
 					"arguments": [
@@ -392,9 +389,9 @@
 				
 				{
 					"name": "typeNames",
+					"extension": "xtypejs-extension-typename-utils",
 					"signature": "xtype.util.typeNames()",
 					"description": "Gets a list of the names of all types.",
-					"new": true,
 					"arguments": [],
 					"return": [
 						{
@@ -406,9 +403,9 @@
 				
 				{
 					"name": "typeIds",
+					"extension": "xtypejs-extension-typename-utils",
 					"signature": "xtype.util.typeIds()",
 					"description": "Gets a list of the type Ids of all types.",
-					"new": true,
 					"arguments": [],
 					"return": [
 						{
@@ -425,6 +422,7 @@
 			"methods": [
 				{
 					"name": "registerType",
+					"extension": "xtypejs-extension-custom-types",
 					"signature": "xtype.ext.registerType({typeName}, {typeDetails})",
 					"description": "Adds one or more user-defined type to xtypejs.",
 					"arguments": [
@@ -521,7 +519,6 @@
 					"name": "registerNameScheme",
 					"signature": "xtype.ext.registerNameScheme({schemeName}, {aliases})",
 					"description": "Adds a new name scheme to xtypejs. It does not automatically switch to the new scheme.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "schemeName",
@@ -580,6 +577,7 @@
 					"name": "registerExtension",
 					"signature": "xtype.ext.registerExtension({extensionModule})",
 					"description": "Applies an xtypejs extension, enhancing xtypejs with the extension's functionality.",
+					"new": true,
 					"arguments": [
 						{
 							"name": "extensionModule",
@@ -608,7 +606,6 @@
 					"name": "setDelimiterPattern",
 					"signature": "xtype.options.setDelimiterPattern({delimiterPattern})",
 					"description": "Sets the regular expression pattern used in recognizing how individual type names are delimited in type name expression strings.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "{delimiterPattern}",
@@ -632,7 +629,6 @@
 					"name": "setNameScheme",
 					"signature": "xtype.options.setNameScheme({nameScheme})",
 					"description": "Sets the scheme to be used for type names.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "{nameScheme}",
@@ -664,7 +660,6 @@
 					"name": "set",
 					"signature": "xtype.options.set({optionsData})",
 					"description": "Sets multiple options in a single operation.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "optionsData",

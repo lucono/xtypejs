@@ -484,6 +484,14 @@ ul.right-nav.fixed {
     color: #D78451; /* #999; */
 }
 
+.item-subtitle.alternative {
+    color: #aaa;
+}
+
+.item-subtitle.alternative a {
+    color: #40BCC9 !important;
+}
+
 .title-label {
     display: inline-block;
     margin-left: 20px;

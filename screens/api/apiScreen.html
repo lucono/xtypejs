@@ -32,6 +32,10 @@
                             <span class="title-label deprecated-label" data-ng-if="method.deprecated">deprecated</span>
                             <span class="title-label new-label" data-ng-if="method.new">new</span>
                         </div>
+                        <div class="item-subtitle alternative" data-ng-if="method.extension">
+                            <span>Provided by Extension: &nbsp;</span>
+                            <a screen-link="getit:{{method.extension}}">{{method.extension}}</a>
+                        </div>
                         <p class="item-description" data-ng-bind-html="method.description"></p>
                         
                         <table class="api-table" data-ng-if="method.arguments || method.return">
