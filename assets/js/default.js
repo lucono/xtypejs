@@ -295,6 +295,16 @@
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
         
+        service.getLatestRelease(function(releaseData) {
+            var now = new Date(),
+                releaseDate = new Date(releaseData.published_at),
+                daysSinceRelease = (now.getTime() - releaseDate.getTime()) / (1000 * 60 * 60 * 24);
+                
+            AppUtils.latestRelease = {};
+            AppUtils.latestRelease.version = releaseData.tag_name;
+            AppUtils.latestRelease.isNewRelease = (daysSinceRelease < (30 * 6));    // If roughly within 6 months
+        });
+
         $rootScope.libDescription = 'Concise, performant, readable, data and type validation for JavaScript apps, using built-in and user-defined data-validating pseudo types.';
         
         $rootScope.previousState = '';

@@ -136,9 +136,7 @@ a, a:visited, a:active {
 
 .top-links-pane .github-buttons a {
     display: inline-block;
-    margin: 0px 15px;
-    padding: 20px 30px;
-    min-width: 180px;
+    margin: 20px 15px;
     text-decoration: none;
     color: #2c3233;
     font-size: 21px;
