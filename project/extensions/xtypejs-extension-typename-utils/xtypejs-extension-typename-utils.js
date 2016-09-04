@@ -94,7 +94,7 @@
         function idToName(type) {
             return (typeof type === 'function' ? type
                     : typeof type === 'number' ? (typeToAliasMapping[type] || typeToAliasMapping[xtype.NONE])
-                    : typeToAliasMapping[ztype.NONE]);
+                    : typeToAliasMapping[xtype.NONE]);
         }
         
         /**

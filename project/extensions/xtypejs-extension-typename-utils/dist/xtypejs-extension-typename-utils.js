@@ -1,4 +1,4 @@
-/** @license | xtypejs-extension-typename-utils v0.1.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs-extension-typename-utils v0.1.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -28,7 +28,7 @@
     'use strict';
 
     var LIB_NAME = 'xtypejsTypeNameUtilsExtension',
-        LIB_VERSION = '0.1.0';
+        LIB_VERSION = '0.1.1';
 
     function init(xtype) {
 
@@ -94,7 +94,7 @@
         function idToName(type) {
             return (typeof type === 'function' ? type
                     : typeof type === 'number' ? (typeToAliasMapping[type] || typeToAliasMapping[xtype.NONE])
-                    : typeToAliasMapping[ztype.NONE]);
+                    : typeToAliasMapping[xtype.NONE]);
         }
         
         /**
