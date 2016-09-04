@@ -70,7 +70,7 @@
                         <ul class="release-assets">
                             <li data-ng-repeat="asset in assets">
                                 <a href="{{asset.browser_download_url}}">
-                                    <i class="fa fa-2x fa-{{asset.content_type.indexOf('zip') > 0 ? 'file-archive-o' : 'file-o'}}"></i>
+                                    <i class="fa fa-2x fa-cloud-download"></i>
                                     <div>
                                         {{asset.name}}
                                     </div>
@@ -122,7 +122,7 @@
                         <ul class="release-assets">
                             <li data-ng-repeat="nameScheme in nameSchemes">
                                 <a href="{{nameScheme.url}}">
-                                    <i class="fa fa-2x fa-puzzle-piece"></i>
+                                    <i class="fa fa-2x fa-cube"></i>
                                     <div>
                                         {{nameScheme.name}}
                                         <div class="asset-description">{{nameScheme.description}}</div>
