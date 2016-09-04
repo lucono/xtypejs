@@ -103,8 +103,7 @@ module.exports = function (grunt) {
     shell: {
       copy_shared_test_files: {
         command: [
-          'rm -rf build',
-          'mkdir build',
+          'rm -rf build; mkdir build',
           'mkdir build/shared',
           'cp -rp ../../xtypejs/dist/xtype.js ./build/shared',
           'cp -rp --remove-destination ../../../shared/test/ ./build/shared'

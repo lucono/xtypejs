@@ -104,7 +104,7 @@ module.exports = function (grunt) {
     shell: {
       copy_shared_test_files: {
         command: [
-          'mkdir build',
+          'rm -rf build; mkdir build',
           'mkdir build/shared',
           'cp -rp --remove-destination ../../shared/test/ ./build/shared'
         ].join('&&')
