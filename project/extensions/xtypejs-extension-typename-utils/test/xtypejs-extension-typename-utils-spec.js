@@ -40,17 +40,45 @@
             
             
             describe('Getting all types', function() {
-                
-                it('should get the expected full set of type names', function() {
+
+                it('should get the expected full set of type names for the default name scheme', function() {
                     
-                    var allReceivedTypes = xtype.util.typeNames(),
-                        allReceivedTypeIds = xtype.util.typeIds();
+                    var allReceivedTypes = xtype.util.typeNames();
                 
                     expect(allReceivedTypes.length).toBe(expectedTypeCount,
                             
                     msg('Expected xtype.util.typeNames().length to be ' + str(expectedTypeCount)));
                     
                     allNonInstanceTypes.forEach(function(expectedTypeName) {
+                        
+                        expect(allReceivedTypes).toContain(expectedTypeName,
+                                
+                        msg('Expected xtype.util.typeNames() to contain ' + str(expectedTypeName)));
+                    });
+                });
+
+                it('should get the expected full set of type names when using a custom name scheme', function() {
+                    
+                    var customNameScheme = {
+                            integer: 'int',
+                            string: 'str',
+                            number: 'num',
+                            'undefined': 'undef',
+                            'null': 'nil',
+                            nothing: 'void',
+                            any: 'anything'
+                        };
+
+                    xtype.options.setNameScheme(customNameScheme);
+
+                    var allReceivedTypes = xtype.util.typeNames();
+                
+                    expect(allReceivedTypes.length).toBe(expectedTypeCount,
+                            
+                    msg('Expected xtype.util.typeNames().length to be ' + str(expectedTypeCount)));
+                    
+                    Object.keys(customNameScheme).forEach(function(typeName) {
+                        var expectedTypeName = customNameScheme[typeName];
                         
                         expect(allReceivedTypes).toContain(expectedTypeName,
                                 

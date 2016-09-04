@@ -15,6 +15,67 @@ module.exports = function (grunt) {
         reporterOutput: 'build/jslint-report.html'
       }
     },
+    karma: {
+      options: {
+        configFile: 'test/karma.conf.js'
+      },
+      source_lib: {
+        files: [
+          { 
+            src: [
+              'build/shared/test/test-util.js', 
+              'build/shared/xtype.js', 
+              'build/shared/xtypejs-extension-custom-types.js',
+              'dist/xtypejs-extension-autocamel-name-scheme.js', 
+              'test/**/*-spec.js'
+            ] 
+          }
+        ],
+        reporters: ['progress', 'spec', 'coverage', 'html'],
+        htmlReporter: {
+          outputDir: 'build/test-reports-source-lib',
+          focusOnFailures: true,
+          namedFiles: true,
+          pageTitle: 'xtypejs-extension-autocamel-name-scheme - Source Lib Test Report',
+          urlFriendlyName: true,
+          preserveDescribeNesting: true,
+          foldAll: true
+        },
+        coverageReporter: {
+          type: 'html',
+          dir: 'build/coverage-reports',
+          subdir: function(browser) {
+            return browser.toLowerCase().split(/[ /-]/)[0] + '-coverage-report';
+          }
+        },
+        preprocessors: {
+          'dist/xtypejs-extension-autocamel-name-scheme.js': ['coverage']
+        }
+      },
+      minified_lib: {
+        files: [
+          { 
+            src: [
+              'build/shared/test/test-util.js', 
+              'build/shared/xtype.js', 
+              'build/shared/xtypejs-extension-custom-types.js',
+              'dist/**/*.min.js', 
+              'test/**/*-spec.js'
+            ] 
+          }
+        ],
+        reporters: ['progress', 'spec', 'html'],
+        htmlReporter: {
+          outputDir: 'build/test-reports-minified-lib',
+          focusOnFailures: true,
+          namedFiles: true,
+          pageTitle: 'xtypejs-extension-autocamel-name-scheme - Minified Lib Test Report',
+          urlFriendlyName: true,
+          preserveDescribeNesting: true,
+          foldAll: true
+        }
+      }
+    },
     uglify: {
       options: {
         compress: {
@@ -56,6 +117,16 @@ module.exports = function (grunt) {
         build: ['build', 'dist']
     },
     shell: {
+      copy_shared_test_files: {
+        command: [
+          'rm -rf build',
+          'mkdir build',
+          'mkdir build/shared',
+          'cp -rp ../../xtypejs/dist/xtype.js ./build/shared',
+          'cp -rp ../xtypejs-extension-custom-types/dist/xtypejs-extension-custom-types.js ./build/shared',
+          'cp -rp --remove-destination ../../../shared/test/ ./build/shared'
+        ].join('&&')
+      },
       jasmine_node_test: {
         command: './node_modules/jasmine/bin/jasmine.js test/xtypejs-extension-autocamel-name-scheme-spec.js JASMINE_CONFIG_PATH=test/jasmine.json'
       }
@@ -79,13 +150,14 @@ module.exports = function (grunt) {
   
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-string-replace');
   
   grunt.registerTask('test-node', ['shell:jasmine_node_test']);
-  grunt.registerTask('test', ['jshint', 'test-node']);
+  grunt.registerTask('test', ['jshint', 'shell:copy_shared_test_files', 'test-node', 'karma']);
   grunt.registerTask('build', ['clean', 'copy', 'string-replace', 'uglify']);
   grunt.registerTask('default', ['build', 'test']);
 };
