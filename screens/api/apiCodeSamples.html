@@ -318,19 +318,46 @@ xtype.isNan(5 / 'hi')                   === true;
  * ---------------------------------------------------------------
  */
 
-// To register a new type named 'non_negative_integer' and with compact
-// name '-int-', that validates when a data value matches both of the
-// existing 'non_negative_number' and 'integer' types:
+// To register a new type with name 'non_negative_integer', that validates
+// when a data value matches both of the existing 'non_negative_number' and
+// 'integer' types:
 
+xtype.registerType('non_negative_integer', {
+    definition: 'non_negative_number, integer',
+    matchMode: 'all'
+});
+
+xtype.isNonNegativeInteger(value);
+xtype.is(value, 'non_negative_integer');
+
+
+// To register a new type and also specify the corresponding names for the
+// type in other name schemes, the 'schemeAliases' property can be used.
+// For instance, to register the 'non_negative_integer' type also specifying
+// '-int-' as the name of the type in the 'compact' name scheme:
 
 xtype.registerType('non_negative_integer', {
     definition: 'non_negative_number, integer',
     matchMode: 'all',
-    compactName: '-int-'
+    schemeAliases: { compact: '-int-' }
 });
 
 xtype.isNonNegativeInteger(value);
 xtype.is(value, '{@type:non_negative_integer:-int-}');
+
+
+// The name of the new type can also be specified for several custom name
+// schemes as part of the type registration. For instance, the following also
+// specifies the type names for both the 'compact' and 'allcaps' name schemes:
+
+xtype.registerType('non_negative_integer', {
+    definition: 'non_negative_number, integer',
+    matchMode: 'all',
+    schemeAliases: {
+        compact: '-int-',
+        allcaps: 'NON_NEGATIVE_INTEGER'
+    }
+});
 
 /*
  * ---------------------------------------------------------------
@@ -341,19 +368,19 @@ xtype.is(value, '{@type:non_negative_integer:-int-}');
 // To register a new type named 'flag' that validates when a data
 // value is either a positive integer or a single character string:
 
-
 xtype.registerType('flag', {
     definition: 'positive_integer, single_char_string',
     // matchMode omitted because 'any' is the default
-    compactName: 'flag'
 });
 
 xtype.isFlag(value);
-xtype.is(value, '{@type:flag:flag}');
+xtype.is(value, 'flag');
 
 
-// But because the default and compact names are both 'flag', the type
-// expression string parameter format makes more sense in this case:
+// But because only the 'definition' property is used in the 'flag'
+// custom type registration above, it can be simplified to use the
+// type expression string parameter format instead, which in this
+// case accomplishes exactly the same thing:
 
 xtype.registerType('flag', 'positive_integer, single_char_string');
 
@@ -364,16 +391,15 @@ xtype.registerType('flag', 'positive_integer, single_char_string');
  * ------------------------------
  */
 
-// To register a type named 'social_security_number'
-// and with compact name 'ssn', that validates SSNs:
-
+// To register a type named 'social_security_number' that validates SSNs,
+// and with 'ssn' as the name of the type in the 'compact' name scheme:
 
 xtype.registerType('social_security_number', {
     definition: {
         validator: function(val) {
             return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
         },
-        compactName: 'ssn'
+        schemeAliases: { compact: 'ssn' }
     }
 });
 
@@ -381,8 +407,8 @@ xtype.isSocialSecurityNumber(value);
 xtype.is(value, '{@type:social_security_number:ssn}');
 
 
-// To register it simply with a single name 'ssn' as both the 
-// default and compact names, then the registration can just be:
+// To register it simply with a single name 'ssn' as both the default name
+// and name in any custom name schemes, then the registration can just be:
 
 xtype.registerType('ssn', {
     validator: function(val) {
@@ -401,19 +427,21 @@ xtype.is(value, 'ssn');
  */
 
 // To register an instance type constructor function, Product,
-// using the default name 'product' and the compact name 'prod':
+// using the default name 'product' and with 'prod' as the name
+// of the type in the 'compact' name scheme:
 
 xtype.registerType('product', {
     definition: Product,
-    compactName: 'prod'
+    schemeAliases: { compact: 'prod' }
 });
 
 xtype.isProduct(value);
 xtype.is(value, '{@type:product:prod}');
 
 
-// To register it simply with a single name 'prod' as both the default 
-// and compact names, then the function parameter format can be used:
+// To register it simply with a single name 'prod' as both the
+// default name and name in any custom name schemes, then the
+// simple function parameter format can be used:
 
 xtype.registerType('prod', Product);
 
@@ -432,7 +460,7 @@ xtype.registerType({
     non_negative_integer: {                             // Derived type: match all
         definition: 'non_negative_number, integer',
         matchMode: 'all',
-        compactName: '-int-'
+        schemeAliases: { compact: '-int-' }
     },
     
     social_security_number: {                           // Self-validated type
@@ -440,7 +468,7 @@ xtype.registerType({
             validator: function(val) {
                 return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
             },
-            compactName: 'ssn'
+            schemeAliases: { compact: 'ssn' }
         }
     },
     
