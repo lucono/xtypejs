@@ -103,7 +103,11 @@ module.exports = function (grunt) {
     },
     shell: {
       copy_shared_test_files: {
-        command: 'mkdir build; mkdir build/shared; cp -rp --remove-destination ../../shared/test/ ./build/shared'
+        command: [
+          'mkdir build',
+          'mkdir build/shared',
+          'cp -rp --remove-destination ../../shared/test/ ./build/shared'
+        ].join('&&')
       },
       jasmine_node_test_source_lib: {
         command: './node_modules/jasmine/bin/jasmine.js test/spec/xtypejs-spec-node-source.js JASMINE_CONFIG_PATH=test/config/jasmine.json'

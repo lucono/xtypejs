@@ -1,4 +1,4 @@
-/** @license | xtypejs v0.6.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs v0.6.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -34,7 +34,7 @@
     */
     
     var LIB_NAME = 'xtype',
-        LIB_VERSION = '0.6.0',
+        LIB_VERSION = '0.6.1',
         
         TYPE_DELIMITER_DEFAULT_PATTERN = '[|, ]',
         NAME_SCHEME_DEFAULT_OPTION_VALUE = 'default',
@@ -467,15 +467,11 @@
          * HELPER FUNCTIONS
          * ----------------
          */
-        
-        function rebuildAliasMappings() {
-            buildAliasMappings(activeNameScheme);
-        }
 
         /**
          * Builds an alias map using data in supplied value and alias mappings.
          */
-        function buildAliasMappings(nameScheme) {
+        function buildAliasMappings() {
             var typeAliasMapping = newObj(),
                 aliasTypeMapping = newObj(),
                 nameAliasMapping = newObj(),
@@ -483,7 +479,7 @@
             
             objKeys(typeToValueMapping).forEach(function(typeName) {
                 var typeValue = typeToValueMapping[typeName];
-                var aliasName = (nameScheme ? nameScheme[typeName] : typeName);
+                var aliasName = (activeNameScheme ? activeNameScheme[typeName] : typeName);
                 aliasName = ((typeof aliasName === 'string' && aliasName.length > 0) ? aliasName : typeName);
                 
                 if (aliasName in usedAliases) {
@@ -502,9 +498,7 @@
             aliasToTypeMapping = aliasTypeMapping;
             nameToAliasMapping = nameAliasMapping;
             
-            activeNameScheme = nameScheme;
-            isAliasMode = !!nameScheme;
-            
+            isAliasMode = !!activeNameScheme;
             clearTypeListStringCache();
         }
         
@@ -658,16 +652,16 @@
         
         function setNameScheme(nameScheme) {
             if (nameScheme === undefined || nameScheme === null || nameScheme === NAME_SCHEME_DEFAULT_OPTION_VALUE) {
-                buildAliasMappings();
-                return;
+                nameScheme = null;
             }
-            if (typeof nameScheme === 'string' && (nameScheme in nameSchemes)) {
+            else if (typeof nameScheme === 'string' && (nameScheme in nameSchemes)) {
                 nameScheme = nameSchemes[nameScheme];
             }
-            if (typeof nameScheme !== 'object') {
+            if (nameScheme !== null && typeof nameScheme !== 'object') {
                 throwError('Unknown name scheme "' + nameScheme + '"');
             }
-            buildAliasMappings(nameScheme);
+            activeNameScheme = nameScheme;
+            doRefresh();
         }
         
         function setOptions(options) {
@@ -693,12 +687,16 @@
          * --------------
          */
 
-        function refreshCoreModule() {
-            rebuildAliasMappings();
+        function coreModuleRefreshHandler() {
+            buildAliasMappings();
+        }
+
+        function doRefresh() {
+            coreModuleRefreshHandler();
+            doModuleTriggeredRefresh(coreModuleRefreshHandler);
         }
         
-
-        var executeRefresh = (function() {
+        var doModuleTriggeredRefresh = (function() {
 
             var handlersRequestingModuleRefresh = [],
                 isModuleRefreshing = false,
@@ -766,7 +764,7 @@
 
         function applyExtension(extensionInit, hostModule) {
 
-            var refreshHandler = null,
+            var moduleRefreshHandler = null,
 
                 extensionInterface = {
                 
@@ -787,18 +785,18 @@
                     },
 
                     refresh: function() {
-                        executeRefresh(refreshHandler);
+                        doModuleTriggeredRefresh(moduleRefreshHandler);
                     },
 
                     setRefreshHandler: function(handler) {
-                        var existingHandlerIndex = moduleRefreshHandlers.indexOf(refreshHandler || handler);
+                        var existingHandlerIndex = moduleRefreshHandlers.indexOf(moduleRefreshHandler || handler);
 
                         if (existingHandlerIndex > -1) {
                             moduleRefreshHandlers.splice(existingHandlerIndex, 1);
                         }
                         if (typeof handler === 'function') {
                             moduleRefreshHandlers.push(handler);
-                            refreshHandler = handler;
+                            moduleRefreshHandler = handler;
                         }
                     }
                 };
@@ -827,7 +825,7 @@
             });
             
             buildAliasMappings();
-            moduleRefreshHandlers.push(refreshCoreModule);
+            moduleRefreshHandlers.push(coreModuleRefreshHandler);
             
             Object.defineProperty(moduleExport, 'VERSION', {
                 value: (/\s*{{[^}]*}}\s*/g.test(LIB_VERSION) ? 'unspecified' : LIB_VERSION),
