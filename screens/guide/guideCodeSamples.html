@@ -617,6 +617,36 @@ xtype.is(25, '{zero}, {positive_number} / {float}') === true;
 
 
 <content
+    name="using_custom_name_scheme"
+    title="Using name schemes"
+    description="
+    A name scheme provides the set of names or aliases used to refer to the various xtypejs 
+    built-in and custom types. By default, there is the descriptive 'default' name scheme. 
+    But there is also the flexibility to create and use custom name schemes according to user 
+    preference and application needs. Also, a number of useful custom name schemes are officially 
+    provided as separate modules and can easily be applied to xtypejs. See the 'Get It' tab for 
+    a list of the officially provided name scheme modules." >
+ 
+xtype.options.setNameScheme({
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+});
+
+xtype({})       === 'emp_obj';          // empty_object is 'emp_obj' in new scheme
+xtype(25)       === 'pos_num';          // positive_integer is 'pos_num' in new scheme
+xtype('  ')     === 'bl_str';           // blank_string is 'bl_str' in new scheme
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content
     name="switching_to_compact_name_scheme"
     title="Switching to the compact name scheme"
     description="
@@ -644,34 +674,6 @@ xtype({})               === 'obj0';     // Compact scheme uses 'obj0' for 'empty
 xtype(25)               === 'int+';     // Compact scheme uses 'int+' for 'positive_integer'
 xtype.is({}, 'obj0')    === true;
 xtype.is(25, 'int+')    === true;
-</content>
-
-
-
-
-<content
-    name="using_custom_name_scheme"
-    title="Using a custom name scheme"
-    description="
-    By default, there is the descriptive 'default' name scheme. But there is also the flexibility 
-    to create and apply other custom schemes according to user preference and application needs.
-    A number of useful custom name schemes are also already available as modules and can easily
-    be registered to xtypejs.">
- 
-xtype.options.setNameScheme({
-    positive_number: 'pos_num', 
-    empty_object: 'emp_obj', 
-    blank_string: 'bl_str'
-    /* More entries */
-});
-
-xtype({})       === 'emp_obj';          // empty_object is 'emp_obj' in new scheme
-xtype(25)       === 'pos_num';          // positive_integer is 'pos_num' in new scheme
-xtype('  ')     === 'bl_str';           // blank_string is 'bl_str' in new scheme
-
-xtype.is({}, 'emp_obj')    === true;
-xtype.is(25, 'pos_num')    === true;
-xtype.is('  ', 'bl_str')   === true;
 </content>
 
 
