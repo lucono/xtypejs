@@ -470,7 +470,7 @@ var customNameScheme = {
     /* More entries */
 };
 
-xtype.registerNameScheme('my_custom_scheme', customNameScheme);
+xtype.ext.registerNameScheme('my_custom_scheme', customNameScheme);
 
 // The custom scheme is now internally registered
 // and can now be referenced by name:
@@ -733,7 +733,7 @@ xtype.isNan(5 / 'hi')                   === true;
 // when a data value matches both of the existing 'non_negative_number' and
 // 'integer' types:
 
-xtype.registerType('non_negative_integer', {
+xtype.ext.registerType('non_negative_integer', {
     definition: 'non_negative_number, integer',
     matchMode: 'all'
 });
@@ -747,7 +747,7 @@ xtype.is(value, 'non_negative_integer');
 // For instance, to register the 'non_negative_integer' type also specifying
 // '-int-' as the name of the type in the 'compact' name scheme:
 
-xtype.registerType('non_negative_integer', {
+xtype.ext.registerType('non_negative_integer', {
     definition: 'non_negative_number, integer',
     matchMode: 'all',
     schemeAliases: { compact: '-int-' }
@@ -761,7 +761,7 @@ xtype.is(value, '{@type:non_negative_integer:-int-}');
 // schemes as part of the type registration. For instance, the following also
 // specifies the type names for both the 'compact' and 'allcaps' name schemes:
 
-xtype.registerType('non_negative_integer', {
+xtype.ext.registerType('non_negative_integer', {
     definition: 'non_negative_number, integer',
     matchMode: 'all',
     schemeAliases: {
@@ -779,7 +779,7 @@ xtype.registerType('non_negative_integer', {
 // To register a new type named 'flag' that validates when a data
 // value is either a positive integer or a single character string:
 
-xtype.registerType('flag', {
+xtype.ext.registerType('flag', {
     definition: 'positive_integer, single_char_string',
     // matchMode omitted because 'any' is the default
 });
@@ -793,7 +793,7 @@ xtype.is(value, 'flag');
 // type expression string parameter format instead, which in this
 // case accomplishes exactly the same thing:
 
-xtype.registerType('flag', 'positive_integer, single_char_string');
+xtype.ext.registerType('flag', 'positive_integer, single_char_string');
 
 
 /*
@@ -805,7 +805,7 @@ xtype.registerType('flag', 'positive_integer, single_char_string');
 // To register a type named 'social_security_number' that validates SSNs,
 // and with 'ssn' as the name of the type in the 'compact' name scheme:
 
-xtype.registerType('social_security_number', {
+xtype.ext.registerType('social_security_number', {
     definition: {
         validator: function(val) {
             return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
@@ -821,7 +821,7 @@ xtype.is(value, '{@type:social_security_number:ssn}');
 // To register it simply with a single name 'ssn' as both the default name
 // and name in any custom name schemes, then the registration can just be:
 
-xtype.registerType('ssn', {
+xtype.ext.registerType('ssn', {
     validator: function(val) {
         return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
     }
@@ -841,7 +841,7 @@ xtype.is(value, 'ssn');
 // using the default name 'product' and with 'prod' as the name
 // of the type in the 'compact' name scheme:
 
-xtype.registerType('product', {
+xtype.ext.registerType('product', {
     definition: Product,
     schemeAliases: { compact: 'prod' }
 });
@@ -854,7 +854,7 @@ xtype.is(value, '{@type:product:prod}');
 // default name and name in any custom name schemes, then the
 // simple function parameter format can be used:
 
-xtype.registerType('prod', Product);
+xtype.ext.registerType('prod', Product);
 
 xtype.isProd(value);
 xtype.is(value, 'prod');
@@ -866,7 +866,7 @@ xtype.is(value, 'prod');
  * -------------------------------
  */
 
-xtype.registerType({
+xtype.ext.registerType({
 
     non_negative_integer: {                             // Derived type: match all
         definition: 'non_negative_number, integer',
@@ -1176,7 +1176,7 @@ xtype.is(value, ['str2+', 'int+', Product]);
 
 // However, registering the instance type gives it a type name:
 
-xtype.registerType('product', Product);
+xtype.ext.registerType('product', Product);
 
 // The type name can then be used as the Instance type in type expressions:
 
@@ -1364,7 +1364,7 @@ xtype.isZero(new Number(0))     === true;
 // and 'integer' types:
 
 
-xtype.registerType('non_negative_integer', {
+xtype.ext.registerType('non_negative_integer', {
     definition: 'non_negative_number, integer',
     matchMode: 'all'
 });
@@ -1390,7 +1390,7 @@ xtype.registerType('non_negative_integer', {
 // or a single character string:
 
 
-xtype.registerType('app_flag', {
+xtype.ext.registerType('app_flag', {
     definition: 'positive_integer, single_char_string',
     matchMode: 'any'
 });
@@ -1400,7 +1400,7 @@ xtype.registerType('app_flag', {
 // for creating our 'app_flag' type we can just have:
 
 
-xtype.registerType('app_flag', {
+xtype.ext.registerType('app_flag', {
     definition: 'positive_integer, single_char_string'
 });
 
@@ -1409,7 +1409,7 @@ xtype.registerType('app_flag', {
 // type registration, we can simply have:
 
 
-xtype.registerType('app_flag', 'positive_integer, single_char_string');
+xtype.ext.registerType('app_flag', 'positive_integer, single_char_string');
 
 
 /*
@@ -1467,7 +1467,7 @@ xtype.isAppFlag(value);
 
 // To create a type named 'social_security_number' for validating SSNs:
 
-xtype.registerType('social_security_number', {
+xtype.ext.registerType('social_security_number', {
     definition: {
         validator: function(val) {
             return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
@@ -1488,7 +1488,7 @@ xtype.isSocialSecurityNumber(value);
 // However, if we just wanted to register it simply with a single name 'ssn' as 
 // both the default and compact names, then the registration could just be:
 
-xtype.registerType('ssn', {
+xtype.ext.registerType('ssn', {
     validator: function(val) {
         return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
     }
@@ -1517,7 +1517,7 @@ xtype.isSsn(value);
 // using the default name 'product' and the name 'prod' for 
 // the 'compact' name scheme:
 
-xtype.registerType('product', {
+xtype.ext.registerType('product', {
     definition: Product,
     schemeAliases: {
         compact: 'prod'
@@ -1656,7 +1656,7 @@ var customNameScheme = {
     /* More entries */
 };
 
-xtype.registerNameScheme('my_custom_scheme', customNameScheme);
+xtype.ext.registerNameScheme('my_custom_scheme', customNameScheme);
 
 
 // The custom scheme is now internally registered
