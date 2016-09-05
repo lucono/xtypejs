@@ -1591,7 +1591,7 @@ xtype.is(25, '{zero}, {positive_number} / {float}') === true;
     But there is also the flexibility to create and use custom name schemes according to user 
     preference and application needs. Also, a number of useful custom name schemes are officially 
     provided as separate modules and can easily be applied to xtypejs. See the 'Get It' tab for 
-    a list of the officially provided name scheme modules." >
+    a list of the officially provided name scheme modules.">
  
 xtype.options.setNameScheme({
     positive_number: 'pos_num', 
@@ -1616,7 +1616,7 @@ xtype.is('  ', 'bl_str')   === true;
     name="switching_to_compact_name_scheme"
     title="Switching to the compact name scheme"
     description="
-    &lt;b&gt;Important: &lt;/b&gt; The 'compact' name scheme is provided by the 
+    <b>Important:</b> The 'compact' name scheme is provided by the 
     'xtypejs-name-scheme-compact' name scheme module, which needs to be applied 
     in xtypejs to make the 'compact' name sceheme available. See the 'Get It' tab 
     for details on this and other available name scheme and extension modules.">
@@ -1799,6 +1799,176 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
 
 
 
+</content-wrapper><section id="playground-screen-content" class="screen-content" template-artifact="playground">
+    
+    <div class="screen-content-links">
+
+        <h1>Setup</h1>
+
+        <div class="cols-2">
+            <div>
+                <ul>
+                    <li data-ng-repeat="contentName in col1Items">
+                        <a screen-link=":{{contentName}}">{{playgroundContent[contentName].attributes.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="cols-2">
+            <div>
+                <ul>
+                    <li data-ng-repeat="contentName in col2Items">
+                        <a screen-link=":{{contentName}}">{{playgroundContent[contentName].attributes.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="screen-content-body">
+        <div class="colspan-70">
+        
+            <div class="content-group">
+            
+                <div class="content-item">
+
+                    <div id="{{contentName}}" style="height: 0px;" data-ng-repeat="contentName in contentNames"></div>
+
+                    <div id="playground_editor">
+                        
+                        <div class="item-title">
+                            <a screen-link=":playground_editor">Code Playground</a>
+                        </div>
+                        
+                        <!--
+                        <p class="item-description">
+                            Play with xtypejs by typing and running code in the editor below. 
+                            You can require xtypejs, any of the official xtypejs extensions and name schemes, 
+                            and any other module in the npm repository.
+                        </p>
+                        -->
+                        
+                        <div id="playground_editor_box"></div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section><content-wrapper code-artifact="playground">
+
+
+
+<content 
+    name="basic_xtypejs" 
+    title="Basic setup with just xtypejs">
+    
+var xtype = require('xtypejs');
+
+</content>
+
+
+
+<content 
+    name="compact_name_scheme" 
+    title="Compact name scheme">
+    
+var xtype = require('xtypejs');
+var compactScheme = require('xtypejs-name-scheme-compact');
+
+xtype.options.setNameScheme(compactScheme);
+
+</content>
+
+
+
+<content 
+    name="custom_types" 
+    title="Custom types">
+    
+var xtype = require('xtypejs');
+var customTypes = require('xtypejs-extension-custom-types');
+
+xtype.ext.registerExtension(customTypes);
+
+</content>
+
+
+
+<content 
+    name="custom_types_compact_name_scheme" 
+    title="Custom types and compact name scheme">
+    
+var xtype = require('xtypejs');
+var customTypes = require('xtypejs-extension-custom-types');
+var compactScheme = require('xtypejs-name-scheme-compact');
+
+xtype.ext.registerExtension(customTypes);
+xtype.options.setNameScheme(compactScheme);
+
+</content>
+
+
+
+<content 
+    name="official_name_schemes" 
+    title="Official name schemes">
+    
+var xtype = require('xtypejs');
+var compactScheme = require('xtypejs-name-scheme-compact');
+var shortScheme = require('xtypejs-name-scheme-shortened');
+var camelScheme = require('xtypejs-name-scheme-camel');
+var shortCamelScheme = require('xtypejs-name-scheme-shortened-camel');
+
+xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.ext.registerNameScheme('shortened', shortScheme);
+xtype.ext.registerNameScheme('camel', camelScheme);
+xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
+
+// You can now switch to any of the above registered name schemes. Eg:
+// xtype.options.setNameScheme('compact');
+
+</content>
+
+
+
+<content 
+    name="official_name_schemes_and_extensions" 
+    title="Official name schemes and extensions">
+    
+var xtype = require('xtypejs');
+
+var customTypes = require('xtypejs-extension-custom-types');
+var typeNameUtils = require('xtypejs-extension-typename-utils');
+var autoCamel = require('xtypejs-extension-autocamel-name-scheme');
+
+xtype.ext.registerExtension(customTypes, typeNameUtils, autoCamel);
+
+var compactScheme = require('xtypejs-name-scheme-compact');
+var shortScheme = require('xtypejs-name-scheme-shortened');
+var camelScheme = require('xtypejs-name-scheme-camel');
+var shortCamelScheme = require('xtypejs-name-scheme-shortened-camel');
+
+xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.ext.registerNameScheme('shortened', shortScheme);
+xtype.ext.registerNameScheme('camel', camelScheme);
+xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
+
+</content>
+
+
+
 </content-wrapper><section id="getit-screen-content" class="screen-content" template-artifact="getit">
     
     <div class="screen-content-links">        
@@ -1919,13 +2089,13 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
                         </div>
                         
                         <p class="item-description">The official name schemes below are provided as separate modules.
-                            To learn more about name schemes, please see: <a screen-link="guide:using_custom_name_scheme">Using Name Schemes</a>.
+                            To learn more about name schemes, see <a screen-link="guide:using_custom_name_scheme">using name schemes</a>.
                         </p>
                         
                         <ul class="release-assets">
                             <li data-ng-repeat="nameScheme in nameSchemes">
                                 <a href="{{nameScheme.url}}" target="_blank">
-                                    <i class="fa fa-2x fa-th-large"></i>
+                                    <i class="fa fa-2x fa-hashtag"></i>
                                     <div>
                                         {{nameScheme.name}}
                                         <div class="asset-description">{{nameScheme.description}}</div>

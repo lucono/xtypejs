@@ -1,0 +1,68 @@
+<section id="playground-screen-content" class="screen-content" template-artifact="playground">
+    
+    <div class="screen-content-links">
+
+        <h1>Setup</h1>
+
+        <div class="cols-2">
+            <div>
+                <ul>
+                    <li data-ng-repeat="contentName in col1Items">
+                        <a screen-link=":{{contentName}}">{{playgroundContent[contentName].attributes.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="cols-2">
+            <div>
+                <ul>
+                    <li data-ng-repeat="contentName in col2Items">
+                        <a screen-link=":{{contentName}}">{{playgroundContent[contentName].attributes.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="screen-content-body">
+        <div class="colspan-70">
+        
+            <div class="content-group">
+            
+                <div class="content-item">
+
+                    <div id="{{contentName}}" style="height: 0px;" data-ng-repeat="contentName in contentNames"></div>
+
+                    <div id="playground_editor">
+                        
+                        <div class="item-title">
+                            <a screen-link=":playground_editor">Code Playground</a>
+                        </div>
+                        
+                        <!--
+                        <p class="item-description">
+                            Play with xtypejs by typing and running code in the editor below. 
+                            You can require xtypejs, any of the official xtypejs extensions and name schemes, 
+                            and any other module in the npm repository.
+                        </p>
+                        -->
+                        
+                        <div id="playground_editor_box"></div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>

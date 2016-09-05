@@ -226,6 +226,10 @@
             template: '/screens/overview/overviewScreen.html',
             code: 'screens/overview/overviewCodeSamples.html'
         },
+        guide: {
+            template: '/screens/guide/guideScreen.html',
+            code: 'screens/guide/guideCodeSamples.html'
+        },
         types: {
             template: '/screens/types/typesScreen.html',
             code: 'screens/types/typeCodeSamples.html',
@@ -236,9 +240,9 @@
             code: 'screens/api/apiCodeSamples.html',
             json: 'screens/api/api.json'
         },
-        guide: {
-            template: '/screens/guide/guideScreen.html',
-            code: 'screens/guide/guideCodeSamples.html'
+        playground: {
+            template: '/screens/playground/playgroundScreen.html',
+            code: 'screens/playground/playgroundCodeSamples.html'
         },
         getit: {
             template: '/screens/getit/getitScreen.html',
@@ -498,6 +502,20 @@
                 .state('api.item', {
                     url: '/{item:[^/]+}',
                     controller: 'scrollToItem',
+                    deepStateRedirect: true
+                })
+                
+                .state('playground', {
+                    url: '/playground',
+                    templateProvider: function() {
+                        return templatePromise(appArtifacts.playground.template);
+                    },
+                    controller: 'PlaygroundScreenController',
+                    deepStateRedirect: true
+                })
+                .state('playground.item', {
+                    url: '/{item:[^/]+}',
+                    controller: 'loadPlaygroundCodeSnippet',
                     deepStateRedirect: true
                 })
                 

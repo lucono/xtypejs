@@ -148,6 +148,10 @@ a, a:visited, a:active {
     */
 }
 
+.top-links-pane .github-buttons a:hover {
+    color: #999;
+}
+
 .top-links-pane .github-buttons a:only-child {
     margin-right: 50px;
 }
@@ -218,7 +222,7 @@ a, a:visited, a:active {
 .screen-tabs ul li {
     display: table-cell;
     position: relative;
-    width: 20%;
+    width: 16.7%;
     z-index: 1;
 }
 
@@ -226,7 +230,7 @@ a, a:visited, a:active {
     display: block;
     text-align: center;
     text-decoration: none;
-    padding: 45px 20px;
+    padding: 40px 0px;
     color: #2c3233;
     font-size: 14px;
     font-weight: bold;
@@ -743,6 +747,11 @@ code.highlight, .code.highlight {
     margin-top: 10px;
     margin-bottom: 5px;
     border-bottom: #e8e8e8 1px solid;
+}
+
+#playground_editor_box {
+    min-height: 600px;
+    margin: 30px 0px;
 }
 
 .release-details div {

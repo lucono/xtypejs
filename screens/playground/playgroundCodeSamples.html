@@ -1,0 +1,104 @@
+<content-wrapper code-artifact="playground">
+
+
+
+<content 
+    name="basic_xtypejs" 
+    title="Basic setup with just xtypejs">
+    
+var xtype = require('xtypejs');
+
+</content>
+
+
+
+<content 
+    name="compact_name_scheme" 
+    title="Compact name scheme">
+    
+var xtype = require('xtypejs');
+var compactScheme = require('xtypejs-name-scheme-compact');
+
+xtype.options.setNameScheme(compactScheme);
+
+</content>
+
+
+
+<content 
+    name="custom_types" 
+    title="Custom types">
+    
+var xtype = require('xtypejs');
+var customTypes = require('xtypejs-extension-custom-types');
+
+xtype.ext.registerExtension(customTypes);
+
+</content>
+
+
+
+<content 
+    name="custom_types_compact_name_scheme" 
+    title="Custom types and compact name scheme">
+    
+var xtype = require('xtypejs');
+var customTypes = require('xtypejs-extension-custom-types');
+var compactScheme = require('xtypejs-name-scheme-compact');
+
+xtype.ext.registerExtension(customTypes);
+xtype.options.setNameScheme(compactScheme);
+
+</content>
+
+
+
+<content 
+    name="official_name_schemes" 
+    title="Official name schemes">
+    
+var xtype = require('xtypejs');
+var compactScheme = require('xtypejs-name-scheme-compact');
+var shortScheme = require('xtypejs-name-scheme-shortened');
+var camelScheme = require('xtypejs-name-scheme-camel');
+var shortCamelScheme = require('xtypejs-name-scheme-shortened-camel');
+
+xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.ext.registerNameScheme('shortened', shortScheme);
+xtype.ext.registerNameScheme('camel', camelScheme);
+xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
+
+// You can now switch to any of the above registered name schemes. Eg:
+// xtype.options.setNameScheme('compact');
+
+</content>
+
+
+
+<content 
+    name="official_name_schemes_and_extensions" 
+    title="Official name schemes and extensions">
+    
+var xtype = require('xtypejs');
+
+var customTypes = require('xtypejs-extension-custom-types');
+var typeNameUtils = require('xtypejs-extension-typename-utils');
+var autoCamel = require('xtypejs-extension-autocamel-name-scheme');
+
+xtype.ext.registerExtension(customTypes, typeNameUtils, autoCamel);
+
+var compactScheme = require('xtypejs-name-scheme-compact');
+var shortScheme = require('xtypejs-name-scheme-shortened');
+var camelScheme = require('xtypejs-name-scheme-camel');
+var shortCamelScheme = require('xtypejs-name-scheme-shortened-camel');
+
+xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.ext.registerNameScheme('shortened', shortScheme);
+xtype.ext.registerNameScheme('camel', camelScheme);
+xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
+
+</content>
+
+
+
+</content-wrapper>

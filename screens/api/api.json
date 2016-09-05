@@ -486,12 +486,12 @@
 									]
 								},
 								{
-									"name": "compactName",
+									"name": "schemeAliases",
 									"types": [
 										{
-											"type": "string",
+											"type": "object",
 											"required": "no",
-											"description": "The compact name to be used for the type being registered, and must not conflict with the compact name of any already existing type. Defaults to the value of the {typeName} argument if omitted."
+											"description": "An object whose keys are the names of name schemes and corresponding values are the type names to be used for the type being registered when the corresponding name scheme is active."
 										}
 									]
 								},
