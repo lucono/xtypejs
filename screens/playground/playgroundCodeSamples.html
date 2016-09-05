@@ -19,7 +19,8 @@ var xtype = require('xtypejs');
 var xtype = require('xtypejs');
 var compactScheme = require('xtypejs-name-scheme-compact');
 
-xtype.options.setNameScheme(compactScheme);
+xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.options.setNameScheme('compact');
 
 </content>
 
@@ -47,7 +48,8 @@ var customTypes = require('xtypejs-extension-custom-types');
 var compactScheme = require('xtypejs-name-scheme-compact');
 
 xtype.ext.registerExtension(customTypes);
-xtype.options.setNameScheme(compactScheme);
+xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.options.setNameScheme('compact');
 
 </content>
 
