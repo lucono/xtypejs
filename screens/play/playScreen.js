@@ -111,7 +111,10 @@
             function checkCodeEditorLoaded(playContent) {
                 if (!$scope.codeEditor) {
                     $timeout.cancel(codeEditorLoadedPromise);
-                    codeEditorLoadedPromise = $timeout(checkCodeEditorLoaded, 0, true, playContent);
+                    
+                    codeEditorLoadedPromise = $timeout(function() {
+                        checkCodeEditorLoaded(playContent);
+                    });
                     return;
                 }
                 loadCodeSnippet($scope.codeEditor, playContent[$stateParams.item]);
