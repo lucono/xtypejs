@@ -424,7 +424,7 @@
 					"name": "registerType",
 					"extension": "xtypejs-extension-custom-types",
 					"signature": "xtype.ext.registerType({typeName}, {typeDetails})",
-					"description": "Adds one or more user-defined type to xtypejs.",
+					"description": "Adds one or more user-defined types to xtypejs.",
 					"arguments": [
 						{
 							"name": "typeName",

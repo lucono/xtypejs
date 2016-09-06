@@ -1799,30 +1799,33 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
 
 
 
-</content-wrapper><section id="playground-screen-content" class="screen-content" template-artifact="playground">
+</content-wrapper><section id="play-screen-content" class="screen-content" template-artifact="play">
     
     <div class="screen-content-links">
 
-        <h1>Setup</h1>
+        <div data-ng-repeat="category in AppUtils.keys(itemsByCategoryAndColGroups)">
+            <h1>{{category}}</h1>
 
-        <div class="cols-2">
-            <div>
-                <ul>
-                    <li data-ng-repeat="contentName in col1Items">
-                        <a screen-link=":{{contentName}}">{{playgroundContent[contentName].attributes.title}}</a>
-                    </li>
-                </ul>
+            <div class="cols-2">
+                <div>
+                    <ul>
+                        <li data-ng-repeat="contentItem in itemsByCategoryAndColGroups[category].col1Items">
+                            <a screen-link=":{{contentItem.attributes.name}}">{{contentItem.attributes.title}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="cols-2">
+                <div>
+                    <ul>
+                        <li data-ng-repeat="contentItem in itemsByCategoryAndColGroups[category].col2Items">
+                            <a screen-link=":{{contentItem.attributes.name}}">{{contentItem.attributes.title}}</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="cols-2">
-            <div>
-                <ul>
-                    <li data-ng-repeat="contentName in col2Items">
-                        <a screen-link=":{{contentName}}">{{playgroundContent[contentName].attributes.title}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
     </div>
     
     <div class="screen-content-body">
@@ -1834,10 +1837,10 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
 
                     <div id="{{contentName}}" style="height: 0px;" data-ng-repeat="contentName in contentNames"></div>
 
-                    <div id="playground_editor">
+                    <div id="play_editor">
                         
                         <div class="item-title">
-                            <a screen-link=":playground_editor">Code Playground</a>
+                            <a screen-link=":play_editor">Code Playground</a>
                         </div>
                         
                         <!--
@@ -1848,7 +1851,7 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
                         </p>
                         -->
                         
-                        <div id="playground_editor_box"></div>
+                        <div id="play_editor_box"></div>
                         
                     </div>
                 </div>
@@ -1866,12 +1869,13 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
     
     <div ui-view></div> <!-- dummy child view -->
     
-</section><content-wrapper code-artifact="playground">
+</section><content-wrapper code-artifact="play">
 
 
 
 <content 
     name="basic_xtypejs" 
+    category="Setup"
     title="Basic setup with just xtypejs">
     
 var xtype = require('xtypejs');
@@ -1882,6 +1886,7 @@ var xtype = require('xtypejs');
 
 <content 
     name="compact_name_scheme" 
+    category="Setup"
     title="Compact name scheme">
     
 var xtype = require('xtypejs');
@@ -1896,6 +1901,7 @@ xtype.options.setNameScheme('compact');
 
 <content 
     name="custom_types" 
+    category="Setup"
     title="Custom types">
     
 var xtype = require('xtypejs');
@@ -1909,6 +1915,7 @@ xtype.ext.registerExtension(customTypes);
 
 <content 
     name="custom_types_compact_name_scheme" 
+    category="Setup"
     title="Custom types and compact name scheme">
     
 var xtype = require('xtypejs');
@@ -1925,6 +1932,7 @@ xtype.options.setNameScheme('compact');
 
 <content 
     name="official_name_schemes" 
+    category="Setup"
     title="Official name schemes">
     
 var xtype = require('xtypejs');
@@ -1938,15 +1946,13 @@ xtype.ext.registerNameScheme('shortened', shortScheme);
 xtype.ext.registerNameScheme('camel', camelScheme);
 xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
 
-// You can now switch to any of the above registered name schemes. Eg:
-// xtype.options.setNameScheme('compact');
-
 </content>
 
 
 
 <content 
     name="official_name_schemes_and_extensions" 
+    category="Setup"
     title="Official name schemes and extensions">
     
 var xtype = require('xtypejs');
@@ -1969,6 +1975,33 @@ xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
 
 </content>
 
+
+
+<!--
+<content 
+    name="switching_to_compact_name_scheme" 
+    category="Examples"
+    title="Switching to the compact name scheme">
+
+var xtype = require('xtypejs');
+var compactNameScheme = require('xtypejs-name-scheme-compact');
+xtype.ext.registerNameScheme('compact', compactNameScheme);
+
+var someNumber = 25;
+var someObject = {};
+
+console.log('Type of someNumber is: ' + xtype(someNumber));
+console.log('Type of someObject is: ' + xtype(someObject));
+
+// Switch to the 'compact' name scheme:
+xtype.options.setNameScheme('compact');
+console.log('--- Switched to compact name scheme ---');
+
+console.log('Type of someNumber is: ' + xtype(someNumber));
+console.log('Type of someObject is: ' + xtype(someObject));
+
+</content>
+-->
 
 
 </content-wrapper><section id="getit-screen-content" class="screen-content" template-artifact="getit">

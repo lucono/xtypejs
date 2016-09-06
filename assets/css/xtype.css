@@ -343,6 +343,10 @@ body.page-loading .screen-loader-pane, body.screen-loading .screen-loader-pane {
     min-height: 180px;
 }
 
+.screen-content-links > div {
+    overflow: auto;
+}
+
 .screen-content-links ul.horizontal-links {
     white-space: nowrap;
     margin-bottom: 50px;
@@ -749,7 +753,7 @@ code.highlight, .code.highlight {
     border-bottom: #e8e8e8 1px solid;
 }
 
-#playground_editor_box {
+#play_editor_box {
     min-height: 600px;
     margin: 30px 0px;
 }

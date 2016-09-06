@@ -240,9 +240,9 @@
             code: 'screens/api/apiCodeSamples.html',
             json: 'screens/api/api.json'
         },
-        playground: {
-            template: '/screens/playground/playgroundScreen.html',
-            code: 'screens/playground/playgroundCodeSamples.html'
+        play: {
+            template: '/screens/play/playScreen.html',
+            code: 'screens/play/playCodeSamples.html'
         },
         getit: {
             template: '/screens/getit/getitScreen.html',
@@ -505,17 +505,17 @@
                     deepStateRedirect: true
                 })
                 
-                .state('playground', {
-                    url: '/playground',
+                .state('play', {
+                    url: '/play',
                     templateProvider: function() {
-                        return templatePromise(appArtifacts.playground.template);
+                        return templatePromise(appArtifacts.play.template);
                     },
-                    controller: 'PlaygroundScreenController',
+                    controller: 'PlayScreenController',
                     deepStateRedirect: true
                 })
-                .state('playground.item', {
+                .state('play.item', {
                     url: '/{item:[^/]+}',
-                    controller: 'loadPlaygroundCodeSnippet',
+                    controller: 'loadPlayCodeSnippet',
                     deepStateRedirect: true
                 })
                 

@@ -14,6 +14,9 @@
         <loc>http://xtype.js.org/?doc=api</loc>
     </url>
     <url>
+        <loc>http://xtype.js.org/?doc=play</loc>
+    </url>
+    <url>
         <loc>http://xtype.js.org/?doc=getit</loc>
     </url>
 </urlset>

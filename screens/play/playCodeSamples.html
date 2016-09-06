@@ -1,9 +1,10 @@
-<content-wrapper code-artifact="playground">
+<content-wrapper code-artifact="play">
 
 
 
 <content 
     name="basic_xtypejs" 
+    category="Setup"
     title="Basic setup with just xtypejs">
     
 var xtype = require('xtypejs');
@@ -14,6 +15,7 @@ var xtype = require('xtypejs');
 
 <content 
     name="compact_name_scheme" 
+    category="Setup"
     title="Compact name scheme">
     
 var xtype = require('xtypejs');
@@ -28,6 +30,7 @@ xtype.options.setNameScheme('compact');
 
 <content 
     name="custom_types" 
+    category="Setup"
     title="Custom types">
     
 var xtype = require('xtypejs');
@@ -41,6 +44,7 @@ xtype.ext.registerExtension(customTypes);
 
 <content 
     name="custom_types_compact_name_scheme" 
+    category="Setup"
     title="Custom types and compact name scheme">
     
 var xtype = require('xtypejs');
@@ -57,6 +61,7 @@ xtype.options.setNameScheme('compact');
 
 <content 
     name="official_name_schemes" 
+    category="Setup"
     title="Official name schemes">
     
 var xtype = require('xtypejs');
@@ -70,15 +75,13 @@ xtype.ext.registerNameScheme('shortened', shortScheme);
 xtype.ext.registerNameScheme('camel', camelScheme);
 xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
 
-// You can now switch to any of the above registered name schemes. Eg:
-// xtype.options.setNameScheme('compact');
-
 </content>
 
 
 
 <content 
     name="official_name_schemes_and_extensions" 
+    category="Setup"
     title="Official name schemes and extensions">
     
 var xtype = require('xtypejs');
@@ -101,6 +104,33 @@ xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
 
 </content>
 
+
+
+<!--
+<content 
+    name="switching_to_compact_name_scheme" 
+    category="Examples"
+    title="Switching to the compact name scheme">
+
+var xtype = require('xtypejs');
+var compactNameScheme = require('xtypejs-name-scheme-compact');
+xtype.ext.registerNameScheme('compact', compactNameScheme);
+
+var someNumber = 25;
+var someObject = {};
+
+console.log('Type of someNumber is: ' + xtype(someNumber));
+console.log('Type of someObject is: ' + xtype(someObject));
+
+// Switch to the 'compact' name scheme:
+xtype.options.setNameScheme('compact');
+console.log('--- Switched to compact name scheme ---');
+
+console.log('Type of someNumber is: ' + xtype(someNumber));
+console.log('Type of someObject is: ' + xtype(someObject));
+
+</content>
+-->
 
 
 </content-wrapper>

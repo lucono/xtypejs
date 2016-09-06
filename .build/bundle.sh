@@ -19,7 +19,7 @@ find ../assets ../vendor ../screens -name "*.js" -o -name "*.css" -o -name "*.ht
     ../screens/types/typesScreen.js \
     ../screens/api/apiScreen.js \
     ../screens/guide/guideScreen.js \
-    ../screens/playground/playgroundScreen.js \
+    ../screens/play/playScreen.js \
     ../screens/getit/getitScreen.js \
     ../bundles/app-bundle.min.js
 
@@ -41,8 +41,8 @@ cat \
     ../screens/api/apiCodeSamples.html \
     ../screens/guide/guideScreen.html \
     ../screens/guide/guideCodeSamples.html \
-    ../screens/playground/playgroundScreen.html \
-    ../screens/playground/playgroundCodeSamples.html \
+    ../screens/play/playScreen.html \
+    ../screens/play/playCodeSamples.html \
     ../screens/getit/getitScreen.html \
     ../screens/getit/getitOptions.html \
     ../components/code-snippet/code-snippet.tpl.html \
