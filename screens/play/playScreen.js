@@ -98,7 +98,7 @@
                 return;
             }
 
-            var codeEditorLoadedPromise = null;
+            var codeEditorLoadedPromise;
 
             function checkCodeEditorLoaded(playContent) {
                 if (!$scope.codeEditor) {
