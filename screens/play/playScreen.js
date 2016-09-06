@@ -32,10 +32,12 @@
 
         .controller('PlayScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
 
-            $scope.codeEditor = Tonic.createNotebook({
+            Tonic.createNotebook({
                 element: document.getElementById('play_editor_box'),
-                source: defaultCodeSnippet
-                //onLoad: loadCodeSnippet
+                source: defaultCodeSnippet,
+                onLoad: function(loadedCodeEditor) {
+                    $scope.codeEditor = loadedCodeEditor;
+                }
             });
 
             service.getCodeContent('play', function(playContent) {
@@ -97,11 +99,22 @@
             }
 
             if ($scope.playContent) {
-                loadCodeSnippet($scope.codeEditor, $scope.playContent[$stateParams.item]);
+                checkCodeEditorLoaded($scope.playContent);
             } else {
                 service.getCodeContent('play', function(playContent) {
-                    loadCodeSnippet($scope.codeEditor, playContent[$stateParams.item]);
+                    checkCodeEditorLoaded(playContent);
                 });
+            }
+
+            var codeEditorLoadedPromise = null;
+
+            function checkCodeEditorLoaded(playContent) {
+                if (!$scope.codeEditor) {
+                    $timeout.cancel(codeEditorLoadedPromise);
+                    codeEditorLoadedPromise = $timeout(checkCodeEditorLoaded, 0, true, playContent);
+                    return;
+                }
+                loadCodeSnippet($scope.codeEditor, playContent[$stateParams.item]);
             }
 
             $rootScope.navigateToItem(playEditorId, !isSameScreenNavigation);
