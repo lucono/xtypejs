@@ -98,14 +98,6 @@
                 return;
             }
 
-            if ($scope.playContent) {
-                checkCodeEditorLoaded($scope.playContent);
-            } else {
-                service.getCodeContent('play', function(playContent) {
-                    checkCodeEditorLoaded(playContent);
-                });
-            }
-
             var codeEditorLoadedPromise = null;
 
             function checkCodeEditorLoaded(playContent) {
@@ -118,6 +110,14 @@
                     return;
                 }
                 loadCodeSnippet($scope.codeEditor, playContent[$stateParams.item]);
+            }
+
+            if ($scope.playContent) {
+                checkCodeEditorLoaded($scope.playContent);
+            } else {
+                service.getCodeContent('play', function(playContent) {
+                    checkCodeEditorLoaded(playContent);
+                });
             }
 
             $rootScope.navigateToItem(playEditorId, !isSameScreenNavigation);
