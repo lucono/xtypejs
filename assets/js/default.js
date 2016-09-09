@@ -309,7 +309,7 @@
             AppUtils.latestRelease.isNewRelease = (daysSinceRelease < (30 * 6));    // If roughly within 6 months
         });
 
-        $rootScope.libDescription = 'Concise, performant, readable, data and type validation for JavaScript apps, using built-in and user-defined data-validating pseudo types.';
+        $rootScope.libDescription = 'Concise, performant, readable, data and type validation for JavaScript, using built-in and user-defined data-validating pseudo types.';
         
         $rootScope.previousState = '';
         $rootScope.activeScreen = '';
@@ -746,7 +746,7 @@
             if (element.attr('share') === 'email') {
                 element.attr('href',
                     'mailto:?subject=' +
-                    encodeURIComponent('Elegant, highly efficient data validation for JavaScript Apps') +
+                    encodeURIComponent('Elegant, highly efficient data validation for JavaScript') +
                     '&body=' +
                     encodeURIComponent('Checkout xtypejs - ' + $rootScope.libDescription + ' Find out more at http://xtype.js.org.'));
                 return;
@@ -769,13 +769,13 @@
                 case 'twitter':
                     shareParams = [
                         'https://twitter.com/home?status=' + 
-                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript Apps. http://xtype.js.org'), 
+                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript. http://xtype.js.org'), 
                         550, 420];
                     break;
                 case 'linkedin':
                     shareParams = [
                         'https://www.linkedin.com/shareArticle?mini=true&url=http://xtype.js.org&title=' +
-                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript Apps'), 
+                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript'), 
                         550, 560];
                     break;
                 case 'reddit':
