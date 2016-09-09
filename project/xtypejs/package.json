@@ -1,7 +1,7 @@
 {
   "name": "xtypejs",
   "version": "0.6.1",
-  "description": "Elegant, highly efficient data validation for JavaScript Apps.",
+  "description": "Elegant, highly efficient data validation for JavaScript.",
   "main": "dist/xtype",
   "keywords": [
     "type",
