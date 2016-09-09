@@ -1,8 +1,8 @@
 {
   "name": "xtypejs-name-scheme-camel",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "xtypejs Camel name scheme",
-  "main": "dist/xtypejs-name-scheme-compact",
+  "main": "dist/xtypejs-name-scheme-camel",
   "keywords": [
     "type",
     "xtype",
