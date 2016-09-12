@@ -6,19 +6,19 @@ angular.module('xtypejsSite')
 
     .controller('GuideScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
 
-        var DEFAULT_CATEGORY = 'miscellaneous',
+        var DEFAULT_CATEGORY = 'more_topics',
         
             categoryTitles = {
                 setup_and_basics: 'Setup and Basics',
                 type_checking_and_validation: 'Type Checking and Validation',
                 user_defined_types: 'User Defined Types',
                 name_schemes_and_customization: 'Name Schemes and Customization',
-                miscellaneous: 'Miscellaneous'
+                more_topics: 'More Topics'
             },
             
             colGrouping = [
                 ['setup_and_basics', 'type_checking_and_validation'],
-                ['user_defined_types', 'name_schemes_and_customization', 'miscellaneous']
+                ['user_defined_types', 'name_schemes_and_customization', 'more_topics']
             ];
         
         service.getCodeContent('guide', function(guideContent) {
