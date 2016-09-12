@@ -153,11 +153,11 @@ xtype.ext.registerType('ssn', {
 });
 
 function searchEmployees(value) {
-    switch (xtype.which(value, '{{ssn, positive_integer, multi_char_string}}')) {
-        case 'ssn':
-            return EmployeeDB.searchBySSN(value);
+    switch (xtype.which(value, '{{positive_integer, ssn, multi_char_string}}')) {
         case '{positive_integer}':
             return EmployeeDB.searchByEmployeeNumber(value);
+        case 'ssn':
+            return EmployeeDB.searchBySSN(value);
         case '{multi_char_string}':
             return EmployeeDB.searchByName(value);
         default:
@@ -283,11 +283,14 @@ function searchEmployees(value) {
             </div>
         </div>
     </div>
-                            
+    
     <div class="screen-content-body">    
         <div class="colspan-70">
             
-            <div id="{{methodGroup.name | lowercase}}_api" section-title="{{methodGroup.name}} API" class="content-group" data-ng-repeat="methodGroup in methodGroups">
+            <div id="{{methodGroup.name | lowercase}}_api" 
+                section-title="{{methodGroup.name}} API" 
+                class="content-group" 
+                data-ng-repeat="methodGroup in methodGroups">
                 
                 <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
                 
@@ -912,20 +915,12 @@ xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
 <section id="guide-screen-content" class="screen-content" template-artifact="guide">
     
     <div class="screen-content-links">
-        <div class="cols-2">
-            <div>
+        <div class="cols-2" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="guideCategory in colGroup">
+                <h2><a screen-link=":{{guideCategory.name}}_guide">{{guideCategory.title}}</a></h2>
                 <ul>
-                    <li data-ng-repeat="contentName in col1Items">
-                        <a screen-link=":{{contentName}}">{{guideContent[contentName].attributes.title}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="cols-2">
-            <div>
-                <ul>
-                    <li data-ng-repeat="contentName in col2Items">
-                        <a screen-link=":{{contentName}}">{{guideContent[contentName].attributes.title}}</a>
+                    <li data-ng-repeat="guideItem in guideCategory.items">
+                        <a screen-link=":{{guideItem.attributes.name}}" data-ng-bind-html="guideItem.attributes.title"></a>
                     </li>
                 </ul>
             </div>
@@ -935,19 +930,23 @@ xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
     <div class="screen-content-body">        
         <div class="colspan-80">
             
-            <div class="content-group">
+            <div id="{{guideCategory.name}}_guide" 
+                section-title="{{_guide.title}}" 
+                class="content-group" 
+                data-ng-repeat="guideCategory in guideCategoriesList">
+                
+                <a screen-link=":{{guideCategory.name}}_guide" class="content-group-title">{{guideCategory.title}}</a>
                 
                 <div class="content-item" 
-                    data-ng-repeat="contentName in AppUtils.keys(guideContent)" 
-                    data-ng-init="codeItem = guideContent[contentName]">
+                    data-ng-repeat="guideItem in guideCategory.items">
                     
-                    <div id="{{contentName}}" section-title="{{codeItem.attributes.title}}">
+                    <div id="{{guideItem.attributes.name}}" section-title="{{guideItem.attributes.title}}">
                         
-                        <div class="item-title" data-ng-if="codeItem.attributes.title">
-                            <a screen-link=":{{contentName}}">{{codeItem.attributes.title}}</a>
+                        <div class="item-title">
+                            <a screen-link=":{{guideItem.attributes.name}}">{{guideItem.attributes.title}}</a>
                         </div>
                         
-                        <code-snippet code-item="codeItem" default-view="compact"></code-snippet>
+                        <code-snippet code-item="guideItem" default-view="compact"></code-snippet>
                     </div>
                 </div>
                 
@@ -964,13 +963,13 @@ xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
     
     <div ui-view></div> <!-- dummy child view -->
     
-</section>
-<content-wrapper code-artifact="guide">
+</section><content-wrapper code-artifact="guide">
 
 
 <content 
     name="installing" 
     title="Installing" 
+    category="setup_and_basics"
     lang="sh">
 
 # npm:
@@ -991,7 +990,8 @@ bower install git://github.com/lucono/xtypejs.git
 
 <content 
     name="importing_node_requirejs" 
-    title="Importing with node and requireJS">
+    title="Importing with node and requireJS"
+    category="setup_and_basics">
 
 var xtype = require('xtypejs');             // node.js and CommonJS
 
@@ -1006,6 +1006,7 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 <content 
     name="importing_with_html_script_tag" 
     title="Importing with HTML script tag"
+    category="setup_and_basics"
     lang="html">
 
 <script src="path/to/xtype.js"></script>    <!-- exports xtype global variable -->
@@ -1021,6 +1022,7 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 <content 
     name="types_and_validation" 
     title="Pseudo types and data validation in xtypejs"
+    category="setup_and_basics"
     description="
     xtypejs uses the concept of 'types' (or pseudo types) for data validation. 
     Each 'type' captures a set of validation criteria which must be satisfied 
@@ -1064,7 +1066,8 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 
 <content 
     name="getting_extended_type" 
-    title="Getting the extended type of a value">
+    title="Getting the extended type of a value"
+    category="setup_and_basics">
 
 xtype(-2.5)   === '{negative_float}';       // Value is number, negative and float
 xtype('  ')   === '{whitespace}';           // Value is string and blank
@@ -1077,7 +1080,8 @@ xtype(['hi']) === '{single_elem_array}';    // Value is array, has exactly one e
 
 <content 
     name="getting_simple_type" 
-    title="Getting the simple type of a value">
+    title="Getting the simple type of a value"
+    category="setup_and_basics">
 
 xtype.type(null)              === '{null}';
 xtype.type(undefined)         === '{undefined}';
@@ -1105,6 +1109,7 @@ xtype.type(new Boolean(true)) === '{boolean}';
 <content 
     name="checking_combinations_of_types" 
     title="Checking values against combinations of various types"
+    category="type_checking_and_validation"
     description="
     Complex type and data requirements can be concisely validated using combinations of 
     relevant simple and/or extended types. The following example returns true only if - 
@@ -1120,6 +1125,7 @@ xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
 <content 
     name="checking_instance_types" 
     title="Checking Instance types"
+    category="type_checking_and_validation"
     description="
     Instance types are used to validate values to be ojects of a specific constructor.
     Any constructor function can be used as the Instance type for validating objects of that
@@ -1135,6 +1141,7 @@ xtype.is(value, Product);
 <content 
     name="checking_instance_and_other_types" 
     title="Checking instance types along with other types"
+    category="type_checking_and_validation"
     description="
     For instance, in an application or library method that receives a varying 
     piece of information with which a product should be displayed, the following 
@@ -1162,6 +1169,7 @@ switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product
 <content 
     name="instance_types_in_expression_strings" 
     title="Using instance types in type expression strings"
+    category="type_checking_and_validation"
     description="
     Because an instance type is by default represented by the corresponding constructor 
     function for objects of that instance, instance types cannot be used in type expression 
@@ -1190,6 +1198,7 @@ xtype.is(value, '{{multi_char_string, positive_integer,}} product');
 <content 
     name="checking_values_in_different_ways" 
     title="Checking values in different ways"
+    category="type_checking_and_validation"
     description="Different ways of checking values provide flexibility based on application needs and constraints.">
 
 // Verify if 'flag' variable is a single character string:
@@ -1211,7 +1220,8 @@ xtype.is(flag, ['{single_char_string}', xtype.POSITIVE_NUMBER]);
 
 <content 
     name="validating_value_against_specific_type" 
-    title="Validating a value against a specific type">
+    title="Validating a value against a specific type"
+    category="type_checking_and_validation">
 
 xtype.isSingleCharString('g')           === true;
 xtype.isNonEmptyObject({foo: 'bar'})    === true;
@@ -1228,6 +1238,7 @@ xtype.isNan(5 / 'hi')                   === true;
 <content 
     name="validating_multiple_values_against_specific_type" 
     title="Validating multiple values against a specific type"
+    category="type_checking_and_validation"
     description="The 'none', 'any', 'some', and 'all' method extensions provide the checking of multiple values against a single type.">
 
 xtype.none.isNan(7, 2.5, NaN, 0, -5)        === false;
@@ -1255,6 +1266,7 @@ xtype.some.isTrue(values)          === true;
 <content
     name="switching_based_on_value_type"
     title="Switching based on the type of a value"
+    category="type_checking_and_validation"
     description="
     Switch on the result of xtype.which() to handle only valid data scenarios without 
     first performing extensive type checking and data validations. For instance, in an 
@@ -1283,7 +1295,8 @@ switch (xtype.which(value, '{{multi_char_string, positive_integer, nothing}}')) 
 
 <content 
     name="checking_boolean_values" 
-    title="Checking boolean values">
+    title="Checking boolean values"
+    category="type_checking_and_validation">
 
 xtype.isTrue(23.5)                  === false;      // Truthy but not boolean
 xtype.isTrue(new MyProduct())       === false;      // Any type can be checked
@@ -1303,6 +1316,7 @@ xtype.isFalse(new Boolean(false))   === true;       // Object false is actual fa
 <content 
     name="application_flag_example" 
     title="Single character application flag example"
+    category="type_checking_and_validation"
     description="
     Suppose a single character application/operation flag is expected as input. 
     The 'single_char_string' extended type will match a string that contains 
@@ -1322,6 +1336,7 @@ xtype.isSingleCharString(new String(' z ')) === true;
 <content
     name="normalized_type_checking"
     title="Normalized type checking"
+    category="type_checking_and_validation"
     description="Primitive types and their corresponding object types share the same simple types.">
  
 // Regular type checking:
@@ -1348,6 +1363,7 @@ xtype.isZero(new Number(0))     === true;
 <content
     name="creating_derived_types"
     title="Creating new types derived from combinations of existing types"
+    category="user_defined_types"
     description="
     Any number of new types can be derived from combinations of several 
     existing types, and then used like, and/or together with, all other 
@@ -1457,6 +1473,7 @@ xtype.isAppFlag(value);
 <content
     name="creating_self_validated_types"
     title="Creating self-validated types having arbitrary custom validation"
+    category="user_defined_types"
     description="
     Self-validated types having any arbitrary custom validation can be created by
     registering them and providing an object in the 'definition' field which should 
@@ -1505,6 +1522,7 @@ xtype.isSsn(value);
 <content
     name="registering_instance_types_internally"
     title="Registering Instance types internally"
+    category="user_defined_types"
     description="
     Any constructor function can be used directly as the Instance type identifier 
     for validating objects of that constructor, even without having been registered 
@@ -1538,53 +1556,9 @@ xtype.is(value, '{{multi_char_string, positive_integer,}} {@type:product:prod}')
 
 
 <content
-    name="delimiting_types_in_expressions"
-    title="Delimiting types in type expression strings"
-    description="
-    By default, a comma or space or pipe character can be used as a delimiter in type 
-    expression strings. Additional spaces can be used around delimiters, and are ignored.">
-
-xtype.is(value, '{single_char_string},{positive_number}');
-xtype.is(value, '{single_char_string}, {positive_number}');
-xtype.is(value, '{single_char_string}|{positive_number}');
-xtype.is(value, '{single_char_string} | {positive_number}');
-xtype.is(value, '{single_char_string} {positive_number}'); 
-</content>
-
-
-
-
-<content
-    name="using_custom_delimiter"
-    title="Using a custom delimiter"
-    description="
-    A custom pattern can be used in place of the default type delimiters. This can be useful in 
-    applications for which the default delimiters may not be ideal. For instance, if the type 
-    expressions are being stored as part of data validation metadata, but the default delimiter 
-    characters are problematic for the specific storage format being used. When a custom type
-    delimiter pattern is used, it should be ensured that the characters allowed by the pattern 
-    do not conflict with the characters in the type names of any type name schemes being used.">
-
-xtype.options.setDelimiterPattern('/');
-
-xtype.is(0, '{zero} / {positive_number}')     === true;
-xtype.is(25, '{zero} / {positive_number}')    === true;
-xtype.is(-3, '{zero} / {positive_number}')    === false;
-
-
-// Using a different pattern to also allow the comma character:
-
-xtype.options.setDelimiterPattern('[/,]');
-
-xtype.is(25, '{zero}, {positive_number} / {float}') === true;
-</content>
-
-
-
-
-<content
     name="using_custom_name_scheme"
     title="Using name schemes"
+    category="name_schemes_and_customization"
     description="
     A name scheme provides the set of names or aliases used to refer to the various xtypejs 
     built-in and custom types. By default, there is the descriptive 'default' name scheme. 
@@ -1615,6 +1589,7 @@ xtype.is('  ', 'bl_str')   === true;
 <content
     name="switching_to_compact_name_scheme"
     title="Switching to the compact name scheme"
+    category="name_schemes_and_customization"
     description="
     <b>Important:</b> The 'compact' name scheme is provided by the 
     'xtypejs-name-scheme-compact' name scheme module, which needs to be applied 
@@ -1647,7 +1622,8 @@ xtype.is(25, 'int+')    === true;
 
 <content
     name="registering_custom_name_scheme"
-    title="Registering a custom name scheme">
+    title="Registering a custom name scheme"
+    category="name_schemes_and_customization">
 
 var customNameScheme = {
     positive_number: 'pos_num', 
@@ -1678,9 +1654,57 @@ xtype.is('  ', 'bl_str')   === true;
 
 <content
     name="switching_back_to_default_name_scheme"
-    title="Switching back to the default name scheme">
+    title="Switching back to the default name scheme"
+    category="name_schemes_and_customization">
 
 xtype.options.setNameScheme('default');
+</content>
+
+
+
+
+<content
+    name="delimiting_types_in_expressions"
+    title="Delimiting types in type expression strings"
+    category="name_schemes_and_customization"
+    description="
+    By default, a comma or space or pipe character can be used as a delimiter in type 
+    expression strings. Additional spaces can be used around delimiters, and are ignored.">
+
+xtype.is(value, '{single_char_string},{positive_number}');
+xtype.is(value, '{single_char_string}, {positive_number}');
+xtype.is(value, '{single_char_string}|{positive_number}');
+xtype.is(value, '{single_char_string} | {positive_number}');
+xtype.is(value, '{single_char_string} {positive_number}'); 
+</content>
+
+
+
+
+<content
+    name="using_custom_type_delimiter"
+    title="Using a custom type name delimiter"
+    category="name_schemes_and_customization"
+    description="
+    A custom pattern can be used in place of the default type delimiters. This can be useful in 
+    applications for which the default delimiters may not be ideal. For instance, if the type 
+    expressions are being stored as part of data validation metadata, but the default delimiter 
+    characters are problematic for the specific storage format being used. When a custom type
+    delimiter pattern is used, it should be ensured that the characters allowed by the pattern 
+    do not conflict with the characters in the type names of any type name schemes being used.">
+
+xtype.options.setDelimiterPattern('/');
+
+xtype.is(0, '{zero} / {positive_number}')     === true;
+xtype.is(25, '{zero} / {positive_number}')    === true;
+xtype.is(-3, '{zero} / {positive_number}')    === false;
+
+
+// Using a different pattern to also allow the comma character:
+
+xtype.options.setDelimiterPattern('[/,]');
+
+xtype.is(25, '{zero}, {positive_number} / {float}') === true;
 </content>
 
 
@@ -1689,6 +1713,7 @@ xtype.options.setNameScheme('default');
 <content 
     name="using_none_and_any_types" 
     title="Using the none and any types"
+    category="miscellaneous"
     description="
     The 'none' type represents the set of no types, which means that no value can actually 
     ever match 'none'. Therefore, xtype.isNone(value) will always be false for any value. 
@@ -1734,6 +1759,7 @@ xtype.is(25, '{{object, any}}')    === true;          // allows any value to pas
 <content 
     name="using_the_nan_type" 
     title="Using the nan type"
+    category="miscellaneous"
     description="
     The xtypejs 'nan' type is a representation of any invalid numeric value in JavaScript, 
     in a way that is completely decoupled and distinct from the JavaScript 'number' type. 
@@ -1776,6 +1802,7 @@ xtype.isNan(boxedNanValue)    === true;          // Boxed NaN Number also identi
 <content 
     name="prevent_name_collisions" 
     title="Preventing name collisions"
+    category="miscellaneous"
     description="
     When imported as a script tag, the xtype module is assigned to the global variable 'xtype'. 
     The 'noConflict' method can be used to reassign the xtype module to a different namespace or variable 
@@ -1790,8 +1817,20 @@ otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
 
 
 <content 
+    name="checking_library_version" 
+    title="Checking the library version"
+    category="miscellaneous">
+
+var version = xtype.VERSION;      // Gives version of xtype library
+</content>
+
+
+
+
+<content 
     name="reporting_bugs_and_issues" 
     title="Reporting bugs and issues"
+    category="miscellaneous"
     description="
     Please report bugs or problems by creating an issue on the GitHub project 
     <a href='https://github.com/lucono/xtypejs/issues' target='_blank'>Issues Page</a>.">

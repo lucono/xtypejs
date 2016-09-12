@@ -1,6 +1,4 @@
 /* global prettyPrint */
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/jquery/jquery.d.ts"/>
 /* global xtype */
 
 
@@ -309,7 +307,7 @@
             AppUtils.latestRelease.isNewRelease = (daysSinceRelease < (30 * 6));    // If roughly within 6 months
         });
 
-        $rootScope.libDescription = 'Concise, performant, readable, data and type validation for JavaScript, using built-in and user-defined data-validating pseudo types.';
+        $rootScope.libDescription = 'Concise, performant, and readable data and type validation for JavaScript, using built-in and user-defined data-validating pseudo types.';
         
         $rootScope.previousState = '';
         $rootScope.activeScreen = '';

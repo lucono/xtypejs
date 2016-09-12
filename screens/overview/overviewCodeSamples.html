@@ -70,11 +70,11 @@ xtype.ext.registerType('ssn', {
 });
 
 function searchEmployees(value) {
-    switch (xtype.which(value, '{{ssn, positive_integer, multi_char_string}}')) {
-        case 'ssn':
-            return EmployeeDB.searchBySSN(value);
+    switch (xtype.which(value, '{{positive_integer, ssn, multi_char_string}}')) {
         case '{positive_integer}':
             return EmployeeDB.searchByEmployeeNumber(value);
+        case 'ssn':
+            return EmployeeDB.searchBySSN(value);
         case '{multi_char_string}':
             return EmployeeDB.searchByName(value);
         default:

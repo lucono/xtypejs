@@ -12,11 +12,14 @@
             </div>
         </div>
     </div>
-                            
+    
     <div class="screen-content-body">    
         <div class="colspan-70">
             
-            <div id="{{methodGroup.name | lowercase}}_api" section-title="{{methodGroup.name}} API" class="content-group" data-ng-repeat="methodGroup in methodGroups">
+            <div id="{{methodGroup.name | lowercase}}_api" 
+                section-title="{{methodGroup.name}} API" 
+                class="content-group" 
+                data-ng-repeat="methodGroup in methodGroups">
                 
                 <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
                 

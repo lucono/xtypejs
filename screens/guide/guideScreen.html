@@ -1,20 +1,12 @@
 <section id="guide-screen-content" class="screen-content" template-artifact="guide">
     
     <div class="screen-content-links">
-        <div class="cols-2">
-            <div>
+        <div class="cols-2" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="guideCategory in colGroup">
+                <h2><a screen-link=":{{guideCategory.name}}_guide">{{guideCategory.title}}</a></h2>
                 <ul>
-                    <li data-ng-repeat="contentName in col1Items">
-                        <a screen-link=":{{contentName}}">{{guideContent[contentName].attributes.title}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="cols-2">
-            <div>
-                <ul>
-                    <li data-ng-repeat="contentName in col2Items">
-                        <a screen-link=":{{contentName}}">{{guideContent[contentName].attributes.title}}</a>
+                    <li data-ng-repeat="guideItem in guideCategory.items">
+                        <a screen-link=":{{guideItem.attributes.name}}" data-ng-bind-html="guideItem.attributes.title"></a>
                     </li>
                 </ul>
             </div>
@@ -24,19 +16,23 @@
     <div class="screen-content-body">        
         <div class="colspan-80">
             
-            <div class="content-group">
+            <div id="{{guideCategory.name}}_guide" 
+                section-title="{{_guide.title}}" 
+                class="content-group" 
+                data-ng-repeat="guideCategory in guideCategoriesList">
+                
+                <a screen-link=":{{guideCategory.name}}_guide" class="content-group-title">{{guideCategory.title}}</a>
                 
                 <div class="content-item" 
-                    data-ng-repeat="contentName in AppUtils.keys(guideContent)" 
-                    data-ng-init="codeItem = guideContent[contentName]">
+                    data-ng-repeat="guideItem in guideCategory.items">
                     
-                    <div id="{{contentName}}" section-title="{{codeItem.attributes.title}}">
+                    <div id="{{guideItem.attributes.name}}" section-title="{{guideItem.attributes.title}}">
                         
-                        <div class="item-title" data-ng-if="codeItem.attributes.title">
-                            <a screen-link=":{{contentName}}">{{codeItem.attributes.title}}</a>
+                        <div class="item-title">
+                            <a screen-link=":{{guideItem.attributes.name}}">{{guideItem.attributes.title}}</a>
                         </div>
                         
-                        <code-snippet code-item="codeItem" default-view="compact"></code-snippet>
+                        <code-snippet code-item="guideItem" default-view="compact"></code-snippet>
                     </div>
                 </div>
                 
