@@ -1,0 +1,1057 @@
+{
+"api" : {
+	"methodsByCategory": {
+		"typeMethods": {
+			"name": "Types",
+			"methods": [
+				{
+					"name": "xtype",
+					"signature": "xtype({value})",
+					"description": "Gets the extended type of a value, or the simple type if the value type has no extended types.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value for which to get the extended type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The name of the extended type of {value}, or its simple type if there is no corresponding extended type."
+						}
+					]
+				},
+				
+				{
+					"name": "type",
+					"signature": "xtype.type({value})",
+					"description": "Gets the simple type of a value.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value for which to get the simple type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The name of the simple type of {value}."
+						}
+					]
+				},
+				
+				{
+					"name": "typeOf",
+					"signature": "xtype.typeOf({value})",
+					"description": "Gets the type of a value, including more specific types of {object} that are native to the host environment which are not of the xtypejs built-in types, such as {global}, {Arguments}, HTML element object types, etc. For the xtypejs built-in types, this method will return the same results as the xtype.type({value}) method.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value for which to get the type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The name of the type of {value}, including types that are not of the xtypejs built-in types."
+						}
+					]
+				}
+			]
+		},
+		
+		"validationMethods": {
+			"name": "Validation",
+			"methods": [
+				{
+					"name": "is",
+					"signature": "xtype.is({value}, {types})",
+					"description": "Checks whether a value matches any of a list of simple, extended and/or instance types.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value of which the type is to be checked."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+								},
+								{
+									"type": "number",
+									"description": "A single or OR'ed expression of several type Ids against which {value} is to be checked."
+								},
+								{
+									"type": "function",
+									"description": "A single instance type against which {value} is to be checked"
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, and must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or a bitwise expression of several type Ids."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if {value} matches any of the type or types represented in the {types} parameter, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "is<em>Type</em>",
+					"interface": "",
+					"signature": "xtype.is<em>Type</em> ({value})",
+					"description": "Checks if {value} is of the referenced type.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if {value} is of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "not.is<em>Type</em>",
+					"interface": "not",
+					"signature": "xtype.not.is<em>Type</em> ({value})",
+					"description": "Checks if {value} is not of the referenced type.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if {value} is not of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "none.is<em>Type</em>",
+					"interface": "none",
+					"signature": "xtype.none.is<em>Type</em> ({values})",
+					"description": "Checks if none of a list of values are of the referenced type.",
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if none of the values in {values} are of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "any.is<em>Type</em>",
+					"interface": "any",
+					"signature": "xtype.any.is<em>Type</em> ({values})",
+					"description": "Checks if any of a list of values are of the referenced type.",
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if one or more of the values in {values} are of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "some.is<em>Type</em>",
+					"interface": "some",
+					"signature": "xtype.some.is<em>Type</em> ({values})",
+					"description": "Checks if some, but not all, of a list of values are of the referenced type.",
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if only some, but not all of the values in {values} are of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "all.is<em>Type</em>",
+					"interface": "all",
+					"signature": "xtype.all.is<em>Type</em> ({values})",
+					"description": "Checks if all of a list of values are of the referenced type.",
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if all of the values in {values} are of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "which",
+					"signature": "xtype.which({value}, {types})",
+					"description": "Gets the matching type of a value from a list of simple, extended and/or instance types.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value of which the type is to be matched."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be matched."
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the type names or Ids, type expression string or type Id expression, and/or instance types against which {value} is to be matched."
+								},
+								{
+									"type": "number *",
+									"description": "A single or OR'ed expression of several type Ids as a single combined type, against which {value} is to be matched."
+								},
+								{
+									"type": "function *",
+									"description": "A single instance type against which {value} is to be matched."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as a type name string in the {types} list argument, or the {none} type if there was no match."
+						},
+						{
+							"type": "number",
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as a type Id in the {types} argument, or the {none} type if there was no match."
+						},
+						{
+							"type": "function",
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as an instance type in the {types} argument, or the {none} type if there was no match."
+						}
+					],
+					"notes": "* Note that the single <em>number</em> and <em>function</em> forms of the {types} argument are treated not as a list of types, but as a single type against which {value} is to be matched, therefore either returning the value of the {types} argument if the type of {value} matches, or otherwise returning the {none} type. This is useful as a form of the <em>xtype.is</em> call, but which rather than returning a boolean {true} when there is a match, will return the actual type used instead. Likewise, rather than returning {false} when there is no match, it will return the {none} type instead."
+				}
+			]
+		},
+		
+		"utilityMethods": {
+			"name": "Utility",
+			"methods": [
+				{
+					"name": "nameToId",
+					"extension": "xtypejs-extension-typename-utils",
+					"signature": "xtype.util.nameToId({type})",
+					"description": "Gets the type Id/constant corresponding to the specific type name in the active name scheme.",
+					"arguments": [
+						{
+							"name": "type",
+							"types": [					
+								{
+									"type": "string",
+									"description": "The name of a single simple or extended type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "number",
+							"description": "The type Id/constant corresponding to the type name specified by {type}."
+						}
+					]
+				},
+				
+				{
+					"name": "idToName",
+					"extension": "xtypejs-extension-typename-utils",
+					"signature": "xtype.util.idToName({type})",
+					"description": "Gets the type name in the active name scheme corresponding to the specified type Id.",
+					"arguments": [
+						{
+							"name": "type",
+							"types": [					
+								{
+									"type": "number",
+									"description": "The type Id/constant of a single simple or extended type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The type name corresponding to the type Id/constant specified by {type}."
+						}
+					]
+				},
+				
+				{
+					"name": "typeNames",
+					"extension": "xtypejs-extension-typename-utils",
+					"signature": "xtype.util.typeNames()",
+					"description": "Gets a list of the names of all types.",
+					"arguments": [],
+					"return": [
+						{
+							"type": "array",
+							"description": "An array containing the string names of all types."
+						}
+					]
+				},
+				
+				{
+					"name": "typeIds",
+					"extension": "xtypejs-extension-typename-utils",
+					"signature": "xtype.util.typeIds()",
+					"description": "Gets a list of the type Ids of all types.",
+					"arguments": [],
+					"return": [
+						{
+							"type": "array",
+							"description": "An array containing the numeric type Id values of all types."
+						}
+					]
+				}
+			]
+		},
+		
+		"extensionMethods": {
+			"name": "Extension",
+			"methods": [
+				{
+					"name": "registerType",
+					"extension": "xtypejs-extension-custom-types",
+					"signature": "xtype.ext.registerType({typeName}, {typeDetails})",
+					"description": "Adds one or more user-defined types to xtypejs.",
+					"arguments": [
+						{
+							"name": "typeName",
+							"types": [					
+								{
+									"type": "string",
+									"description": "The default name of the user-defined type to be added. It must be all lowercase, can only contain alphanumeric characters and the underscore character, and must not conflict with the name of any already existing type in xtypejs."
+								},
+								{
+									"type": "object",
+									"description": "If an object is provided for the {typeName} argument, then each key in the object will be treated as though it were the {typeName} argument, and each corresponding value as though it were the corresponding {typeDetails} argument. This allows for the registration of multiple types in a single call. Also, when an object is provided for the {typeName} argument, the {typeDetails} argument, if also present, will be ignored."
+								}
+							]
+						},
+						{
+							"name": "typeDetails",
+							"types": [					
+								{
+									"type": "string",
+									"description": "A type expression string with the default names of any set of already existing types from which the type being registered is to be derived. The newly registered derived type will validate a data value when it matches any of the underlying component types."
+								},					
+								{
+									"type": "function",
+									"description": "An instance type constructor function which will be registered as type name {typeName}."
+								},				
+								{
+									"type": "object <sup>(1)</sup>",
+									"description": "If registering a self-validated type, this is an object which must have a {'validator'} property whose value must contain the validator function for the type being registered. The validator function must be able to accept as the first argument, the value being validated, and return true (not a truthy value) if the value is considered valid."
+								},				
+								{
+									"type": "object <sup>(2)</sup>",
+									"description": "For this object argument version, see object property and value details in {typeDetails} argument section below."
+								}
+							]
+						}
+					],
+					"argumentDetails": [
+						{
+							"name": "typesDetails",
+							"properties": [
+								{
+									"name": "definition",
+									"types": [
+										{
+											"type": "string",
+											"required": "yes",
+											"description": "Same as the <em>string</em> argument value for {typeDetails}."
+										},
+										{
+											"type": "function",
+											"required": "yes",
+											"description": "Same as the <em>function</em> argument value for {typeDetails}."
+										},
+										{
+											"type": "object",
+											"required": "yes",
+											"description": "Same as the <em>object <sup>(1)</sup></em> argument value for {typeDetails}."
+										}
+									]
+								},
+								{
+									"name": "schemeAliases",
+									"types": [
+										{
+											"type": "object",
+											"required": "no",
+											"description": "An object whose keys are the names of name schemes and corresponding values are the type names to be used for the type being registered when the corresponding name scheme is active."
+										}
+									]
+								},
+								{
+									"name": "matchMode",
+									"types": [
+										{
+											"type": "string",
+											"required": "no",
+											"description": "Only applies when registering derived types. When the value is {'all'}, indicates that the derived type being registered should validate data values only when they match <em>all</em> of the underlying component types. When the value is {'any'}, indicates that it should validate data values if they match <em>any</em> of the underlying types. The default when not provided, is {'any'}."
+										}
+									]
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				},
+				{
+					"name": "registerNameScheme",
+					"signature": "xtype.ext.registerNameScheme({schemeName}, {aliases})",
+					"description": "Adds a new name scheme to xtypejs. It does not automatically switch to the new scheme.",
+					"arguments": [
+						{
+							"name": "schemeName",
+							"types": [					
+								{
+									"type": "string",
+									"description": "The name to be used for the new scheme."
+								}
+							]
+						},
+						{
+							"name": "aliases",
+							"types": [					
+								{
+									"type": "object",
+									"description": "An object containing the type name aliases to be used when the name scheme being added is in use."
+								}
+							]
+						}
+					],
+					"argumentDetails": [
+						{
+							"name": "aliases",
+							"properties": [
+								{
+									"name": "<em>object properties</em>",
+									"types": [
+										{
+											"type": "-",
+											"required": "-",
+											"description": "The keys in the {aliases} object are the regular names of the types for which the type names are to be changed when this scheme is in use. A key doesn't have to exist for every type, and only those types for which a key exists in {aliases} will be updated when this scheme is in use."
+										}
+									]
+								},
+								{
+									"name": "<em>object values</em>",
+									"types": [
+										{
+											"type": "string",
+											"required": "yes",
+											"description": "The values in the {aliases} object are the name aliases to be used for the corresponding types when this scheme is in use."
+										}
+									]
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "object",
+							"description": "The name scheme previously associated with {schemeName} if any."
+						}
+					]
+				},
+				{
+					"name": "registerExtension",
+					"signature": "xtype.ext.registerExtension({extensionModule})",
+					"description": "Applies an xtypejs extension, enhancing xtypejs with the extension's functionality.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "extensionModule",
+							"types": [					
+								{
+									"type": "object",
+									"description": "The extension module to be applied to xtypejs."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				}
+			]
+		},
+		
+		"optionsMethods": {
+			"name": "Options",
+			"methods": [
+				{
+					"name": "setDelimiterPattern",
+					"signature": "xtype.options.setDelimiterPattern({delimiterPattern})",
+					"description": "Sets the regular expression pattern used in recognizing how individual type names are delimited in type name expression strings.",
+					"arguments": [
+						{
+							"name": "{delimiterPattern}",
+							"types": [
+								{
+									"type": "string",
+									"description": "The type name expression string delimiter pattern to use. Note that this is not a regular expression object, but a regular expression pattern string. If an empty string or the null or undefined value is supplied, then the delimiter pattern is reset to the built-in default, which allows a comma, space or pipe character for delmiting types."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				},
+				
+				{
+					"name": "setNameScheme",
+					"signature": "xtype.options.setNameScheme({nameScheme})",
+					"description": "Sets the scheme to be used for type names.",
+					"arguments": [
+						{
+							"name": "{nameScheme}",
+							"types": [
+								{
+									"type": "string",
+									"description": "The name of a type name scheme to be used for type names. This can be {'default'} for the default name scheme, or the name of a name scheme previously registered in xtypejs using the {xtype.ext.registerNameScheme} method."
+								},
+								{
+									"type": "object",
+									"description": "An object representing a custom name scheme to be used. For each property of the object with the regular name of a type, the new name for the type will be set to the value of the property. The object does not have to contain a property for every type name. The type names for which the object does not contain a property will not be changed."
+								},
+								{
+									"type": "-",
+									"description": "If no value is supplied for {nameScheme}, the default name scheme is used instead."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				},
+				
+				{
+					"name": "set",
+					"signature": "xtype.options.set({optionsData})",
+					"description": "Sets multiple options in a single operation.",
+					"arguments": [
+						{
+							"name": "optionsData",
+							"types": [					
+								{
+									"type": "object",
+									"description": "An object whose keys are the decaplitalized <em>option</em> names in any of the {xtype.options.set<em>Option</em>} methods, and whose values are the corresponding values to be set for each <em>option</em>. For instance, an object key of {'nameScheme'} would correspond to the {xtype.options.setNameScheme} method."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "-",
+							"description": "Does not return a value."
+						}
+					]
+				},
+				
+				{
+					"name": "setOptions",
+					"signature": "xtype.setOptions({optionsData})",
+					"description": "Same as the newer {xtype.options.set} method, which should be used instead.",
+					"deprecated": true
+				}
+			]
+		},
+		
+		"otherMethods": {
+			"name": "Other",
+			"methods": [
+				{
+					"name": "newInstance",
+					"signature": "xtype.newInstance()",
+					"description": "Creates a new xtypejs module instance that is independently configurable from all other previously created xtypejs module instances. The initial state and configuration of the new instance will be the xtypejs defaults, and is not affected by the state or configuration of the existing instance on which the creation was called.",
+					"arguments": [],
+					"return": [
+						{
+							"type": "<em>xtypejs</em>",
+							"description": "The newly created xtypejs module instance."
+						}
+					]
+				},
+                
+				{
+					"name": "noConflict",
+					"signature": "xtype.noConflict()",
+					"description": "When xtypejs is imported using a {&lt;script&gt;} tag, this method returns the {'xtype'} global variable to its previous value before xtypejs was imported. Note that this method is only available when xtypejs is imported using a {&lt;script&gt;} tag.",
+					"arguments": [],
+					"return": [
+						{
+							"type": "<em>xtypejs</em>",
+							"description": "The xtypejs module."
+						}
+					]
+				}
+			]
+		}
+	},
+	
+	"properties": [
+		
+	]
+},
+"types" : {
+    "typesByCategory": {
+        "basicTypes": {
+            "name": "Basic",
+            "types": [
+                {
+                    "name": "null",
+                    "category": "simple",
+                    "description": "The null value."
+                },
+                {
+                    "name": "undefined",
+                    "category": "simple",
+                    "description": "The undefined value."
+                },
+                {
+                    "name": "nan",
+                    "category": "simple",
+                    "description": "The NaN value."
+                },
+                {
+                    "name": "symbol",
+                    "category": "simple",
+                    "description": "A symbol value."
+                },
+                {
+                    "name": "function",
+                    "category": "simple",
+                    "description": "A function object."
+                },
+                {
+                    "name": "date",
+                    "category": "simple",
+                    "description": "A date object."
+                },
+                {
+                    "name": "error",
+                    "category": "simple",
+                    "description": "An object of any of the error types."
+                },
+                {
+                    "name": "regexp",
+                    "category": "simple",
+                    "description": "A regular expression object."
+                }
+            ]
+        },
+        
+        "objectTypes": {
+            "name": "Object",
+            "types": [
+                {
+                    "name": "object",
+                    "category": "simple",
+                    "description": "All other objects that are not one of the other specific object types."
+                },
+                {
+                    "name": "empty_object",
+                    "category": "extended",
+                    "description": "An object with no own properties."
+                },
+                {
+                    "name": "single_prop_object",
+                    "category": "extended",
+                    "description": "An object with exactly one own property."
+                },
+                {
+                    "name": "multi_prop_object",
+                    "category": "extended",
+                    "description": "An object with more than one own property."
+                },
+                {
+                    "name": "non_empty_object",
+                    "category": "extended",
+                    "description": "An object with one or more own properties."
+                }
+            ]
+        },
+        
+        "stringTypes": {
+            "name": "String",
+            "types": [
+                {
+                    "name": "string",
+                    "category": "simple",
+                    "description": "A string primitive or object."
+                },
+                {
+                    "name": "whitespace",
+                    "category": "extended",
+                    "description": "A string with one or more of only whitespace characters."
+                },
+                {
+                    "name": "single_char_string",
+                    "category": "extended",
+                    "description": "A string with exactly one non-whitespace character and zero or more whitespace characters."
+                },
+                {
+                    "name": "multi_char_string",
+                    "category": "extended",
+                    "description": "A string with more than one non-whitespace character and zero or more whitespace characters."
+                },
+                {
+                    "name": "empty_string",
+                    "category": "extended",
+                    "description": "A string with zero characters."
+                },
+                {
+                    "name": "blank_string",
+                    "category": "extended",
+                    "description": "A string with zero or more of only whitespace characters."
+                },
+                {
+                    "name": "non_empty_string",
+                    "category": "extended",
+                    "description": "A string with at least one whitespace or other character."
+                },
+                {
+                    "name": "non_blank_string",
+                    "category": "extended",
+                    "description": "A string with at least one non-whitespace character."
+                }
+            ]
+        },
+        
+        "arrayTypes": {
+            "name": "Array",
+            "types": [
+                {
+                    "name": "array",
+                    "category": "simple",
+                    "description": "An array object."
+                },
+                {
+                    "name": "empty_array",
+                    "category": "extended",
+                    "description": "An array with no elements."
+                },
+                {
+                    "name": "single_elem_array",
+                    "category": "extended",
+                    "description": "An array with exactly one element."
+                },
+                {
+                    "name": "multi_elem_array",
+                    "category": "extended",
+                    "description": "An array with more than one element."
+                },
+                {
+                    "name": "non_empty_array",
+                    "category": "extended",
+                    "description": "An array with one or more elements."
+                }
+            ]
+        },
+        
+        "numberTypes": {
+            "name": "Number",
+            "types": [
+                {
+                    "name": "number",
+                    "category": "simple",
+                    "description": "A number primitive or object."
+                },
+                {
+                    "name": "integer",
+                    "category": "extended",
+                    "description": "A number primitive or object with a whole number value."
+                },
+                {
+                    "name": "float",
+                    "category": "extended",
+                    "description": "A number primitive or object with a fractional component."
+                },
+                {
+                    "name": "positive_number",
+                    "category": "extended",
+                    "description": "A number primitive or object greater than zero."
+                },
+                {
+                    "name": "negative_number",
+                    "category": "extended",
+                    "description": "A number primitive or object less than zero."
+                },
+                {
+                    "name": "infinite_number",
+                    "category": "extended",
+                    "description": "A number primitive or object with a positive or negative infinite value."
+                },
+                {
+                    "name": "zero",
+                    "category": "extended",
+                    "description": "A number primitive or object equal to zero."
+                },
+                {
+                    "name": "non_zero_number",
+                    "category": "extended",
+                    "description": "A number primitive or object with a value other than zero."
+                },
+                {
+                    "name": "positive_integer",
+                    "category": "extended",
+                    "description": "A finite whole number primitive or object greater than zero."
+                },
+                {
+                    "name": "negative_integer",
+                    "category": "extended",
+                    "description": "A finite whole number primitive or object less than zero."
+                },
+                {
+                    "name": "positive_float",
+                    "category": "extended",
+                    "description": "A finite number primitive or object greater than zero with a fractional component."
+                },
+                {
+                    "name": "negative_float",
+                    "category": "extended",
+                    "description": "A finite number primitive or object less than zero with a fractional component."
+                },
+                {
+                    "name": "positive_infinity",
+                    "category": "extended",
+                    "description": "A number primitive or object with the value of the JavaScript positive Infinity."
+                },
+                {
+                    "name": "negative_infinity",
+                    "category": "extended",
+                    "description": "A number primitive or object with the value of the JavaScript negative Infinity."
+                },
+                {
+                    "name": "non_positive_number",
+                    "category": "extended",
+                    "description": "A number primitive or object less than or equal to zero."
+                },
+                {
+                    "name": "non_negative_number",
+                    "category": "extended",
+                    "description": "A number primitive or object greater than or equal to zero."
+                },
+                {
+                    "name": "non_infinite_number",
+                    "category": "extended",
+                    "description": "A number primitive or object with a non-infinite value."
+                }
+            ]
+        },
+        
+        "booleanTypes": {
+            "name": "Boolean",
+            "types": [
+                {
+                    "name": "boolean",
+                    "category": "simple",
+                    "description": "A boolean primitive or object."
+                },
+                {
+                    "name": "true",
+                    "category": "extended",
+                    "description": "The boolean primitive or object that is true."
+                },
+                {
+                    "name": "false",
+                    "category": "extended",
+                    "description": "The boolean primitive or object that is false."
+                }
+            ]
+        },
+        
+       "groupTypes": {
+            "name": "Group",
+            "types": [
+                {
+                    "name": "primitive",
+                    "category": "extended",
+                    "description": "A primitive type other than null or undefined."
+                },
+                {
+                    "name": "nothing",
+                    "category": "extended",
+                    "description": "The null or undefined value."
+                },
+                {
+                    "name": "any",
+                    "category": "extended",
+                    "description": "Any type."
+                },
+                {
+                    "name": "none",
+                    "category": "extended",
+                    "description": "Not of any type."
+                }
+            ]
+        },
+    
+        "moreTypes": {
+            "name": "More",
+            "types": [
+                {
+                    "typeId": "<em>not applicable</em>",
+                    "name": "instance_types",
+                    "title": "Instance Types",
+                    "category": "instance",
+                    "derived": false,
+                    "description": "Any constructor function is an Instance type. Each constructor function is the Instance type for objects of that constructor.",
+                    "builtInType": false
+                },
+                {
+                    "typeId": "<em>not applicable</em>",
+                    "name": "self_validated_types",
+                    "title": "Self-Validated Types",
+                    "category": "self-validated",
+                    "derived": false,
+                    "description": "Self-validated types are user-defined types that provide an implementation of the arbitrary custom validation used in validating that type. Any number of self-validated types can be created and used like, and/or together with, all other types.",
+                    "builtInType": false
+                },
+                {
+                    "typeId": "<em>based on composition - only applicable for derivations using only built-in types</em>",
+                    "name": "derived_types",
+                    "title": "Derived Types",
+                    "category": "derived",
+                    "derived": true,
+                    "derivation": "<em>component types</em>",
+                    "description": "Derived types are types created from a combination of multiple types, and may be created to validate either on a match of all the component types, or of any of the component types.",
+                    "builtInType": false
+                }
+            ]
+        }
+    }
+}
+}

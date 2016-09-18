@@ -1,3 +1,149 @@
+/* --- File: vendor/css/prettify-theme.css---*/ 
+
+/* GitHub Theme */
+.prettyprint {
+	background: #f6f6f6;
+	font-family: Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace;
+	font-size: 14px;
+	line-height: 1.5;
+	padding: 0px 25px 20px 25px;
+	/*
+    border-top: 5px solid #d4dde4;
+    border-bottom: 1px solid #ececec;
+	border: 1px solid #e8e8e8;
+	border-radius: 5px;
+	*/
+}
+
+.pln {
+	color: #333333;
+}
+
+@media screen {
+	.str {
+		color: #dd1144;
+	}
+	.kwd {
+		/* color: #333333; */
+		color: #0086b3;
+	}
+	.com {
+		color: #999988;
+	}
+	.typ {
+		/* color: #445588; */
+		color: #795da3;
+	}
+	.lit {
+		/* color: #445588; */
+		color: #a71d5d;
+	}
+	.pun {
+		color: #333333;
+	}
+	.opn {
+		color: #333333;
+	}
+	.clo {
+		color: #333333;
+	}
+	.tag {
+		color: navy;
+	}
+	.atn {
+		color: teal;
+	}
+	.atv {
+		color: #dd1144;
+	}
+	.dec {
+		color: #333333;
+	}
+	.var {
+		color: teal;
+	}
+	.fun {
+		color: #990000;
+	}
+}
+
+@media print , projection {
+	.str {
+		color: #006600;
+	}
+	.kwd {
+		color: #006;
+		font-weight: bold;
+	}
+	.com {
+		color: #600;
+		font-style: italic;
+	}
+	.typ {
+		color: #404;
+		font-weight: bold;
+	}
+	.lit {
+		color: #004444;
+	}
+	.pun, .opn, .clo {
+		color: #444400;
+	}
+	.tag {
+		color: #006;
+		font-weight: bold;
+	}
+	.atn {
+		color: #440044;
+	}
+	.atv {
+		color: #006600;
+	}
+}
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+/* IE indents via margin-left */
+li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9 {
+	/* */
+	
+}
+
+/* Alternate shading for lines */
+li.L1, li.L3, li.L5, li.L7, li.L9 {
+	/* */
+	
+}
+/* --- File: vendor/css/typed.css---*/ 
+
+.typed-cursor {
+    opacity: 1;
+    color: #ccc;
+    font-weight: bold;
+    -webkit-animation: blink 0.7s infinite;
+    -moz-animation: blink 0.7s infinite;
+    animation: blink 0.7s infinite;
+    transform: translateZ(0);
+}
+@keyframes blink {
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+@-webkit-keyframes blink {
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+@-moz-keyframes blink {
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+/* --- File: app/assets/css/xtype.css---*/ 
 
 body {
     font-family: 'Lato', sans-serif;
@@ -74,11 +220,11 @@ a, a:visited, a:active {
 }
 
 .circle-button.up {
-    background: url('/app/assets/img/up-arrow.png') center center no-repeat;
+    background: url('/site/img/up-arrow.png') center center no-repeat;
 }
 
 .circle-button.down {
-    background: url('/app/assets/img/down-arrow.png') center center no-repeat;
+    background: url('/site/img/down-arrow.png') center center no-repeat;
 }
 
 .circle-button.active, a.circle-button:hover {
@@ -906,6 +1052,7 @@ ul.release-assets li a .asset-description {
     border-left: #e8e8e8 1px solid;
     padding-left: 25px;
 }
+/* --- File: app/components/code-snippet/code-snippet.css---*/ 
 
 .code-container {
     margin-top: 20px;
@@ -1102,144 +1249,4 @@ ul.release-assets li a .asset-description {
 
 .code-container.compact-view .code-content pre.compact-view {
     display: inline-block;
-}
-/* GitHub Theme */
-.prettyprint {
-	background: #f6f6f6;
-	font-family: Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace;
-	font-size: 14px;
-	line-height: 1.5;
-	padding: 0px 25px 20px 25px;
-	/*
-    border-top: 5px solid #d4dde4;
-    border-bottom: 1px solid #ececec;
-	border: 1px solid #e8e8e8;
-	border-radius: 5px;
-	*/
-}
-
-.pln {
-	color: #333333;
-}
-
-@media screen {
-	.str {
-		color: #dd1144;
-	}
-	.kwd {
-		/* color: #333333; */
-		color: #0086b3;
-	}
-	.com {
-		color: #999988;
-	}
-	.typ {
-		/* color: #445588; */
-		color: #795da3;
-	}
-	.lit {
-		/* color: #445588; */
-		color: #a71d5d;
-	}
-	.pun {
-		color: #333333;
-	}
-	.opn {
-		color: #333333;
-	}
-	.clo {
-		color: #333333;
-	}
-	.tag {
-		color: navy;
-	}
-	.atn {
-		color: teal;
-	}
-	.atv {
-		color: #dd1144;
-	}
-	.dec {
-		color: #333333;
-	}
-	.var {
-		color: teal;
-	}
-	.fun {
-		color: #990000;
-	}
-}
-
-@media print , projection {
-	.str {
-		color: #006600;
-	}
-	.kwd {
-		color: #006;
-		font-weight: bold;
-	}
-	.com {
-		color: #600;
-		font-style: italic;
-	}
-	.typ {
-		color: #404;
-		font-weight: bold;
-	}
-	.lit {
-		color: #004444;
-	}
-	.pun, .opn, .clo {
-		color: #444400;
-	}
-	.tag {
-		color: #006;
-		font-weight: bold;
-	}
-	.atn {
-		color: #440044;
-	}
-	.atv {
-		color: #006600;
-	}
-}
-/* Specify class=linenums on a pre to get line numbering */
-ol.linenums {
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
-/* IE indents via margin-left */
-li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9 {
-	/* */
-	
-}
-
-/* Alternate shading for lines */
-li.L1, li.L3, li.L5, li.L7, li.L9 {
-	/* */
-	
-}.typed-cursor {
-    opacity: 1;
-    color: #ccc;
-    font-weight: bold;
-    -webkit-animation: blink 0.7s infinite;
-    -moz-animation: blink 0.7s infinite;
-    animation: blink 0.7s infinite;
-    transform: translateZ(0);
-}
-@keyframes blink {
-    0% { opacity:1; }
-    50% { opacity:0; }
-    100% { opacity:1; }
-}
-@-webkit-keyframes blink {
-    0% { opacity:1; }
-    50% { opacity:0; }
-    100% { opacity:1; }
-}
-@-moz-keyframes blink {
-    0% { opacity:1; }
-    50% { opacity:0; }
-    100% { opacity:1; }
 }

@@ -1,11 +1,11 @@
-/* global prettyPrint */
-
-'use strict';
+/* global angular prettyPrint */
 
 angular.module('xtypejsSite')
 
     .controller('GuideScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
 
+        'use strict';
+        
         var DEFAULT_CATEGORY = 'more_topics',
         
             categoryTitles = {

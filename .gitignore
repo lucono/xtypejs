@@ -1,5 +1,8 @@
+/node_modules/
+/build/
 /.idea/
 /.project/
 /.settings/
 /.vscode/
-/wip/
+/jsconfig.json
+/web.config

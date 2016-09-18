@@ -1,10 +1,11 @@
-/* global prettyPrint */
+/* global angular prettyPrint */
 
-'use strict';
 
 angular.module('xtypejsSite')
     
     .controller('APIScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
+        
+        'use strict';
         
         service.getCodeContent('api', function(codeContent) {
             $scope.codeContent = codeContent;

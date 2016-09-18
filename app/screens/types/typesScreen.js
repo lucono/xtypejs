@@ -1,10 +1,11 @@
-/* global prettyPrint */
-
-'use strict';
+/* global angular prettyPrint */
 
 angular.module('xtypejsSite')
 
     .controller('TypesScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
+
+        'use strict';
+        
         $scope.activeViews = {};
         
         $scope.switchCodeView = function(typeName, view) {

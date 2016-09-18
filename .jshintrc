@@ -1,0 +1,11 @@
+{
+    "browser"   : true,
+    "devel"	    : false,
+    "validthis" : false,
+    "eqeqeq"    : true,
+    "eqnull"    : true,
+    "curly"     : true,
+    "boss"      : false,
+    "expr"      : false,
+    "asi"       : false
+}

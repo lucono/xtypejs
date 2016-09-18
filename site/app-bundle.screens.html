@@ -1,418 +1,7 @@
-<section id="overview-screen-content" class="screen-content" template-artifact="overview">
-    
-    <div class="screen-content-links">
-        <div class="description-pane">
-            <div>
-                <span class="title">What</span>
-                {{libDescription}}
-            </div>
-            <div>
-                <span class="title">Why</span>
-                Improves efficiency and readability by unifying the most basic but common data and type validations in apps into single, highly optimized operations.
-            </div>
-            <div>
-                <span class="title">How</span>
-                Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
-            </div>
-        </div>
-    </div>
-    
-    <div class="code-comparison"
-        data-ng-repeat="codeSnippets in [codeContent]">
-        
-        <div class="code-entry" id="before_code">
-            
-            <code-snippet
-                code-item="codeSnippets.before"
-                skip-compact-view>
-            </code-snippet>
-            
-            <div class="compare-label">
-                <span>
-                    <a screen-link=":before_code" class="large">go</a>
-                </span>
-                <span>from this..</span>
-                <i class="fa fa-share fa-2x fa-rotate-180"></i>
-            </div>
-        </div>
-        
-        <div class="code-entry right" id="after_code">
-            <div class="compare-label">
-                <span>
-                    <a screen-link=":after_code" class="large">..to</a>
-                </span>
-                <span>concise</span>
-                <span>performant</span>
-                <span>readable</span>
-                <span>validation</span>
-                <i class="fa fa-reply fa-2x fa-rotate-180"></i>
-            </div>
-            
-            <code-snippet 
-                code-item="codeSnippets.after" 
-                default-view="compact" 
-                compact-view-label="Compact Names"
-                default-view-label="Descriptive Names"
-                info-label="Choose name scheme &nbsp; &rarr;">
-            </code-snippet>
-        </div>
-        
-        <div class="code-entry right" id="add_your_own">
-            
-            <div class="compare-label">
-                <span>
-                    <a screen-link=":add_your_own" class="large">and,</a>
-                </span>
-                <span>even add custom</span>
-                <span>validation types</span>
-                <span>of your own</span>
-            </div>
-            
-            <code-snippet 
-                code-item="codeSnippets.add_your_own" 
-                default-view="compact" 
-                compact-view-label="Compact Names"
-                default-view-label="Descriptive Names"
-                info-label="Choose name scheme &nbsp; &rarr;">
-            </code-snippet>
-        </div>
-    </div>
-    
-    <div ui-view></div> <!-- dummy child view -->
-    
-</section>
+<div>
 
-<content-wrapper code-artifact="overview">
+ <!-- File: app/screens/api/apiCodeSamples.html --> 
 
-
-<content name="before_code">
-
-function searchEmployees(value) {
-    if (typeof value === 'string') {
-         if (value.trim().length > 1) {
-            return EmployeeDB.searchByName(value);
-        } else if (value.trim().length === 1) {
-            return EmployeeDB.searchByMiddleInitial(value);
-        } else {
-            return { error: 'Invalid search value supplied' };
-        }
-    } else if (typeof value === 'object' && value !== null) {
-        if (Object.keys(value).length === 1) {
-            return EmployeeDB.searchByFieldValuePair(value);
-        } else if (Object.keys(value).length > 1) {
-            return { error: 'Search by multiple fields not supported' };
-        } else {
-            return { error: 'Invalid search value supplied' };
-        }
-    } else if (typeof value === 'number') {
-        if (!isNaN(value) && isFinite(value) && value > 0 && value % 1 === 0) {
-            return EmployeeDB.searchByEmployeeNumber(value);
-        } else {
-            return { error: 'Invalid employee number supplied' };
-        }
-    } else if (typeof value === 'undefined' || value === null) {
-        return { error: 'No search value supplied' };
-    } else {
-        return { error: 'Invalid search value supplied' };
-    }
-}
-</content>
-
-
-<content name="after_code">
-
-function searchEmployees(value) {
-    switch (xtype.which(value, '{{multi_char_string, single_char_string, positive_integer, single_prop_object, multi_prop_object, number, nothing}}')) {
-        case '{multi_char_string}':
-            return EmployeeDB.searchByName(value);
-        case '{single_char_string}':
-            return EmployeeDB.searchByMiddleInitial(value);
-        case '{positive_integer}':
-            return EmployeeDB.searchByEmployeeNumber(value);
-        case '{single_prop_object}':
-            return EmployeeDB.searchByFieldValuePair(value);
-        case '{multi_prop_object}':
-            return { error: 'Search by multiple fields not supported' };
-        case '{number}':
-            return { error: 'Invalid employee number supplied' };
-        case '{nothing}':
-            return { error: 'No search value supplied' };
-        default:
-            return { error: 'Invalid search value supplied' };
-    }
-}
-</content>
-
-
-<content name="add_your_own_code">
-
-xtype.ext.registerType('ssn', {
-    validator: function(val) {
-        return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
-    }
-});
-
-function searchEmployees(value) {
-    switch (xtype.which(value, '{{positive_integer, ssn, multi_char_string}}')) {
-        case '{positive_integer}':
-            return EmployeeDB.searchByEmployeeNumber(value);
-        case 'ssn':
-            return EmployeeDB.searchBySSN(value);
-        case '{multi_char_string}':
-            return EmployeeDB.searchByName(value);
-        default:
-            return { error: 'Invalid search value supplied' };
-    }
-}
-</content>
-
-</content-wrapper>
-<section id="types-screen-content" class="screen-content" template-artifact="types">
-    
-    <div class="screen-content-links">
-        <div class="cols-4" data-ng-repeat="colGroup in colGroups">
-            <div data-ng-repeat="typeGroup in colGroup">
-                <h2><a screen-link=":{{typeGroup.name | lowercase}}_types">{{typeGroup.name}}</a></h2>
-                <ul>
-                    <li data-ng-repeat="type in typeGroup.types">
-                        <a screen-link=":{{type.name}}">{{type.title || type.friendlyName}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-    <div class="screen-content-body">        
-        <div class="colspan-70">
-            
-            <div id="{{typeGroup.name | lowercase}}_types" section-title="{{typeGroup.name}} Types" class="content-group" data-ng-repeat="typeGroup in typeGroups">
-            
-                <a screen-link=":{{typeGroup.name | lowercase}}_types" class="content-group-title">{{typeGroup.name}} Types</a>
-                
-                <div class="content-item"
-                    data-ng-repeat="type in typeGroup.types"
-                    data-ng-init="codeItem = codeContent[type.name]">
-                    
-                    <div id="{{type.name}}" section-title="{{type.title || type.name}}">
-                        
-                        <div class="item-title">
-                            <a screen-link=":{{type.name}}">{{type.title || type.name}}</a>                            
-                            <a screen-link=":{{type.name}}" class="title-label compact-label" data-ng-if="type.compactName"><code>{{type.compactName}}</code></a>
-                        </div>
-                        
-                        <p class="item-description" data-ng-bind-html="type.description"></p>
-                            
-                        <div class="item-detail">
-                            <div class="item-header">
-                                <div data-ng-if="type.typeId">
-                                   <span class="nowrap">type id</span>
-                                   <span>
-                                       <a data-ng-if="type.typeId.toLowerCase() === type.name.toLowerCase()"
-                                           screen-link=":{{type.name}}" 
-                                           class="type-label squeezed">
-                                           <code>xtype.{{type.typeId}}</code>
-                                       </a>
-                                       <span data-ng-if="type.typeId.toLowerCase() !== type.name.toLowerCase()"
-                                           data-ng-bind-html="type.typeId">
-                                       </span>
-                                   </span>
-                                </div>
-                                <div>
-                                   <span>category</span>
-                                   <span>{{type.category}} type</span>
-                                </div>
-                                <div>
-                                   <span>derived</span>
-                                   <span>{{(type.derived === true || type.derivation.length > 0) ? 'yes' : 'no'}}</span>
-                                </div>
-                                <div data-ng-if="AppUtils.isArray(type.derivation) ? type.derivation.length > 0 : type.derivation">
-                                    <span>derivation</span>
-                                    <span>
-                                        <span data-ng-if="!AppUtils.isArray(type.derivation)" data-ng-bind-html="type.derivation"></span>
-                                        <span data-ng-if="AppUtils.isArray(type.derivation)">
-                                            <span class="type-label title">
-                                                <code>Match Any:</code>
-                                            </span>
-                                            <a data-ng-repeat="compositeTypeName in type.derivation" 
-                                                screen-link=":{{compositeTypeName}}" 
-                                                class="type-label">
-                                                <code>{{compositeTypeName}}</code>
-                                            </a>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <div class="item-subtitle" data-ng-if="codeItem.codeSamples">Example</div>
-                            
-                            <code-snippet code-item="codeItem" default-view="compact"></code-snippet>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div> 
-                
-        <div class="colspan-30 right-nav-container">
-            <ul class="right-nav">
-                <li data-ng-repeat="typeGroup in typeGroups" scroll-fixed>
-                    <a screen-link=":{{typeGroup.name | lowercase}}_types">{{typeGroup.name | lowercase}}</a>
-                </li>
-                <li><a screen-link=":menu" class="circle-button up active"></a></li>
-            </ul>
-        </div>
-        
-    </div>
-    
-    <div ui-view></div> <!-- dummy child view -->
-    
-</section>
-<content-wrapper code-artifact="types">
-
-</content-wrapper><section id="api-screen-content" class="screen-content" template-artifact="api">
-    
-    <div class="screen-content-links">
-        <div class="cols-4" data-ng-repeat="colGroup in colGroups">
-            <div data-ng-repeat="methodGroup in colGroup">
-                <h2><a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name}}</a></h2>
-                <ul>
-                    <li data-ng-repeat="method in methodGroup.methods" data-ng-if="!method.deprecated">
-                        <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.name"></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-    <div class="screen-content-body">    
-        <div class="colspan-70">
-            
-            <div id="{{methodGroup.name | lowercase}}_api" 
-                section-title="{{methodGroup.name}} API" 
-                class="content-group" 
-                data-ng-repeat="methodGroup in methodGroups">
-                
-                <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
-                
-                <div class="content-item" 
-                    data-ng-repeat="method in methodGroup.methods" 
-                    data-ng-if="!method.deprecated"
-                    data-ng-init="codeItem = codeContent[method.plainName]">
-                    
-                    <div id="{{method.plainName}}" section-title="{{method.plainName}}">
-                        
-                        <div class="item-title">
-                            <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.signature"></a>
-                            <span class="title-label deprecated-label" data-ng-if="method.deprecated">deprecated</span>
-                            <span class="title-label new-label" data-ng-if="method.new">new</span>
-                        </div>
-                        <div class="item-subtitle alternative" data-ng-if="method.extension">
-                            <span>Requires Extension: &nbsp;</span>
-                            <a screen-link="getit:{{method.extension}}">{{method.extension}}</a>
-                        </div>
-                        <p class="item-description" data-ng-bind-html="method.description"></p>
-                        
-                        <table class="api-table" data-ng-if="method.arguments || method.return">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <span data-ng-if="method.arguments.length > 0">Arguments</span>
-                                        <span class="gray" data-ng-if="method.arguments.length === 0">No Arguments</span>
-                                    </th>
-                                    <th class="center">Type</th>
-                                    <th>Description</th>
-                                </tr>
-                            </thead>
-                            <tbody data-ng-repeat="argument in method.arguments">
-                                <tr>
-                                    <td><code data-ng-bind-html="argument.name"></code></td>
-                                    <td class="nowrap center" data-ng-bind-html="argument.types[0].type"></td>
-                                    <td data-ng-bind-html="argument.types[0].description"></td>
-                                </tr>
-                                <tr data-ng-repeat="argType in argument.types.slice(1)">
-                                    <td></td>
-                                    <td class="nowrap center" data-ng-bind-html="argType.type"></td>
-                                    <td data-ng-bind-html="argType.description"></td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td class="return">Return</td>
-                                    <td class="nowrap center" data-ng-bind-html="method.return[0].type"></td>
-                                    <td data-ng-bind-html="method.return[0].description"></td>
-                                </tr>
-                                <tr data-ng-repeat="returnType in method.return.slice(1)">
-                                    <td></td>
-                                    <td class="nowrap center" data-ng-bind-html="returnType.type"></td>
-                                    <td data-ng-bind-html="returnType.description"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                        <div data-ng-repeat="argumentDetail in method.argumentDetails" data-ng-if="method.argumentDetails">
-                            <div class="item-subtitle">Argument: <code>{{argumentDetail.name}}</code></div>
-                            <table class="api-table">
-                                <thead>
-                                    <tr>
-                                        <th>Property</th>
-                                        <th class="center">Type</th>
-                                        <th class="center">Required</th>
-                                        <th>Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody data-ng-repeat="property in argumentDetail.properties">
-                                    <tr>
-                                        <td data-ng-bind-html="property.name"></td>
-                                        <td class="nowrap center" data-ng-bind-html="property.types[0].type"></td>
-                                        <td class="center" data-ng-bind-html="property.types[0].required"></td>
-                                        <td data-ng-bind-html="property.types[0].description"></td>
-                                    </tr>
-                                    <tr data-ng-repeat="propertyType in property.types.slice(1)">
-                                        <td></td>
-                                        <td class="nowrap center" data-ng-bind-html="propertyType.type"></td>
-                                        <td class="center" data-ng-bind-html="propertyType.required"></td>
-                                        <td data-ng-bind-html="propertyType.description"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <div class="data-table" data-ng-if="method.methodEnumeration">
-                            <div class="item-subtitle">Method List</div>
-                                
-                            <div class="data-col" data-ng-repeat="colGroup in [col1TypeEnumerationGroups, col2TypeEnumerationGroups]">
-                                <div data-ng-repeat="typeEnumGroup in colGroup">
-                                    <div class="data-cell-title">{{method.methodEnumeration[typeEnumGroup].name}}</div>
-                                    <div class="data-cell" data-ng-repeat="methodItem in method.methodEnumeration[typeEnumGroup].methods" data-ng-bind-html="methodItem"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="section-footnote" data-ng-bind-html="method.notes" data-ng-if="method.notes"></div>
-                        
-                        <div class="item-subtitle" data-ng-if="codeItem.codeSamples">Example</div>
-                        
-                        <code-snippet code-item="codeItem" default-view="compact"></code-snippet>                        
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-                
-        <div class="colspan-30 right-nav-container">
-            <ul class="right-nav">
-                <li data-ng-repeat="methodGroup in methodGroups" scroll-fixed>
-                    <a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name | lowercase}}</a>
-                </li>
-                <li><a screen-link=":menu" class="circle-button up active"></a></li>
-            </ul>
-        </div>
-        
-    </div>
-    
-    <div ui-view></div> <!-- dummy child view -->
-    
-</section>
 <content-wrapper code-artifact="api">
 
 
@@ -912,48 +501,314 @@ xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
 </content-wrapper>
 
 
-<section id="guide-screen-content" class="screen-content" template-artifact="guide">
+ <!-- File: app/screens/api/apiScreen.html --> 
+
+<section id="api-screen-content" class="screen-content" template-artifact="api">
     
     <div class="screen-content-links">
-        <div class="cols-2" data-ng-repeat="colGroup in colGroups">
-            <div data-ng-repeat="guideCategory in colGroup">
-                <h2><a screen-link=":{{guideCategory.name}}_guide">{{guideCategory.title}}</a></h2>
+        <div class="cols-4" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="methodGroup in colGroup">
+                <h2><a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name}}</a></h2>
                 <ul>
-                    <li data-ng-repeat="guideItem in guideCategory.items">
-                        <a screen-link=":{{guideItem.attributes.name}}" data-ng-bind-html="guideItem.attributes.title"></a>
+                    <li data-ng-repeat="method in methodGroup.methods" data-ng-if="!method.deprecated">
+                        <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.name"></a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
     
-    <div class="screen-content-body">        
-        <div class="colspan-80">
+    <div class="screen-content-body">    
+        <div class="colspan-70">
             
-            <div id="{{guideCategory.name}}_guide" 
-                section-title="{{_guide.title}}" 
+            <div id="{{methodGroup.name | lowercase}}_api" 
+                section-title="{{methodGroup.name}} API" 
                 class="content-group" 
-                data-ng-repeat="guideCategory in guideCategoriesList">
+                data-ng-repeat="methodGroup in methodGroups">
                 
-                <a screen-link=":{{guideCategory.name}}_guide" class="content-group-title">{{guideCategory.title}}</a>
+                <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
                 
                 <div class="content-item" 
-                    data-ng-repeat="guideItem in guideCategory.items">
+                    data-ng-repeat="method in methodGroup.methods" 
+                    data-ng-if="!method.deprecated"
+                    data-ng-init="codeItem = codeContent[method.plainName]">
                     
-                    <div id="{{guideItem.attributes.name}}" section-title="{{guideItem.attributes.title}}">
+                    <div id="{{method.plainName}}" section-title="{{method.plainName}}">
                         
                         <div class="item-title">
-                            <a screen-link=":{{guideItem.attributes.name}}">{{guideItem.attributes.title}}</a>
+                            <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.signature"></a>
+                            <span class="title-label deprecated-label" data-ng-if="method.deprecated">deprecated</span>
+                            <span class="title-label new-label" data-ng-if="method.new">new</span>
+                        </div>
+                        <div class="item-subtitle alternative" data-ng-if="method.extension">
+                            <span>Requires Extension: &nbsp;</span>
+                            <a screen-link="getit:{{method.extension}}">{{method.extension}}</a>
+                        </div>
+                        <p class="item-description" data-ng-bind-html="method.description"></p>
+                        
+                        <table class="api-table" data-ng-if="method.arguments || method.return">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span data-ng-if="method.arguments.length > 0">Arguments</span>
+                                        <span class="gray" data-ng-if="method.arguments.length === 0">No Arguments</span>
+                                    </th>
+                                    <th class="center">Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody data-ng-repeat="argument in method.arguments">
+                                <tr>
+                                    <td><code data-ng-bind-html="argument.name"></code></td>
+                                    <td class="nowrap center" data-ng-bind-html="argument.types[0].type"></td>
+                                    <td data-ng-bind-html="argument.types[0].description"></td>
+                                </tr>
+                                <tr data-ng-repeat="argType in argument.types.slice(1)">
+                                    <td></td>
+                                    <td class="nowrap center" data-ng-bind-html="argType.type"></td>
+                                    <td data-ng-bind-html="argType.description"></td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td class="return">Return</td>
+                                    <td class="nowrap center" data-ng-bind-html="method.return[0].type"></td>
+                                    <td data-ng-bind-html="method.return[0].description"></td>
+                                </tr>
+                                <tr data-ng-repeat="returnType in method.return.slice(1)">
+                                    <td></td>
+                                    <td class="nowrap center" data-ng-bind-html="returnType.type"></td>
+                                    <td data-ng-bind-html="returnType.description"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div data-ng-repeat="argumentDetail in method.argumentDetails" data-ng-if="method.argumentDetails">
+                            <div class="item-subtitle">Argument: <code>{{argumentDetail.name}}</code></div>
+                            <table class="api-table">
+                                <thead>
+                                    <tr>
+                                        <th>Property</th>
+                                        <th class="center">Type</th>
+                                        <th class="center">Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-ng-repeat="property in argumentDetail.properties">
+                                    <tr>
+                                        <td data-ng-bind-html="property.name"></td>
+                                        <td class="nowrap center" data-ng-bind-html="property.types[0].type"></td>
+                                        <td class="center" data-ng-bind-html="property.types[0].required"></td>
+                                        <td data-ng-bind-html="property.types[0].description"></td>
+                                    </tr>
+                                    <tr data-ng-repeat="propertyType in property.types.slice(1)">
+                                        <td></td>
+                                        <td class="nowrap center" data-ng-bind-html="propertyType.type"></td>
+                                        <td class="center" data-ng-bind-html="propertyType.required"></td>
+                                        <td data-ng-bind-html="propertyType.description"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         
-                        <code-snippet code-item="guideItem" default-view="compact"></code-snippet>
+                        <div class="data-table" data-ng-if="method.methodEnumeration">
+                            <div class="item-subtitle">Method List</div>
+                                
+                            <div class="data-col" data-ng-repeat="colGroup in [col1TypeEnumerationGroups, col2TypeEnumerationGroups]">
+                                <div data-ng-repeat="typeEnumGroup in colGroup">
+                                    <div class="data-cell-title">{{method.methodEnumeration[typeEnumGroup].name}}</div>
+                                    <div class="data-cell" data-ng-repeat="methodItem in method.methodEnumeration[typeEnumGroup].methods" data-ng-bind-html="methodItem"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-footnote" data-ng-bind-html="method.notes" data-ng-if="method.notes"></div>
+                        
+                        <div class="item-subtitle" data-ng-if="codeItem.codeSamples">Example</div>
+                        
+                        <code-snippet code-item="codeItem" default-view="compact"></code-snippet>                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+                
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li data-ng-repeat="methodGroup in methodGroups" scroll-fixed>
+                    <a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name | lowercase}}</a>
+                </li>
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
+
+
+ <!-- File: app/screens/getit/getitOptions.html --> 
+
+<content-wrapper code-artifact="getit">
+
+
+<content 
+    name="npm" 
+    title="Install with npm" 
+    lang="sh">
+
+npm install xtypejs --save
+</content>
+
+
+</content-wrapper>
+
+
+ <!-- File: app/screens/getit/getitScreen.html --> 
+
+<section id="getit-screen-content" class="screen-content" template-artifact="getit">
+    
+    <div class="screen-content-links">        
+        <div class="links-section-buttons">
+            <a href="https://github.com/lucono/xtypejs/stargazers" target="_blank">
+                <i class="fa fa-github fa-5x"></i>
+                <!-- Star GitHub Project -->
+            </a>
+        </div>
+        <div class="release-details">
+            <h1>Current version {{latestVersion ? '- ' + latestVersion: ''}}</h1>
+            <div data-ng-if="releaseDescription">
+                <span data-ng-if="releaseTitle">{{releaseTitle}} &nbsp;&ndash;&nbsp; </span>
+                {{releaseDescription}}
+            </div>
+        </div>
+        <ul class="horizontal-links">
+            <li data-ng-repeat="contentName in AppUtils.keys(getItContent)" data-ng-init="contentItem = getItContent[contentName]">
+                <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+            </li>
+            <li>
+                <a screen-link=":download">Download</a>
+            </li>
+            <li>
+                <a screen-link=":extensions">Extensions</a>
+            </li>
+            <li>
+                <a screen-link=":name_schemes">Name Schemes</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="screen-content-body">        
+        <div class="colspan-70">
+        
+            <div class="content-group">
+            
+                <div class="content-item" 
+                    data-ng-repeat="contentName in AppUtils.keys(getItContent)" 
+                    data-ng-init="contentItem = getItContent[contentName]">
+                    
+                    <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
+                        
+                        <div class="item-title" data-ng-if="contentItem.attributes.title">
+                            <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-if="contentItem.attributes.description">
+                            {{contentItem.attributes.description}}
+                        </p>
+                        
+                        <code-snippet code-item="contentItem"></code-snippet>
+                        
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="download" section-title="Download">
+                        
+                        <div class="item-title">
+                            <a screen-link=":download">
+                                Download
+                                <!-- <span class="release-title" data-ng-if="releaseTitle"> &nbsp; &ndash; &nbsp; {{releaseTitle}}</span> -->
+                            </a>
+                        </div>
+                        
+                        <!-- <p class="item-description" data-ng-if="releaseDescription">{{releaseDescription}}</p> -->
+                        <p class="item-description">The following downloads are available for this release:</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="asset in assets">
+                                <a href="{{asset.browser_download_url}}">
+                                    <i class="fa fa-2x fa-cloud-download"></i>
+                                    <div>
+                                        {{asset.name}}
+                                    </div>
+                                </a>
+                            </li>
+                            <li data-ng-if="!assets">
+                                <a href="{{fallbackDownloadUrl}}" target="_blank"><i class="fa fa-2x fa-folder-open-o"></i> &nbsp; latest release</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="extensions" section-title="Extensions">
+                        
+                        <div class="item-title">
+                            <a screen-link=":extensions">
+                                Extensions
+                            </a>
+                        </div>
+                        
+                        <p class="item-description">The official extensions below are provided as separate modules.</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="extension in extensions">
+                                <a id="{{extension.name}}" href="{{extension.url}}" target="_blank">
+                                    <i class="fa fa-2x fa-cube"></i>
+                                    <div>
+                                        {{extension.name}}
+                                        <div class="asset-description">{{extension.description}}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="name_schemes" section-title="Name Schemes">
+                        
+                        <div class="item-title">
+                            <a screen-link=":name_schemes">
+                                Name Schemes
+                            </a>
+                        </div>
+                        
+                        <p class="item-description">The official name schemes below are provided as separate modules.
+                            To learn more about name schemes, see <a screen-link="guide:using_custom_name_scheme">using name schemes</a>.
+                        </p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="nameScheme in nameSchemes">
+                                <a href="{{nameScheme.url}}" target="_blank">
+                                    <i class="fa fa-2x fa-hashtag"></i>
+                                    <div>
+                                        {{nameScheme.name}}
+                                        <div class="asset-description">{{nameScheme.description}}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 
             </div>
         </div>
         
-        <div class="colspan-20 right-nav-container">
+        <div class="colspan-30 right-nav-container">
             <ul class="right-nav">
                 <li><a screen-link=":menu" class="circle-button up active"></a></li>
             </ul>
@@ -963,7 +818,12 @@ xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
     
     <div ui-view></div> <!-- dummy child view -->
     
-</section><content-wrapper code-artifact="guide">
+</section>
+
+
+ <!-- File: app/screens/guide/guideCodeSamples.html --> 
+
+<content-wrapper code-artifact="guide">
 
 
 <content 
@@ -1832,53 +1692,53 @@ var version = xtype.VERSION;      // Gives version of xtype library
 
 
 
-</content-wrapper><section id="play-screen-content" class="screen-content" template-artifact="play">
+</content-wrapper>
+
+
+ <!-- File: app/screens/guide/guideScreen.html --> 
+
+<section id="guide-screen-content" class="screen-content" template-artifact="guide">
     
     <div class="screen-content-links">
         <div class="cols-2" data-ng-repeat="colGroup in colGroups">
-            <div data-ng-repeat="playCategory in colGroup">
-                <h2><span>{{playCategory.title}}</span></h2>
+            <div data-ng-repeat="guideCategory in colGroup">
+                <h2><a screen-link=":{{guideCategory.name}}_guide">{{guideCategory.title}}</a></h2>
                 <ul>
-                    <li data-ng-repeat="playItem in playCategory.items">
-                        <a screen-link=":{{playItem.attributes.name}}" data-ng-bind-html="playItem.attributes.title"></a>
+                    <li data-ng-repeat="guideItem in guideCategory.items">
+                        <a screen-link=":{{guideItem.attributes.name}}" data-ng-bind-html="guideItem.attributes.title"></a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
     
-    <div class="screen-content-body">
-        <div class="colspan-70">
-        
-            <div class="content-group">
+    <div class="screen-content-body">        
+        <div class="colspan-80">
             
-                <div class="content-item">
-
-                    <div id="{{contentName}}" style="height: 0px;" data-ng-repeat="contentName in contentNames"></div>
-
-                    <div id="play_editor">
+            <div id="{{guideCategory.name}}_guide" 
+                section-title="{{_guide.title}}" 
+                class="content-group" 
+                data-ng-repeat="guideCategory in guideCategoriesList">
+                
+                <a screen-link=":{{guideCategory.name}}_guide" class="content-group-title">{{guideCategory.title}}</a>
+                
+                <div class="content-item" 
+                    data-ng-repeat="guideItem in guideCategory.items">
+                    
+                    <div id="{{guideItem.attributes.name}}" section-title="{{guideItem.attributes.title}}">
                         
                         <div class="item-title">
-                            <a screen-link=":play_editor">xtypejs &nbsp; &lt;/&gt; &nbsp; Code Playground</a>
+                            <a screen-link=":{{guideItem.attributes.name}}">{{guideItem.attributes.title}}</a>
                         </div>
                         
-                        <!--
-                        <p class="item-description">
-                            Play with xtypejs by typing and running code in the editor below. 
-                            You can require xtypejs, any of the official xtypejs extensions and name schemes, 
-                            and any other module in the npm repository.
-                        </p>
-                        -->
-                        
-                        <div id="play_editor_box"></div>
-                        
+                        <code-snippet code-item="guideItem" default-view="compact"></code-snippet>
                     </div>
                 </div>
                 
             </div>
         </div>
         
-        <div class="colspan-30 right-nav-container">
+        <div class="colspan-20 right-nav-container">
             <ul class="right-nav">
                 <li><a screen-link=":menu" class="circle-button up active"></a></li>
             </ul>
@@ -1888,7 +1748,188 @@ var version = xtype.VERSION;      // Gives version of xtype library
     
     <div ui-view></div> <!-- dummy child view -->
     
-</section><content-wrapper code-artifact="play">
+</section>
+
+
+ <!-- File: app/screens/overview/overviewCodeSamples.html --> 
+
+<content-wrapper code-artifact="overview">
+
+
+<content name="before_code">
+
+function searchEmployees(value) {
+    if (typeof value === 'string') {
+         if (value.trim().length > 1) {
+            return EmployeeDB.searchByName(value);
+        } else if (value.trim().length === 1) {
+            return EmployeeDB.searchByMiddleInitial(value);
+        } else {
+            return { error: 'Invalid search value supplied' };
+        }
+    } else if (typeof value === 'object' && value !== null) {
+        if (Object.keys(value).length === 1) {
+            return EmployeeDB.searchByFieldValuePair(value);
+        } else if (Object.keys(value).length > 1) {
+            return { error: 'Search by multiple fields not supported' };
+        } else {
+            return { error: 'Invalid search value supplied' };
+        }
+    } else if (typeof value === 'number') {
+        if (!isNaN(value) && isFinite(value) && value > 0 && value % 1 === 0) {
+            return EmployeeDB.searchByEmployeeNumber(value);
+        } else {
+            return { error: 'Invalid employee number supplied' };
+        }
+    } else if (typeof value === 'undefined' || value === null) {
+        return { error: 'No search value supplied' };
+    } else {
+        return { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+
+
+<content name="after_code">
+
+function searchEmployees(value) {
+    switch (xtype.which(value, '{{multi_char_string, single_char_string, positive_integer, single_prop_object, multi_prop_object, number, nothing}}')) {
+        case '{multi_char_string}':
+            return EmployeeDB.searchByName(value);
+        case '{single_char_string}':
+            return EmployeeDB.searchByMiddleInitial(value);
+        case '{positive_integer}':
+            return EmployeeDB.searchByEmployeeNumber(value);
+        case '{single_prop_object}':
+            return EmployeeDB.searchByFieldValuePair(value);
+        case '{multi_prop_object}':
+            return { error: 'Search by multiple fields not supported' };
+        case '{number}':
+            return { error: 'Invalid employee number supplied' };
+        case '{nothing}':
+            return { error: 'No search value supplied' };
+        default:
+            return { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+
+
+<content name="add_your_own_code">
+
+xtype.ext.registerType('ssn', {
+    validator: function(val) {
+        return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+    }
+});
+
+function searchEmployees(value) {
+    switch (xtype.which(value, '{{positive_integer, ssn, multi_char_string}}')) {
+        case '{positive_integer}':
+            return EmployeeDB.searchByEmployeeNumber(value);
+        case 'ssn':
+            return EmployeeDB.searchBySSN(value);
+        case '{multi_char_string}':
+            return EmployeeDB.searchByName(value);
+        default:
+            return { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+
+</content-wrapper>
+
+
+ <!-- File: app/screens/overview/overviewScreen.html --> 
+
+<section id="overview-screen-content" class="screen-content" template-artifact="overview">
+    
+    <div class="screen-content-links">
+        <div class="description-pane">
+            <div>
+                <span class="title">What</span>
+                {{libDescription}}
+            </div>
+            <div>
+                <span class="title">Why</span>
+                Improves efficiency and readability by unifying the most basic but common data and type validations in apps into single, highly optimized operations.
+            </div>
+            <div>
+                <span class="title">How</span>
+                Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
+            </div>
+        </div>
+    </div>
+    
+    <div class="code-comparison"
+        data-ng-repeat="codeSnippets in [codeContent]">
+        
+        <div class="code-entry" id="before_code">
+            
+            <code-snippet
+                code-item="codeSnippets.before"
+                skip-compact-view>
+            </code-snippet>
+            
+            <div class="compare-label">
+                <span>
+                    <a screen-link=":before_code" class="large">go</a>
+                </span>
+                <span>from this..</span>
+                <i class="fa fa-share fa-2x fa-rotate-180"></i>
+            </div>
+        </div>
+        
+        <div class="code-entry right" id="after_code">
+            <div class="compare-label">
+                <span>
+                    <a screen-link=":after_code" class="large">..to</a>
+                </span>
+                <span>concise</span>
+                <span>performant</span>
+                <span>readable</span>
+                <span>validation</span>
+                <i class="fa fa-reply fa-2x fa-rotate-180"></i>
+            </div>
+            
+            <code-snippet 
+                code-item="codeSnippets.after" 
+                default-view="compact" 
+                compact-view-label="Compact Names"
+                default-view-label="Descriptive Names"
+                info-label="Choose name scheme &nbsp; &rarr;">
+            </code-snippet>
+        </div>
+        
+        <div class="code-entry right" id="add_your_own">
+            
+            <div class="compare-label">
+                <span>
+                    <a screen-link=":add_your_own" class="large">and,</a>
+                </span>
+                <span>even add custom</span>
+                <span>validation types</span>
+                <span>of your own</span>
+            </div>
+            
+            <code-snippet 
+                code-item="codeSnippets.add_your_own" 
+                default-view="compact" 
+                compact-view-label="Compact Names"
+                default-view-label="Descriptive Names"
+                info-label="Choose name scheme &nbsp; &rarr;">
+            </code-snippet>
+        </div>
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
+
+
+ <!-- File: app/screens/play/playCodeSamples.html --> 
+
+<content-wrapper code-artifact="play">
 
 
 
@@ -2023,140 +2064,51 @@ console.log('Type of someObject is: ' + xtype(someObject));
 -->
 
 
-</content-wrapper><section id="getit-screen-content" class="screen-content" template-artifact="getit">
+</content-wrapper>
+
+
+ <!-- File: app/screens/play/playScreen.html --> 
+
+<section id="play-screen-content" class="screen-content" template-artifact="play">
     
-    <div class="screen-content-links">        
-        <div class="links-section-buttons">
-            <a href="https://github.com/lucono/xtypejs/stargazers" target="_blank">
-                <i class="fa fa-github fa-5x"></i>
-                <!-- Star GitHub Project -->
-            </a>
-        </div>
-        <div class="release-details">
-            <h1>Current version {{latestVersion ? '- ' + latestVersion: ''}}</h1>
-            <div data-ng-if="releaseDescription">
-                <span data-ng-if="releaseTitle">{{releaseTitle}} &nbsp;&ndash;&nbsp; </span>
-                {{releaseDescription}}
+    <div class="screen-content-links">
+        <div class="cols-2" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="playCategory in colGroup">
+                <h2><span>{{playCategory.title}}</span></h2>
+                <ul>
+                    <li data-ng-repeat="playItem in playCategory.items">
+                        <a screen-link=":{{playItem.attributes.name}}" data-ng-bind-html="playItem.attributes.title"></a>
+                    </li>
+                </ul>
             </div>
         </div>
-        <ul class="horizontal-links">
-            <li data-ng-repeat="contentName in AppUtils.keys(getItContent)" data-ng-init="contentItem = getItContent[contentName]">
-                <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
-            </li>
-            <li>
-                <a screen-link=":download">Download</a>
-            </li>
-            <li>
-                <a screen-link=":extensions">Extensions</a>
-            </li>
-            <li>
-                <a screen-link=":name_schemes">Name Schemes</a>
-            </li>
-        </ul>
     </div>
     
-    <div class="screen-content-body">        
+    <div class="screen-content-body">
         <div class="colspan-70">
         
             <div class="content-group">
             
-                <div class="content-item" 
-                    data-ng-repeat="contentName in AppUtils.keys(getItContent)" 
-                    data-ng-init="contentItem = getItContent[contentName]">
-                    
-                    <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
+                <div class="content-item">
+
+                    <div id="{{contentName}}" style="height: 0px;" data-ng-repeat="contentName in contentNames"></div>
+
+                    <div id="play_editor">
                         
-                        <div class="item-title" data-ng-if="contentItem.attributes.title">
-                            <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+                        <div class="item-title">
+                            <a screen-link=":play_editor">xtypejs &nbsp; &lt;/&gt; &nbsp; Code Playground</a>
                         </div>
                         
-                        <p class="item-description" data-ng-if="contentItem.attributes.description">
-                            {{contentItem.attributes.description}}
+                        <!--
+                        <p class="item-description">
+                            Play with xtypejs by typing and running code in the editor below. 
+                            You can require xtypejs, any of the official xtypejs extensions and name schemes, 
+                            and any other module in the npm repository.
                         </p>
+                        -->
                         
-                        <code-snippet code-item="contentItem"></code-snippet>
+                        <div id="play_editor_box"></div>
                         
-                    </div>
-                </div>
-            
-                <div class="content-item">
-                    <div id="download" section-title="Download">
-                        
-                        <div class="item-title">
-                            <a screen-link=":download">
-                                Download
-                                <!-- <span class="release-title" data-ng-if="releaseTitle"> &nbsp; &ndash; &nbsp; {{releaseTitle}}</span> -->
-                            </a>
-                        </div>
-                        
-                        <!-- <p class="item-description" data-ng-if="releaseDescription">{{releaseDescription}}</p> -->
-                        <p class="item-description">The following downloads are available for this release:</p>
-                        
-                        <ul class="release-assets">
-                            <li data-ng-repeat="asset in assets">
-                                <a href="{{asset.browser_download_url}}">
-                                    <i class="fa fa-2x fa-cloud-download"></i>
-                                    <div>
-                                        {{asset.name}}
-                                    </div>
-                                </a>
-                            </li>
-                            <li data-ng-if="!assets">
-                                <a href="{{fallbackDownloadUrl}}" target="_blank"><i class="fa fa-2x fa-folder-open-o"></i> &nbsp; latest release</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            
-                <div class="content-item">
-                    <div id="extensions" section-title="Extensions">
-                        
-                        <div class="item-title">
-                            <a screen-link=":extensions">
-                                Extensions
-                            </a>
-                        </div>
-                        
-                        <p class="item-description">The official extensions below are provided as separate modules.</p>
-                        
-                        <ul class="release-assets">
-                            <li data-ng-repeat="extension in extensions">
-                                <a id="{{extension.name}}" href="{{extension.url}}" target="_blank">
-                                    <i class="fa fa-2x fa-cube"></i>
-                                    <div>
-                                        {{extension.name}}
-                                        <div class="asset-description">{{extension.description}}</div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            
-                <div class="content-item">
-                    <div id="name_schemes" section-title="Name Schemes">
-                        
-                        <div class="item-title">
-                            <a screen-link=":name_schemes">
-                                Name Schemes
-                            </a>
-                        </div>
-                        
-                        <p class="item-description">The official name schemes below are provided as separate modules.
-                            To learn more about name schemes, see <a screen-link="guide:using_custom_name_scheme">using name schemes</a>.
-                        </p>
-                        
-                        <ul class="release-assets">
-                            <li data-ng-repeat="nameScheme in nameSchemes">
-                                <a href="{{nameScheme.url}}" target="_blank">
-                                    <i class="fa fa-2x fa-hashtag"></i>
-                                    <div>
-                                        {{nameScheme.name}}
-                                        <div class="asset-description">{{nameScheme.description}}</div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
                 
@@ -2174,19 +2126,121 @@ console.log('Type of someObject is: ' + xtype(someObject));
     <div ui-view></div> <!-- dummy child view -->
     
 </section>
-<content-wrapper code-artifact="getit">
 
 
-<content 
-    name="npm" 
-    title="Install with npm" 
-    lang="sh">
+ <!-- File: app/screens/types/typeCodeSamples.html --> 
 
-npm install xtypejs --save
-</content>
-
+<content-wrapper code-artifact="types">
 
 </content-wrapper>
+
+
+ <!-- File: app/screens/types/typesScreen.html --> 
+
+<section id="types-screen-content" class="screen-content" template-artifact="types">
+    
+    <div class="screen-content-links">
+        <div class="cols-4" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="typeGroup in colGroup">
+                <h2><a screen-link=":{{typeGroup.name | lowercase}}_types">{{typeGroup.name}}</a></h2>
+                <ul>
+                    <li data-ng-repeat="type in typeGroup.types">
+                        <a screen-link=":{{type.name}}">{{type.title || type.friendlyName}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="screen-content-body">        
+        <div class="colspan-70">
+            
+            <div id="{{typeGroup.name | lowercase}}_types" section-title="{{typeGroup.name}} Types" class="content-group" data-ng-repeat="typeGroup in typeGroups">
+            
+                <a screen-link=":{{typeGroup.name | lowercase}}_types" class="content-group-title">{{typeGroup.name}} Types</a>
+                
+                <div class="content-item"
+                    data-ng-repeat="type in typeGroup.types"
+                    data-ng-init="codeItem = codeContent[type.name]">
+                    
+                    <div id="{{type.name}}" section-title="{{type.title || type.name}}">
+                        
+                        <div class="item-title">
+                            <a screen-link=":{{type.name}}">{{type.title || type.name}}</a>                            
+                            <a screen-link=":{{type.name}}" class="title-label compact-label" data-ng-if="type.compactName"><code>{{type.compactName}}</code></a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-bind-html="type.description"></p>
+                            
+                        <div class="item-detail">
+                            <div class="item-header">
+                                <div data-ng-if="type.typeId">
+                                   <span class="nowrap">type id</span>
+                                   <span>
+                                       <a data-ng-if="type.typeId.toLowerCase() === type.name.toLowerCase()"
+                                           screen-link=":{{type.name}}" 
+                                           class="type-label squeezed">
+                                           <code>xtype.{{type.typeId}}</code>
+                                       </a>
+                                       <span data-ng-if="type.typeId.toLowerCase() !== type.name.toLowerCase()"
+                                           data-ng-bind-html="type.typeId">
+                                       </span>
+                                   </span>
+                                </div>
+                                <div>
+                                   <span>category</span>
+                                   <span>{{type.category}} type</span>
+                                </div>
+                                <div>
+                                   <span>derived</span>
+                                   <span>{{(type.derived === true || type.derivation.length > 0) ? 'yes' : 'no'}}</span>
+                                </div>
+                                <div data-ng-if="AppUtils.isArray(type.derivation) ? type.derivation.length > 0 : type.derivation">
+                                    <span>derivation</span>
+                                    <span>
+                                        <span data-ng-if="!AppUtils.isArray(type.derivation)" data-ng-bind-html="type.derivation"></span>
+                                        <span data-ng-if="AppUtils.isArray(type.derivation)">
+                                            <span class="type-label title">
+                                                <code>Match Any:</code>
+                                            </span>
+                                            <a data-ng-repeat="compositeTypeName in type.derivation" 
+                                                screen-link=":{{compositeTypeName}}" 
+                                                class="type-label">
+                                                <code>{{compositeTypeName}}</code>
+                                            </a>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-subtitle" data-ng-if="codeItem.codeSamples">Example</div>
+                            
+                            <code-snippet code-item="codeItem" default-view="compact"></code-snippet>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div> 
+                
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li data-ng-repeat="typeGroup in typeGroups" scroll-fixed>
+                    <a screen-link=":{{typeGroup.name | lowercase}}_types">{{typeGroup.name | lowercase}}</a>
+                </li>
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
+
+
+ <!-- File: app/components/code-snippet/code-snippet.tpl.html --> 
+
 <div template-artifact="codeSnippet"
     class="code-container {{activeView}}" 
     data-ng-if="(views.length > 0) || codeItem.attributes.description">
@@ -2214,4 +2268,4 @@ npm install xtypejs --save
             </div>
         </div>
     </div>
-</div>
+</div></div>

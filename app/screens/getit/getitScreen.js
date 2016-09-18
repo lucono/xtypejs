@@ -1,10 +1,10 @@
-/* global prettyPrint */
-
-'use strict';
+/* global angular prettyPrint */
 
 angular.module('xtypejsSite')
     
     .controller('GetItScreenController', ['$rootScope', '$scope', 'service', function($rootScope, $scope, service) {
+        
+        'use strict';
         
         $scope.fallbackDownloadUrl = 'https://github.com/lucono/xtypejs/tree/master/dist';
         

@@ -33,7 +33,7 @@
         var typeId = xtype.util.nameToId(typeName),
             memberTypeCount;
             
-        for (memberTypeCount = 0; typeId != 0; memberTypeCount++) {
+        for (memberTypeCount = 0; typeId !== 0; memberTypeCount++) {
             typeId &= (typeId - 1);
         }
         return (memberTypeCount > 1);
@@ -286,13 +286,9 @@
         AppUtils.isArray = Array.isArray;
         
         AppUtils.keys = function(obj) {
-            if (typeof obj === 'object') {
-                return Object.keys(obj);
-            } else {
-                return [];
-            }
+            return (typeof obj === 'object' ? Object.keys(obj) : []);
         };
-        
+
         AppUtils.capitalize = function(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
@@ -379,20 +375,34 @@
         
         function processScreenBundle(bundleContent) {
             var fetchTrackers = [],
-                $content = $('<div>' + bundleContent + '</div>');
+                bundleType = (typeof bundleContent === 'string' ? 'html' 
+                    : typeof bundleContent === 'object' ? 'json'
+                    : null),
+                applicableArtifactTypes = (bundleType === 'html' ? ['template', 'code']
+                    : bundleType === 'json' ? ['json']
+                    : []);
             
             AppUtils.keys(appArtifacts).forEach(function(artifactName) {
                 var artifacts = appArtifacts[artifactName],
-                    $artifact,
                     artifactContent;
                 
-                ['template', 'code'].forEach(function(artifactType) {
-                    var artifactAddress = artifacts[artifactType];
-                    
+                applicableArtifactTypes.forEach(function(artifactType) {
+                    var artifactAddress = artifacts[artifactType],
+                        $artifact;
+
                     if (artifactAddress) {
-                        $artifact = $content.find('[' + artifactType + '-artifact=\'' + artifactName + '\']');
-                        if ($artifact.length === 1) {
-                            artifactContent = $('<div>').append($artifact.clone()).html();                            
+                        if (bundleType === 'html') {
+                            $artifact = $(bundleContent).find('[' + artifactType + '-artifact=\'' + artifactName + '\']');
+
+                            if ($artifact.length === 1) {
+                                artifactContent = $('<div>').append($artifact.clone()).html();
+                            }
+                        }
+                        else if (bundleType === 'json') {
+                            artifactContent = bundleContent[artifactName];
+                        }
+                        
+                        if (artifactContent) {                         
                             (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
                         } else {
                             fetchTrackers.push(
@@ -404,27 +414,23 @@
                         }
                     }
                 });
-                
-                if (artifacts.json) {
-                    fetchTrackers.push($http.get(artifacts.json, {
-                        cache: true
-                    }).success(function(artifactContent) {
-                        httpCache.put(artifacts.json, artifactContent);
-                    }));
-                }
             });
             
             $q.all(fetchTrackers).then(function() {
                 bundleLoadDeffered.resolve($templateCache);
             });
         }
-        
-        $http.get('/bundles/app-bundle.screens.html', {
-            cache: true
-        }).success(function(bundleContent) {
-            processScreenBundle(bundleContent);
-        }).error(function() {
-            processScreenBundle('');
+
+
+        ['/site/app-bundle.screens.html', '/site/app-bundle.screens.json']
+        .forEach(function(bundleAddress) {
+            $http.get(bundleAddress, {
+                cache: true
+            }).success(function(bundleContent) {
+                processScreenBundle(bundleContent);
+            }).error(function() {
+                processScreenBundle(bundleAddress.endsWith('.html') ? '' : {});
+            });
         });
     }])
     

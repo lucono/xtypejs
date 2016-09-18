@@ -1,4 +1,4 @@
-/* global prettyPrint */
+/* global angular prettyPrint */
 
 (function() {
 
