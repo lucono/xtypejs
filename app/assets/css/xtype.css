@@ -74,11 +74,11 @@ a, a:visited, a:active {
 }
 
 .circle-button.up {
-    background: url('/assets/img/up-arrow.png') center center no-repeat;
+    background: url('/app/assets/img/up-arrow.png') center center no-repeat;
 }
 
 .circle-button.down {
-    background: url('/assets/img/down-arrow.png') center center no-repeat;
+    background: url('/app/assets/img/down-arrow.png') center center no-repeat;
 }
 
 .circle-button.active, a.circle-button:hover {

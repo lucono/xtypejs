@@ -35,7 +35,7 @@
             
                 categoryTitles = {
                     basic_setup: 'Start with Basic Setup',
-                    advanced_setup: 'Use More Advanced Setup'
+                    advanced_setup: 'Start with More Advanced Setup'
                 },
                 
                 colGrouping = [

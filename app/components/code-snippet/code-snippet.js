@@ -10,7 +10,7 @@
     
     .directive('codeSnippet', ['$sce', function($sce) {
         return {
-            templateUrl : '/components/code-snippet/code-snippet.tpl.html',
+            templateUrl : '/app/components/code-snippet/code-snippet.tpl.html',
             restrict: 'E',
             bindToController : true,
             link: function(scope, elem, attrs) {

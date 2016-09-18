@@ -221,35 +221,35 @@
     var appArtifacts = {
         /* --- Screens --- */
         overview: {
-            template: '/screens/overview/overviewScreen.html',
-            code: 'screens/overview/overviewCodeSamples.html'
+            template: '/app/screens/overview/overviewScreen.html',
+            code: 'app/screens/overview/overviewCodeSamples.html'
         },
         guide: {
-            template: '/screens/guide/guideScreen.html',
-            code: 'screens/guide/guideCodeSamples.html'
+            template: '/app/screens/guide/guideScreen.html',
+            code: 'app/screens/guide/guideCodeSamples.html'
         },
         types: {
-            template: '/screens/types/typesScreen.html',
-            code: 'screens/types/typeCodeSamples.html',
-            json: 'screens/types/types.json'
+            template: '/app/screens/types/typesScreen.html',
+            code: 'app/screens/types/typeCodeSamples.html',
+            json: 'app/screens/types/types.json'
         },
         api: {
-            template: '/screens/api/apiScreen.html',
-            code: 'screens/api/apiCodeSamples.html',
-            json: 'screens/api/api.json'
+            template: '/app/screens/api/apiScreen.html',
+            code: 'app/screens/api/apiCodeSamples.html',
+            json: 'app/screens/api/api.json'
         },
         play: {
-            template: '/screens/play/playScreen.html',
-            code: 'screens/play/playCodeSamples.html'
+            template: '/app/screens/play/playScreen.html',
+            code: 'app/screens/play/playCodeSamples.html'
         },
         getit: {
-            template: '/screens/getit/getitScreen.html',
-            code: 'screens/getit/getitOptions.html',
+            template: '/app/screens/getit/getitScreen.html',
+            code: 'app/screens/getit/getitOptions.html',
             json: 'https://api.github.com/repos/lucono/xtypejs/releases/latest'
         },
         /* --- Components --- */
         codeSnippet: {
-            template: '/components/code-snippet/code-snippet.tpl.html'
+            template: '/app/components/code-snippet/code-snippet.tpl.html'
         }
     };
     
