@@ -9,7 +9,7 @@ angular.module('xtypejsSite')
         var DEFAULT_CATEGORY = 'more_topics',
         
             categoryTitles = {
-                installation_and_import: 'Installation and Import',
+                installation_and_import: 'Installation',
                 overview_and_basics: 'Overview and Basics',
                 type_checking_and_validation: 'Type Checking and Validation',
                 user_defined_types: 'User Defined Types',
