@@ -4,7 +4,7 @@
 <content 
     name="installing" 
     title="Installing" 
-    category="setup_and_basics"
+    category="installation_and_import"
     lang="sh">
 
 # npm:
@@ -12,12 +12,6 @@ npm install xtypejs --save
 
 # npm from github:
 npm install git://github.com/lucono/xtypejs.git
-
-# bower:
-bower install xtypejs --save
-
-# bower from github:
-bower install git://github.com/lucono/xtypejs.git
 </content>
 
 
@@ -26,7 +20,7 @@ bower install git://github.com/lucono/xtypejs.git
 <content 
     name="importing_node_requirejs" 
     title="Importing with node and requireJS"
-    category="setup_and_basics">
+    category="installation_and_import">
 
 var xtype = require('xtypejs');             // node.js and CommonJS
 
@@ -41,7 +35,7 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 <content 
     name="importing_with_html_script_tag" 
     title="Importing with HTML script tag"
-    category="setup_and_basics"
+    category="installation_and_import"
     lang="html">
 
 <script src="path/to/xtype.js"></script>    <!-- exports xtype global variable -->
@@ -57,7 +51,7 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 <content 
     name="types_and_validation" 
     title="Pseudo types and data validation in xtypejs"
-    category="setup_and_basics"
+    category="overview_and_basics"
     description="
     xtypejs uses the concept of 'types' (or pseudo types) for data validation. 
     Each 'type' captures a set of validation criteria which must be satisfied 
@@ -102,7 +96,7 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 <content 
     name="getting_extended_type" 
     title="Getting the extended type of a value"
-    category="setup_and_basics">
+    category="overview_and_basics">
 
 xtype(-2.5)   === '{negative_float}';       // Value is number, negative and float
 xtype('  ')   === '{whitespace}';           // Value is string and blank
@@ -116,7 +110,7 @@ xtype(['hi']) === '{single_elem_array}';    // Value is array, has exactly one e
 <content 
     name="getting_simple_type" 
     title="Getting the simple type of a value"
-    category="setup_and_basics">
+    category="overview_and_basics">
 
 xtype.type(null)              === '{null}';
 xtype.type(undefined)         === '{undefined}';
@@ -397,7 +391,7 @@ xtype.isZero(new Number(0))     === true;
 
 <content
     name="creating_derived_types"
-    title="Creating new types derived from combinations of existing types"
+    title="Deriving new types from existing types"
     category="user_defined_types"
     description="
     Any number of new types can be derived from combinations of several 
@@ -507,7 +501,7 @@ xtype.isAppFlag(value);
 
 <content
     name="creating_self_validated_types"
-    title="Creating self-validated types having arbitrary custom validation"
+    title="Creating self-validated types with custom validation"
     category="user_defined_types"
     description="
     Self-validated types having any arbitrary custom validation can be created by

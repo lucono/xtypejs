@@ -1,30 +1,16 @@
 <section id="play-screen-content" class="screen-content" template-artifact="play">
     
     <div class="screen-content-links">
-
-        <div data-ng-repeat="category in AppUtils.keys(itemsByCategoryAndColGroups)">
-            <h1>{{category}}</h1>
-
-            <div class="cols-2">
-                <div>
-                    <ul>
-                        <li data-ng-repeat="contentItem in itemsByCategoryAndColGroups[category].col1Items">
-                            <a screen-link=":{{contentItem.attributes.name}}">{{contentItem.attributes.title}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="cols-2">
-                <div>
-                    <ul>
-                        <li data-ng-repeat="contentItem in itemsByCategoryAndColGroups[category].col2Items">
-                            <a screen-link=":{{contentItem.attributes.name}}">{{contentItem.attributes.title}}</a>
-                        </li>
-                    </ul>
-                </div>
+        <div class="cols-2" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="playCategory in colGroup">
+                <h2><span>{{playCategory.title}}</span></h2>
+                <ul>
+                    <li data-ng-repeat="playItem in playCategory.items">
+                        <a screen-link=":{{playItem.attributes.name}}" data-ng-bind-html="playItem.attributes.title"></a>
+                    </li>
+                </ul>
             </div>
         </div>
-
     </div>
     
     <div class="screen-content-body">

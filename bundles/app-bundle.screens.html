@@ -969,7 +969,7 @@ xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
 <content 
     name="installing" 
     title="Installing" 
-    category="setup_and_basics"
+    category="installation_and_import"
     lang="sh">
 
 # npm:
@@ -977,12 +977,6 @@ npm install xtypejs --save
 
 # npm from github:
 npm install git://github.com/lucono/xtypejs.git
-
-# bower:
-bower install xtypejs --save
-
-# bower from github:
-bower install git://github.com/lucono/xtypejs.git
 </content>
 
 
@@ -991,7 +985,7 @@ bower install git://github.com/lucono/xtypejs.git
 <content 
     name="importing_node_requirejs" 
     title="Importing with node and requireJS"
-    category="setup_and_basics">
+    category="installation_and_import">
 
 var xtype = require('xtypejs');             // node.js and CommonJS
 
@@ -1006,7 +1000,7 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 <content 
     name="importing_with_html_script_tag" 
     title="Importing with HTML script tag"
-    category="setup_and_basics"
+    category="installation_and_import"
     lang="html">
 
 <script src="path/to/xtype.js"></script>    <!-- exports xtype global variable -->
@@ -1022,7 +1016,7 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 <content 
     name="types_and_validation" 
     title="Pseudo types and data validation in xtypejs"
-    category="setup_and_basics"
+    category="overview_and_basics"
     description="
     xtypejs uses the concept of 'types' (or pseudo types) for data validation. 
     Each 'type' captures a set of validation criteria which must be satisfied 
@@ -1067,7 +1061,7 @@ require(['xtype'], function(xtype) {        // requirejs and AMD
 <content 
     name="getting_extended_type" 
     title="Getting the extended type of a value"
-    category="setup_and_basics">
+    category="overview_and_basics">
 
 xtype(-2.5)   === '{negative_float}';       // Value is number, negative and float
 xtype('  ')   === '{whitespace}';           // Value is string and blank
@@ -1081,7 +1075,7 @@ xtype(['hi']) === '{single_elem_array}';    // Value is array, has exactly one e
 <content 
     name="getting_simple_type" 
     title="Getting the simple type of a value"
-    category="setup_and_basics">
+    category="overview_and_basics">
 
 xtype.type(null)              === '{null}';
 xtype.type(undefined)         === '{undefined}';
@@ -1362,7 +1356,7 @@ xtype.isZero(new Number(0))     === true;
 
 <content
     name="creating_derived_types"
-    title="Creating new types derived from combinations of existing types"
+    title="Deriving new types from existing types"
     category="user_defined_types"
     description="
     Any number of new types can be derived from combinations of several 
@@ -1472,7 +1466,7 @@ xtype.isAppFlag(value);
 
 <content
     name="creating_self_validated_types"
-    title="Creating self-validated types having arbitrary custom validation"
+    title="Creating self-validated types with custom validation"
     category="user_defined_types"
     description="
     Self-validated types having any arbitrary custom validation can be created by
@@ -1841,30 +1835,16 @@ var version = xtype.VERSION;      // Gives version of xtype library
 </content-wrapper><section id="play-screen-content" class="screen-content" template-artifact="play">
     
     <div class="screen-content-links">
-
-        <div data-ng-repeat="category in AppUtils.keys(itemsByCategoryAndColGroups)">
-            <h1>{{category}}</h1>
-
-            <div class="cols-2">
-                <div>
-                    <ul>
-                        <li data-ng-repeat="contentItem in itemsByCategoryAndColGroups[category].col1Items">
-                            <a screen-link=":{{contentItem.attributes.name}}">{{contentItem.attributes.title}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="cols-2">
-                <div>
-                    <ul>
-                        <li data-ng-repeat="contentItem in itemsByCategoryAndColGroups[category].col2Items">
-                            <a screen-link=":{{contentItem.attributes.name}}">{{contentItem.attributes.title}}</a>
-                        </li>
-                    </ul>
-                </div>
+        <div class="cols-2" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="playCategory in colGroup">
+                <h2><span>{{playCategory.title}}</span></h2>
+                <ul>
+                    <li data-ng-repeat="playItem in playCategory.items">
+                        <a screen-link=":{{playItem.attributes.name}}" data-ng-bind-html="playItem.attributes.title"></a>
+                    </li>
+                </ul>
             </div>
         </div>
-
     </div>
     
     <div class="screen-content-body">
@@ -1914,7 +1894,7 @@ var version = xtype.VERSION;      // Gives version of xtype library
 
 <content 
     name="basic_xtypejs" 
-    category="Quick Setup"
+    category="basic_setup"
     title="Basic setup with just xtypejs">
     
 var xtype = require('xtypejs');
@@ -1925,7 +1905,7 @@ var xtype = require('xtypejs');
 
 <content 
     name="compact_name_scheme" 
-    category="Quick Setup"
+    category="basic_setup"
     title="Compact name scheme">
     
 var xtype = require('xtypejs');
@@ -1940,7 +1920,7 @@ xtype.options.setNameScheme('compact');
 
 <content 
     name="custom_types" 
-    category="Quick Setup"
+    category="basic_setup"
     title="Custom types">
     
 var xtype = require('xtypejs');
@@ -1953,33 +1933,18 @@ xtype.ext.registerExtension(customTypes);
 
 
 <content 
-    name="custom_types_compact_name_scheme" 
-    category="Quick Setup"
-    title="Custom types and compact name scheme">
-    
-var xtype = require('xtypejs');
-var customTypes = require('xtypejs-extension-custom-types');
-var compactScheme = require('xtypejs-name-scheme-compact');
-
-xtype.ext.registerExtension(customTypes);
-xtype.ext.registerNameScheme('compact', compactScheme);
-xtype.options.setNameScheme('compact');
-
-</content>
-
-
-
-<content 
-    name="official_name_schemes" 
-    category="Quick Setup"
-    title="Official name schemes">
+    name="multiple_name_schemes" 
+    category="advanced_setup"
+    title="Multiple name schemes">
     
 var xtype = require('xtypejs');
 var compactScheme = require('xtypejs-name-scheme-compact');
+var camelScheme = require('xtypejs-name-scheme-camel');
 var shortScheme = require('xtypejs-name-scheme-shortened');
 var shortCamelScheme = require('xtypejs-name-scheme-shortened-camel');
 
 xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.ext.registerNameScheme('camel', camelScheme);
 xtype.ext.registerNameScheme('shortened', shortScheme);
 xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
 
@@ -1988,9 +1953,9 @@ xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
 
 
 <content 
-    name="official_name_schemes_and_extensions" 
-    category="Quick Setup"
-    title="Official name schemes and extensions">
+    name="multiple_name_schemes_and_extensions" 
+    category="advanced_setup"
+    title="Multiple name schemes and extensions">
     
 var xtype = require('xtypejs');
 
@@ -2001,12 +1966,31 @@ var autoCamel = require('xtypejs-extension-autocamel-name-scheme');
 xtype.ext.registerExtension(customTypes, typeNameUtils, autoCamel);
 
 var compactScheme = require('xtypejs-name-scheme-compact');
+var camelScheme = require('xtypejs-name-scheme-camel');
 var shortScheme = require('xtypejs-name-scheme-shortened');
 var shortCamelScheme = require('xtypejs-name-scheme-shortened-camel');
 
 xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.ext.registerNameScheme('camel', camelScheme);
 xtype.ext.registerNameScheme('shortened', shortScheme);
 xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
+
+</content>
+
+
+
+<content 
+    name="custom_types_compact_name_scheme" 
+    category="advanced_setup"
+    title="Custom types and compact name scheme">
+    
+var xtype = require('xtypejs');
+var customTypes = require('xtypejs-extension-custom-types');
+var compactScheme = require('xtypejs-name-scheme-compact');
+
+xtype.ext.registerExtension(customTypes);
+xtype.ext.registerNameScheme('compact', compactScheme);
+xtype.options.setNameScheme('compact');
 
 </content>
 
