@@ -1,5 +1,5 @@
 [![xtypejs Logo](http://xtype.js.org/site/assets/img/xtypejs-logo.png)](http://xtype.js.org/) <a href="https://travis-ci.org/lucono/xtypejs"><img align="right" src="https://travis-ci.org/lucono/xtypejs.svg?branch=master"></a>
-#### Elegant, highly efficient data validation for JavaScript
+## Elegant, highly efficient data validation for JavaScript
 
 ---
 
