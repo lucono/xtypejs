@@ -1,0 +1,29 @@
+
+<div template-artifact="codeSnippet"
+    class="code-container {{activeView}}" 
+    data-ng-if="(views.length > 0) || codeItem.attributes.description">
+    
+    <div class="code-content-window {{!codeItem.attributes.description ? 'no-description' : ''}}">
+        <div class="code-content-description" 
+            data-ng-bind-html="codeItem.attributes.description" 
+            data-ng-if="codeItem.attributes.description">
+        </div>
+        <ul class="code-tabs" data-ng-if="(!noInfoLabel && (infoLabel || hasCompact)) || views.length > 1">
+            <li class="tab-label" data-ng-if="!noInfoLabel && infoLabel" data-ng-bind-html="infoLabel"></li>
+            <li class="tab-label" data-ng-if="!noInfoLabel && !infoLabel && hasCompact">Tip: <a screen-link="guide:switching_to_compact_name_scheme">Using compact names</a></li>
+            <li class="{{view}}-view"
+                data-ng-repeat="view in views" 
+                data-ng-if="views.length > 1">
+                <a href="" data-ng-click="switchView(view)">{{viewLabels[view]}}</a>
+            </li>
+        </ul>
+        <div class="code-content" data-ng-if="codeItem.codeSamples">
+            <div class="code-content-scroller">
+                <pre data-ng-repeat="view in views" 
+                    data-ng-bind-html="codeItem.codeSamples[view]"
+                    class="{{view}}-view prettyprint">
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>

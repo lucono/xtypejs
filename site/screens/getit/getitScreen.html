@@ -1,0 +1,151 @@
+<section id="getit-screen-content" class="screen-content" template-artifact="getit">
+    
+    <div class="screen-content-links">        
+        <div class="links-section-buttons">
+            <a href="https://github.com/lucono/xtypejs/stargazers" target="_blank">
+                <i class="fa fa-github fa-5x"></i>
+                <!-- Star GitHub Project -->
+            </a>
+        </div>
+        <div class="release-details">
+            <h1>Current version {{latestVersion ? '- ' + latestVersion: ''}}</h1>
+            <div data-ng-if="releaseDescription">
+                <span data-ng-if="releaseTitle">{{releaseTitle}} &nbsp;&ndash;&nbsp; </span>
+                {{releaseDescription}}
+            </div>
+        </div>
+        <ul class="horizontal-links">
+            <li data-ng-repeat="contentName in AppUtils.keys(getItContent)" data-ng-init="contentItem = getItContent[contentName]">
+                <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+            </li>
+            <li>
+                <a screen-link=":download">Download</a>
+            </li>
+            <li>
+                <a screen-link=":extensions">Extensions</a>
+            </li>
+            <li>
+                <a screen-link=":name_schemes">Name Schemes</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="screen-content-body">        
+        <div class="colspan-70">
+        
+            <div class="content-group">
+            
+                <div class="content-item" 
+                    data-ng-repeat="contentName in AppUtils.keys(getItContent)" 
+                    data-ng-init="contentItem = getItContent[contentName]">
+                    
+                    <div id="{{contentName}}" section-title="{{contentItem.attributes.title}}">
+                        
+                        <div class="item-title" data-ng-if="contentItem.attributes.title">
+                            <a screen-link=":{{contentName}}">{{contentItem.attributes.title}}</a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-if="contentItem.attributes.description">
+                            {{contentItem.attributes.description}}
+                        </p>
+                        
+                        <code-snippet code-item="contentItem"></code-snippet>
+                        
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="download" section-title="Download">
+                        
+                        <div class="item-title">
+                            <a screen-link=":download">
+                                Download
+                                <!-- <span class="release-title" data-ng-if="releaseTitle"> &nbsp; &ndash; &nbsp; {{releaseTitle}}</span> -->
+                            </a>
+                        </div>
+                        
+                        <!-- <p class="item-description" data-ng-if="releaseDescription">{{releaseDescription}}</p> -->
+                        <p class="item-description">The following downloads are available for this release:</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="asset in assets">
+                                <a href="{{asset.browser_download_url}}">
+                                    <i class="fa fa-2x fa-cloud-download"></i>
+                                    <div>
+                                        {{asset.name}}
+                                    </div>
+                                </a>
+                            </li>
+                            <li data-ng-if="!assets">
+                                <a href="{{fallbackDownloadUrl}}" target="_blank"><i class="fa fa-2x fa-folder-open-o"></i> &nbsp; latest release</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="extensions" section-title="Extensions">
+                        
+                        <div class="item-title">
+                            <a screen-link=":extensions">
+                                Extensions
+                            </a>
+                        </div>
+                        
+                        <p class="item-description">The official extensions below are provided as separate modules.</p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="extension in extensions">
+                                <a id="{{extension.name}}" href="{{extension.url}}" target="_blank">
+                                    <i class="fa fa-2x fa-cube"></i>
+                                    <div>
+                                        {{extension.name}}
+                                        <div class="asset-description">{{extension.description}}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="content-item">
+                    <div id="name_schemes" section-title="Name Schemes">
+                        
+                        <div class="item-title">
+                            <a screen-link=":name_schemes">
+                                Name Schemes
+                            </a>
+                        </div>
+                        
+                        <p class="item-description">The official name schemes below are provided as separate modules.
+                            To learn more about name schemes, see <a screen-link="guide:using_custom_name_scheme">using name schemes</a>.
+                        </p>
+                        
+                        <ul class="release-assets">
+                            <li data-ng-repeat="nameScheme in nameSchemes">
+                                <a href="{{nameScheme.url}}" target="_blank">
+                                    <i class="fa fa-2x fa-hashtag"></i>
+                                    <div>
+                                        {{nameScheme.name}}
+                                        <div class="asset-description">{{nameScheme.description}}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>

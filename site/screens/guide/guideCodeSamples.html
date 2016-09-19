@@ -1,0 +1,870 @@
+<content-wrapper code-artifact="guide">
+
+
+<content 
+    name="installing" 
+    title="Installing" 
+    category="installation_and_import"
+    lang="sh">
+
+# npm:
+npm install xtypejs --save
+
+# npm from github:
+npm install git://github.com/lucono/xtypejs.git
+</content>
+
+
+
+
+<content 
+    name="importing_node_requirejs" 
+    title="Importing with node and requireJS"
+    category="installation_and_import">
+
+var xtype = require('xtypejs');             // node.js and CommonJS
+
+require(['xtype'], function(xtype) {        // requirejs and AMD
+    // Use xtype here
+});
+</content>
+
+
+
+
+<content 
+    name="importing_with_html_script_tag" 
+    title="Importing with HTML script tag"
+    category="installation_and_import"
+    lang="html">
+
+<script src="path/to/xtype.js"></script>    <!-- exports xtype global variable -->
+    
+<script>
+    // Use xtype here
+</script>
+</content>
+
+
+
+
+<content 
+    name="types_and_validation" 
+    title="Pseudo types and data validation in xtypejs"
+    category="overview_and_basics"
+    description="
+    xtypejs uses the concept of 'types' (or pseudo types) for data validation. 
+    Each 'type' captures a set of validation criteria which must be satisfied 
+    by a data value in order for it to be considered of that 'type'.
+    <p>
+    For instance, the pseudo type 'positive_integer' is defined to identify 
+    data values which are a JavaScript 'number', are also whole number values, 
+    and are positive, and is therefore used to validate a data value for 
+    these criteria.    
+    </p>
+    <p>
+    Any type in xtypejs can be described as being a Simple type, Extended type, 
+    Instance type, Self-validated type, or Derived type, and a type can fall
+    into more than one category.
+    </p>
+    <p>
+    Simple types are the base set of types that include the fundamental 
+    JavaScript data and built-in object types, in addition to the xtypejs 
+    'nan' type. The simple types are: null, undefined, boolean, string, number, 
+    nan, function, symbol, object, array, date, error, and regexp.    
+    </p>
+    <p>
+    Extended types are the xtypejs built-in types, such as 'positive_integer', 
+    which further specialize the simple types into types with data-validating qualities.   
+    </p>
+    <p>
+    Instance types are types that validate values to be ojects of specific constructors.
+    </p>
+    <p>
+    Self-validated types are types that define their own arbitrary custom validation for 
+    validating any data value.
+    </p>
+    <p>
+    Derived types are simply types created from combinations of multiple other types, 
+    resulting in new validation criteria that are based on those of the component types.
+    </p>">
+
+</content>
+
+
+
+<content 
+    name="getting_extended_type" 
+    title="Getting the extended type of a value"
+    category="overview_and_basics">
+
+xtype(-2.5)   === '{negative_float}';       // Value is number, negative and float
+xtype('  ')   === '{whitespace}';           // Value is string and blank
+xtype({})     === '{empty_object}';         // Value is object and is empty
+xtype(['hi']) === '{single_elem_array}';    // Value is array, has exactly one element
+</content>
+
+
+
+
+<content 
+    name="getting_simple_type" 
+    title="Getting the simple type of a value"
+    category="overview_and_basics">
+
+xtype.type(null)              === '{null}';
+xtype.type(undefined)         === '{undefined}';
+xtype.type(NaN)               === '{nan}';
+
+xtype.type([])                === '{array}';
+xtype.type({})                === '{object}';
+xtype.type(new Date())        === '{date}';
+xtype.type(function() {})     === '{function}';
+xtype.type(/ab+c/i)           === '{regexp}';
+xtype.type(new Error('No!')   === '{error}';
+xtype.type(Symbol())          === '{symbol}';
+
+xtype.type('Hi')              === '{string}';
+xtype.type(new String('Hi'))  === '{string}';
+xtype.type(25)                === '{number}';
+xtype.type(new Number(25))    === '{number}';
+xtype.type(true)              === '{boolean}';
+xtype.type(new Boolean(true)) === '{boolean}';
+</content>
+
+
+
+
+<content 
+    name="checking_combinations_of_types" 
+    title="Checking values against combinations of various types"
+    category="type_checking_and_validation"
+    description="
+    Complex type and data requirements can be concisely validated using combinations of 
+    relevant simple and/or extended types. The following example returns true only if - 
+    data is an object and contains at least one own property, or is an array and has exactly 
+    one element, or is a number and has an integer value and is greater than zero.">
+
+xtype.is(data, '{{non_empty_object, single_elem_array, positive_integer}}');
+</content>
+
+
+
+
+<content 
+    name="checking_instance_types" 
+    title="Checking Instance types"
+    category="type_checking_and_validation"
+    description="
+    Instance types are used to validate values to be ojects of a specific constructor.
+    Any constructor function can be used as the Instance type for validating objects of that
+    constructor. The following example returns true only if value is a Product object
+    (where Product is a constructor function):">
+
+xtype.is(value, Product);
+</content>
+
+
+
+
+<content 
+    name="checking_instance_and_other_types" 
+    title="Checking instance types along with other types"
+    category="type_checking_and_validation"
+    description="
+    For instance, in an application or library method that receives a varying 
+    piece of information with which a product should be displayed, the following 
+    example validates that the value is either a product name string (multi character string), 
+    a product Id number (positive integer), or an actual Product instance.">
+
+xtype.is(value, ['{multi_char_string}', '{positive_integer}', Product]);
+
+switch (xtype.which(value, ['{multi_char_string}', '{positive_integer}', Product])) {
+
+    case '{multi_char_string}':
+        // value is a multi-character string
+
+    case '{positive_integer}':
+        // value is a positive integer
+
+    case Product:
+        // value is a Product object
+}
+</content>
+
+
+
+
+<content 
+    name="instance_types_in_expression_strings" 
+    title="Using instance types in type expression strings"
+    category="type_checking_and_validation"
+    description="
+    Because an instance type is by default represented by the corresponding constructor 
+    function for objects of that instance, instance types cannot be used in type expression 
+    strings in the same convenient way that other types can. However, an instance type 
+    can be registered with a specific name, making it possible to use it in type expression 
+    strings just like other types. The following example shows the use of a Product instance 
+    type, first with a constructor function, and then after type registration.">
+
+// Product instance type referenced using the constructor function:
+
+xtype.is(value, ['str2+', 'int+', Product]);
+
+// However, registering the instance type gives it a type name:
+
+xtype.ext.registerType('product', Product);
+
+// The type name can then be used as the Instance type in type expressions:
+
+xtype.is(value, '{{multi_char_string, positive_integer,}} product');
+
+</content>
+
+
+
+
+<content 
+    name="checking_values_in_different_ways" 
+    title="Checking values in different ways"
+    category="type_checking_and_validation"
+    description="Different ways of checking values provide flexibility based on application needs and constraints.">
+
+// Verify if 'flag' variable is a single character string:
+
+xtype.is(flag, '{single_char_string}');
+xtype.is(flag, xtype.SINGLE_CHAR_STRING);
+xtype.isSingleCharString(flag);
+
+
+// Verify if 'flag' variable is a single character string or positive number value:
+
+xtype.is(flag, '{{single_char_string, positive_number}}');
+xtype.is(flag, xtype.SINGLE_CHAR_STRING | xtype.POSITIVE_NUMBER);
+xtype.is(flag, ['{single_char_string}', xtype.POSITIVE_NUMBER]);
+</content>
+
+
+
+
+<content 
+    name="validating_value_against_specific_type" 
+    title="Validating a value against a specific type"
+    category="type_checking_and_validation">
+
+xtype.isSingleCharString('g')           === true;
+xtype.isNonEmptyObject({foo: 'bar'})    === true;
+xtype.isSingleElemArray(['foo'])        === true;
+
+xtype.isFloat(2.50)                     === true;
+xtype.isPositiveNumber(-2.5)            === false;
+xtype.isNan(5 / 'hi')                   === true;
+</content>
+
+
+
+
+<content 
+    name="validating_multiple_values_against_specific_type" 
+    title="Validating multiple values against a specific type"
+    category="type_checking_and_validation"
+    description="The 'none', 'any', 'some', and 'all' method extensions provide the checking of multiple values against a single type.">
+
+xtype.none.isNan(7, 2.5, NaN, 0, -5)        === false;
+xtype.any.isZero(7, 2.5, NaN, 0, -5)        === true;
+xtype.all.isPositiveInteger(3, 5.1, 7)      === false;
+
+xtype.some.isFloat(3, 5.5, 7)               === true;       // Some but not all are float
+xtype.some.isFloat(2.5, 8.5, 2.1)           === false;      // All are float, not some
+xtype.all.isNonZeroNumber(4, -20, 8.5)      === true;
+
+
+// They can also take a single array of the values to be checked:
+
+var values = ['Tom', 0, true, null, ' '];
+
+xtype.any.isNothing(values)        === true;     // null is of 'nothing' type
+xtype.all.isPrimitive(values)      === false;    // null is of 'nothing' type, not 'primitive'
+xtype.none.isBlankString(values)   === false;
+xtype.some.isTrue(values)          === true;
+</content>
+
+
+
+
+<content
+    name="switching_based_on_value_type"
+    title="Switching based on the type of a value"
+    category="type_checking_and_validation"
+    description="
+    Switch on the result of xtype.which() to handle only valid data scenarios without 
+    first performing extensive type checking and data validations. For instance, in an 
+    application or library that receives a varying piece of information with which a 
+    product should be displayed, the following example handles three scenarios for the 
+    type of product-related information received.">
+
+switch (xtype.which(value, '{{multi_char_string, positive_integer, nothing}}')) {
+
+    case '{multi_char_string}':
+        // Fetch and display product with value as the product name string
+
+    case '{positive_integer}':
+        // Fetch and display product with value as the product Id number
+
+    case '{nothing}':
+        // value is null or undefined, handle no value provided
+
+    default:
+        // value is present but not any of expected 'types', do error
+}
+</content>
+
+
+
+
+<content 
+    name="checking_boolean_values" 
+    title="Checking boolean values"
+    category="type_checking_and_validation">
+
+xtype.isTrue(23.5)                  === false;      // Truthy but not boolean
+xtype.isTrue(new MyProduct())       === false;      // Any type can be checked
+xtype.isTrue('true')                === false;      // String is not boolean
+xtype.isFalse('false')              === false;      // String is not boolean
+
+xtype.isTrue(true)                  === true;       // Primitive true is actual true
+xtype.isTrue(new Boolean(true))     === true;       // Object true is actual true
+
+xtype.isFalse(false)                === true;       // Primitive false is actual false
+xtype.isFalse(new Boolean(false))   === true;       // Object false is actual false
+</content>
+
+
+
+
+<content 
+    name="application_flag_example" 
+    title="Single character application flag example"
+    category="type_checking_and_validation"
+    description="
+    Suppose a single character application/operation flag is expected as input. 
+    The 'single_char_string' extended type will match a string that contains 
+    exactly one non-whitespace character, regardless of whether it also contains 
+    other whitespace characters.">
+
+xtype.isSingleCharString('t')               === true;
+xtype.isSingleCharString(' g ')             === true;
+xtype.isSingleCharString('  ')              === false;
+xtype.isSingleCharString('q1')              === false;
+xtype.isSingleCharString(new String(' z ')) === true;
+</content>
+
+
+
+
+<content
+    name="normalized_type_checking"
+    title="Normalized type checking"
+    category="type_checking_and_validation"
+    description="Primitive types and their corresponding object types share the same simple types.">
+ 
+// Regular type checking:
+
+typeof 'foo'                === 'string';
+typeof new String('foo')    === 'object';
+
+
+// Type checking with xtypejs:
+
+xtype.type('foo')               === '{string}';
+xtype.type(new String('foo'))   === '{string}';
+
+xtype.type(25)                  === '{number}';
+xtype.type(new Number(25))      === '{number}';
+
+xtype.isZero(0)                 === true;
+xtype.isZero(new Number(0))     === true;
+</content>
+
+
+
+
+<content
+    name="creating_derived_types"
+    title="Deriving new types from existing types"
+    category="user_defined_types"
+    description="
+    Any number of new types can be derived from combinations of several 
+    existing types, and then used like, and/or together with, all other 
+    existing types.">
+
+/*
+ * -------------------------------------------------------------
+ * CREATING DERIVED TYPE THAT MATCHES ALL OF THE COMPONENT TYPES
+ * -------------------------------------------------------------
+ */
+
+// To create a new type named 'non_negative_integer', that validates
+// when a data value matches both of the existing 'non_negative_number'
+// and 'integer' types:
+
+
+xtype.ext.registerType('non_negative_integer', {
+    definition: 'non_negative_number, integer',
+    matchMode: 'all'
+});
+
+
+// The type expression value of the 'definition' property may include any
+// existing types, including built-in types, registered instance types and
+// other already registered custom and derived types. However, it must use the
+// default type names of the component types and not those of any name scheme that
+// was registered in xtypejs, such as for example, the 'compact' name scheme.
+
+
+/*
+ * -------------------------------------------------------------
+ * CREATING DERIVED TYPE THAT MATCHES ANY OF THE COMPONENT TYPES
+ * -------------------------------------------------------------
+ */
+
+// The value of the 'matchMode' property can be 'all' to match all the
+// component types, or 'any' (the default when omitted) to match any
+// of the component types. For instance, to register a new type named
+// 'app_flag' that validates when a data value is either a positive integer
+// or a single character string:
+
+
+xtype.ext.registerType('app_flag', {
+    definition: 'positive_integer, single_char_string',
+    matchMode: 'any'
+});
+
+
+// However, because 'any' is the default value for matchMode,
+// for creating our 'app_flag' type we can just have:
+
+
+xtype.ext.registerType('app_flag', {
+    definition: 'positive_integer, single_char_string'
+});
+
+
+// But again, because only the 'definition' attribute is used in the 
+// type registration, we can simply have:
+
+
+xtype.ext.registerType('app_flag', 'positive_integer, single_char_string');
+
+
+/*
+ * ----------------------------------------------------------------
+ * PROVIDING TYPE NAMES FOR THE CUSTOM TYPE IN VARIOUS NAME SCHEMES
+ * ----------------------------------------------------------------
+ */
+
+// Using the 'schemeAliases' key, we can provide the names to be used 
+// for the newly registered type for various custom name schemes that 
+// are registered with xtypejs:
+
+xtype.ext.registerType('app_flag', {
+    definition: 'positive_integer, single_char_string',
+    schemeAliases: {
+        compact: 'flag'
+    }
+});
+
+/*
+ * ---------------------------------
+ * USE NEWLY REGISTERED DERIVED TYPE
+ * ---------------------------------
+ */
+
+// After registration of the new types, we can now use them in type checking:
+
+
+xtype.is(value, '{@type:non_negative_integer:-int-}');
+xtype.is(value, '{@type:app_flag:flag}');
+
+
+// New 'is' methods with the camel-cased name of the new types will
+// also become available on the xtype module for checking the types:
+
+ 
+xtype.isNonNegativeInteger(value);
+xtype.isAppFlag(value);
+
+</content>
+
+
+
+
+<content
+    name="creating_self_validated_types"
+    title="Creating self-validated types with custom validation"
+    category="user_defined_types"
+    description="
+    Self-validated types having any arbitrary custom validation can be created by
+    registering them and providing an object in the 'definition' field which should 
+    have a 'validator' property whose value is the validator function for the 
+    custom type. The validator function must be able to accept as the first argument, 
+    the value being validated, and return true (not a truthy value) if the value is 
+    considered valid for the type.">
+
+// To create a type named 'social_security_number' for validating SSNs:
+
+xtype.ext.registerType('social_security_number', {
+    definition: {
+        validator: function(val) {
+            return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+        },
+        schemeAliases: {
+            compact: 'ssn'
+        }
+    }
+});
+
+
+// After registration of the new type, we can now use it in type checking:
+
+xtype.is(value, '{@type:social_security_number:ssn}');
+xtype.isSocialSecurityNumber(value);
+
+
+// However, if we just wanted to register it simply with a single name 'ssn' as 
+// both the default and compact names, then the registration could just be:
+
+xtype.ext.registerType('ssn', {
+    validator: function(val) {
+        return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+    }
+});
+
+xtype.is(value, 'ssn');
+xtype.isSsn(value);
+
+</content>
+
+
+
+
+<content
+    name="registering_instance_types_internally"
+    title="Registering Instance types internally"
+    category="user_defined_types"
+    description="
+    Any constructor function can be used directly as the Instance type identifier 
+    for validating objects of that constructor, even without having been registered 
+    with xtypejs. However, when an instance type is registered with xtypejs, a
+    validation method dedicated to that instance type becomes available on the
+    xtype module, and the instance type is also then able to be referenced in type 
+    expression strings, much like all other types.">
+
+// To register an instance type constructor function, Product,
+// using the default name 'product' and the name 'prod' for 
+// the 'compact' name scheme:
+
+xtype.ext.registerType('product', {
+    definition: Product,
+    schemeAliases: {
+        compact: 'prod'
+    }
+});
+
+
+// After registration of the instance type, we can then use it in type 
+// checking and in type expressions, like with most other types:
+
+xtype.isProduct(value);
+xtype.is(value, '{@type:product:prod}');
+xtype.is(value, '{{multi_char_string, positive_integer,}} {@type:product:prod}');
+
+</content>
+
+
+
+
+<content
+    name="using_custom_name_scheme"
+    title="Using name schemes"
+    category="name_schemes_and_customization"
+    description="
+    A name scheme provides the set of names or aliases used to refer to the various xtypejs 
+    built-in and custom types. By default, there is the descriptive 'default' name scheme. 
+    But there is also the flexibility to create and use custom name schemes according to user 
+    preference and application needs. Also, a number of useful custom name schemes are officially 
+    provided as separate modules and can easily be applied to xtypejs. See the 'Get It' tab for 
+    a list of the officially provided name scheme modules.">
+ 
+xtype.options.setNameScheme({
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+});
+
+xtype({})       === 'emp_obj';          // empty_object is 'emp_obj' in new scheme
+xtype(25)       === 'pos_num';          // positive_integer is 'pos_num' in new scheme
+xtype('  ')     === 'bl_str';           // blank_string is 'bl_str' in new scheme
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content
+    name="switching_to_compact_name_scheme"
+    title="Switching to the compact name scheme"
+    category="name_schemes_and_customization"
+    description="
+    <b>Important:</b> The 'compact' name scheme is provided by the 
+    'xtypejs-name-scheme-compact' name scheme module, which needs to be applied 
+    in xtypejs to make the 'compact' name sceheme available. See the 'Get It' tab 
+    for details on this and other available name scheme and extension modules.">
+
+// With the regular 'default' name scheme:
+
+xtype({})                           === 'empty_object';
+xtype(25)                           === 'positive_integer';
+xtype.is({}, 'empty_object')        === true;
+xtype.is(25, 'positive_integer')    === true;
+
+
+// Switch to the 'compact' name scheme:
+
+var compactNameScheme = require('xtypejs-name-scheme-compact');
+
+xtype.ext.registerNameScheme('compact', compactNameScheme);
+xtype.options.setNameScheme('compact');
+
+xtype({})               === 'obj0';     // Compact scheme uses 'obj0' for 'empty_object'
+xtype(25)               === 'int+';     // Compact scheme uses 'int+' for 'positive_integer'
+xtype.is({}, 'obj0')    === true;
+xtype.is(25, 'int+')    === true;
+</content>
+
+
+
+
+<content
+    name="registering_custom_name_scheme"
+    title="Registering a custom name scheme"
+    category="name_schemes_and_customization">
+
+var customNameScheme = {
+    positive_number: 'pos_num', 
+    empty_object: 'emp_obj', 
+    blank_string: 'bl_str'
+    /* More entries */
+};
+
+xtype.ext.registerNameScheme('my_custom_scheme', customNameScheme);
+
+
+// The custom scheme is now internally registered
+// and can now be referenced by name:
+
+xtype.options.setNameScheme('my_custom_scheme');
+
+xtype({})       === 'emp_obj';
+xtype(25)       === 'pos_num';
+xtype('  ')     === 'bl_str';
+
+xtype.is({}, 'emp_obj')    === true;
+xtype.is(25, 'pos_num')    === true;
+xtype.is('  ', 'bl_str')   === true;
+</content>
+
+
+
+
+<content
+    name="switching_back_to_default_name_scheme"
+    title="Switching back to the default name scheme"
+    category="name_schemes_and_customization">
+
+xtype.options.setNameScheme('default');
+</content>
+
+
+
+
+<content
+    name="delimiting_types_in_expressions"
+    title="Delimiting types in type expression strings"
+    category="name_schemes_and_customization"
+    description="
+    By default, a comma or space or pipe character can be used as a delimiter in type 
+    expression strings. Additional spaces can be used around delimiters, and are ignored.">
+
+xtype.is(value, '{single_char_string},{positive_number}');
+xtype.is(value, '{single_char_string}, {positive_number}');
+xtype.is(value, '{single_char_string}|{positive_number}');
+xtype.is(value, '{single_char_string} | {positive_number}');
+xtype.is(value, '{single_char_string} {positive_number}'); 
+</content>
+
+
+
+
+<content
+    name="using_custom_type_delimiter"
+    title="Using a custom type name delimiter"
+    category="name_schemes_and_customization"
+    description="
+    A custom pattern can be used in place of the default type delimiters. This can be useful in 
+    applications for which the default delimiters may not be ideal. For instance, if the type 
+    expressions are being stored as part of data validation metadata, but the default delimiter 
+    characters are problematic for the specific storage format being used. When a custom type
+    delimiter pattern is used, it should be ensured that the characters allowed by the pattern 
+    do not conflict with the characters in the type names of any type name schemes being used.">
+
+xtype.options.setDelimiterPattern('/');
+
+xtype.is(0, '{zero} / {positive_number}')     === true;
+xtype.is(25, '{zero} / {positive_number}')    === true;
+xtype.is(-3, '{zero} / {positive_number}')    === false;
+
+
+// Using a different pattern to also allow the comma character:
+
+xtype.options.setDelimiterPattern('[/,]');
+
+xtype.is(25, '{zero}, {positive_number} / {float}') === true;
+</content>
+
+
+
+
+<content 
+    name="using_none_and_any_types" 
+    title="Using the none and any types"
+    category="more_topics"
+    description="
+    The 'none' type represents the set of no types, which means that no value can actually 
+    ever match 'none'. Therefore, xtype.isNone(value) will always be false for any value. 
+    The 'any' type is the composite type consisting of all types, which means that all values 
+    will always match 'any'. Therefore, xtype.isAny(value) will always be true for any value.">
+
+// The 'none' type
+
+xtype.isNone(25)                    === false;
+xtype.isNone(['hi', 5])             === false;
+xtype.isNone(undefined)             === false;
+
+xtype.not.isNone('hello')           === true;         // true for any value
+xtype.all.isNone('hi', 5, true)     === false;        // false for any list of values
+xtype.some.isNone(null, 25, false)  === false;        // false for any list of values
+xtype.any.isNone(null, 25, false)   === false;        // false for any list of values
+xtype.none.isNone(null, 25, false)  === true;         // true for any list of values
+
+
+// The 'any' type
+
+xtype.isAny(25)                    === true;
+xtype.isAny(['hi', 5])             === true;
+xtype.isAny(undefined)             === true;
+
+xtype.not.isAny('hello')           === false;         // false for any value
+xtype.all.isAny('hi', 5, true)     === true;          // true for any list of values
+xtype.some.isAny(null, 25, false)  === false;         // false for any list of values
+xtype.any.isAny(null, 25, false)   === true;          // true for any list of values
+xtype.none.isAny(null, 25, false)  === false;         // false for any list of values
+
+
+// The 'any' type can be temporarily added to a validating type expression as a 
+// switch to temporarily make it fully permissive, therefore accepting all values:
+
+xtype.is(25, '{object}')           === false;
+xtype.is(25, '{{object, any}}')    === true;          // allows any value to pass validation
+</content>
+
+
+
+
+<content 
+    name="using_the_nan_type" 
+    title="Using the nan type"
+    category="more_topics"
+    description="
+    The xtypejs 'nan' type is a representation of any invalid numeric value in JavaScript, 
+    in a way that is completely decoupled and distinct from the JavaScript 'number' type. 
+    This effectively eliminates the need for applications to explicitly check and handle 
+    NaN values in the number context. This is beneficial as NaN values are problematic in 
+    JavaScript applications, because though they are reported as the 'number' type by the 
+    JavaScript runtime, there is effectively little to nothing an application can do to 
+    make meaningful use of them in the number context.">
+
+var validNumber = 5;                              // Valid number value
+var nanValue = (5 / 'a');                         // NaN from invalid numeric computation
+var boxedNanValue = new Number(nanValue);         // Boxed Number object having NaN value
+
+
+/*
+ * -------------------
+ * Vanilla JavaScript:
+ * -------------------
+ */
+
+typeof validNumber            === 'number';
+typeof nanValue               === 'number';      // NaN is also of 'number' type
+Number.isNaN(boxedNanValue)   === false;         // Boxed NaN Number not identified as NaN
+
+
+/*
+ * --------
+ * xtypejs:
+ * --------
+ */
+ 
+xtype.type(validNumber)       === 'number';
+xtype.type(nanValue)          === 'nan';         // NaN is not 'number' type
+xtype.isNan(boxedNanValue)    === true;          // Boxed NaN Number also identified as 'nan'
+</content>
+
+
+
+
+<content 
+    name="prevent_name_collisions" 
+    title="Preventing name collisions"
+    category="more_topics"
+    description="
+    When imported as a script tag, the xtype module is assigned to the global variable 'xtype'. 
+    The 'noConflict' method can be used to reassign the xtype module to a different namespace or variable 
+    name, and return the global 'xtype' variable to its previous value prior to importing xtypejs.">
+
+var otherName = xtype.noConflict();
+
+otherName.isPositiveInteger(5) === 'true';      // otherName is now xtypejs
+</content>
+
+
+
+
+<content 
+    name="checking_library_version" 
+    title="Checking the library version"
+    category="more_topics">
+
+var version = xtype.VERSION;      // Gives version of xtype library
+</content>
+
+
+
+
+<content 
+    name="reporting_bugs_and_issues" 
+    title="Reporting bugs and issues"
+    category="more_topics"
+    description="
+    Please report bugs or problems by creating an issue on the GitHub project 
+    <a href='https://github.com/lucono/xtypejs/issues' target='_blank'>Issues Page</a>.">
+</content>
+
+
+
+</content-wrapper>

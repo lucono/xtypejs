@@ -1,0 +1,83 @@
+<section id="overview-screen-content" class="screen-content" template-artifact="overview">
+    
+    <div class="screen-content-links">
+        <div class="description-pane">
+            <div>
+                <span class="title">What</span>
+                {{libDescription}}
+            </div>
+            <div>
+                <span class="title">Why</span>
+                Improves efficiency and readability by unifying the most basic but common data and type validations in apps into single, highly optimized operations.
+            </div>
+            <div>
+                <span class="title">How</span>
+                Employs bitwise operations, data pre-processing, and memory-efficient memoization for fast, robust performance in small and large apps and libraries.
+            </div>
+        </div>
+    </div>
+    
+    <div class="code-comparison"
+        data-ng-repeat="codeSnippets in [codeContent]">
+        
+        <div class="code-entry" id="before_code">
+            
+            <code-snippet
+                code-item="codeSnippets.before"
+                skip-compact-view>
+            </code-snippet>
+            
+            <div class="compare-label">
+                <span>
+                    <a screen-link=":before_code" class="large">go</a>
+                </span>
+                <span>from this..</span>
+                <i class="fa fa-share fa-2x fa-rotate-180"></i>
+            </div>
+        </div>
+        
+        <div class="code-entry right" id="after_code">
+            <div class="compare-label">
+                <span>
+                    <a screen-link=":after_code" class="large">..to</a>
+                </span>
+                <span>concise</span>
+                <span>performant</span>
+                <span>readable</span>
+                <span>validation</span>
+                <i class="fa fa-reply fa-2x fa-rotate-180"></i>
+            </div>
+            
+            <code-snippet 
+                code-item="codeSnippets.after" 
+                default-view="compact" 
+                compact-view-label="Compact Names"
+                default-view-label="Descriptive Names"
+                info-label="Choose name scheme &nbsp; &rarr;">
+            </code-snippet>
+        </div>
+        
+        <div class="code-entry right" id="add_your_own">
+            
+            <div class="compare-label">
+                <span>
+                    <a screen-link=":add_your_own" class="large">and,</a>
+                </span>
+                <span>even add custom</span>
+                <span>validation types</span>
+                <span>of your own</span>
+            </div>
+            
+            <code-snippet 
+                code-item="codeSnippets.add_your_own" 
+                default-view="compact" 
+                compact-view-label="Compact Names"
+                default-view-label="Descriptive Names"
+                info-label="Choose name scheme &nbsp; &rarr;">
+            </code-snippet>
+        </div>
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>

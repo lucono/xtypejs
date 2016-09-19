@@ -1,0 +1,329 @@
+{
+    "typesByCategory": {
+        "basicTypes": {
+            "name": "Basic",
+            "types": [
+                {
+                    "name": "null",
+                    "category": "simple",
+                    "description": "The null value."
+                },
+                {
+                    "name": "undefined",
+                    "category": "simple",
+                    "description": "The undefined value."
+                },
+                {
+                    "name": "nan",
+                    "category": "simple",
+                    "description": "The NaN value."
+                },
+                {
+                    "name": "symbol",
+                    "category": "simple",
+                    "description": "A symbol value."
+                },
+                {
+                    "name": "function",
+                    "category": "simple",
+                    "description": "A function object."
+                },
+                {
+                    "name": "date",
+                    "category": "simple",
+                    "description": "A date object."
+                },
+                {
+                    "name": "error",
+                    "category": "simple",
+                    "description": "An object of any of the error types."
+                },
+                {
+                    "name": "regexp",
+                    "category": "simple",
+                    "description": "A regular expression object."
+                }
+            ]
+        },
+        
+        "objectTypes": {
+            "name": "Object",
+            "types": [
+                {
+                    "name": "object",
+                    "category": "simple",
+                    "description": "All other objects that are not one of the other specific object types."
+                },
+                {
+                    "name": "empty_object",
+                    "category": "extended",
+                    "description": "An object with no own properties."
+                },
+                {
+                    "name": "single_prop_object",
+                    "category": "extended",
+                    "description": "An object with exactly one own property."
+                },
+                {
+                    "name": "multi_prop_object",
+                    "category": "extended",
+                    "description": "An object with more than one own property."
+                },
+                {
+                    "name": "non_empty_object",
+                    "category": "extended",
+                    "description": "An object with one or more own properties."
+                }
+            ]
+        },
+        
+        "stringTypes": {
+            "name": "String",
+            "types": [
+                {
+                    "name": "string",
+                    "category": "simple",
+                    "description": "A string primitive or object."
+                },
+                {
+                    "name": "whitespace",
+                    "category": "extended",
+                    "description": "A string with one or more of only whitespace characters."
+                },
+                {
+                    "name": "single_char_string",
+                    "category": "extended",
+                    "description": "A string with exactly one non-whitespace character and zero or more whitespace characters."
+                },
+                {
+                    "name": "multi_char_string",
+                    "category": "extended",
+                    "description": "A string with more than one non-whitespace character and zero or more whitespace characters."
+                },
+                {
+                    "name": "empty_string",
+                    "category": "extended",
+                    "description": "A string with zero characters."
+                },
+                {
+                    "name": "blank_string",
+                    "category": "extended",
+                    "description": "A string with zero or more of only whitespace characters."
+                },
+                {
+                    "name": "non_empty_string",
+                    "category": "extended",
+                    "description": "A string with at least one whitespace or other character."
+                },
+                {
+                    "name": "non_blank_string",
+                    "category": "extended",
+                    "description": "A string with at least one non-whitespace character."
+                }
+            ]
+        },
+        
+        "arrayTypes": {
+            "name": "Array",
+            "types": [
+                {
+                    "name": "array",
+                    "category": "simple",
+                    "description": "An array object."
+                },
+                {
+                    "name": "empty_array",
+                    "category": "extended",
+                    "description": "An array with no elements."
+                },
+                {
+                    "name": "single_elem_array",
+                    "category": "extended",
+                    "description": "An array with exactly one element."
+                },
+                {
+                    "name": "multi_elem_array",
+                    "category": "extended",
+                    "description": "An array with more than one element."
+                },
+                {
+                    "name": "non_empty_array",
+                    "category": "extended",
+                    "description": "An array with one or more elements."
+                }
+            ]
+        },
+        
+        "numberTypes": {
+            "name": "Number",
+            "types": [
+                {
+                    "name": "number",
+                    "category": "simple",
+                    "description": "A number primitive or object."
+                },
+                {
+                    "name": "integer",
+                    "category": "extended",
+                    "description": "A number primitive or object with a whole number value."
+                },
+                {
+                    "name": "float",
+                    "category": "extended",
+                    "description": "A number primitive or object with a fractional component."
+                },
+                {
+                    "name": "positive_number",
+                    "category": "extended",
+                    "description": "A number primitive or object greater than zero."
+                },
+                {
+                    "name": "negative_number",
+                    "category": "extended",
+                    "description": "A number primitive or object less than zero."
+                },
+                {
+                    "name": "infinite_number",
+                    "category": "extended",
+                    "description": "A number primitive or object with a positive or negative infinite value."
+                },
+                {
+                    "name": "zero",
+                    "category": "extended",
+                    "description": "A number primitive or object equal to zero."
+                },
+                {
+                    "name": "non_zero_number",
+                    "category": "extended",
+                    "description": "A number primitive or object with a value other than zero."
+                },
+                {
+                    "name": "positive_integer",
+                    "category": "extended",
+                    "description": "A finite whole number primitive or object greater than zero."
+                },
+                {
+                    "name": "negative_integer",
+                    "category": "extended",
+                    "description": "A finite whole number primitive or object less than zero."
+                },
+                {
+                    "name": "positive_float",
+                    "category": "extended",
+                    "description": "A finite number primitive or object greater than zero with a fractional component."
+                },
+                {
+                    "name": "negative_float",
+                    "category": "extended",
+                    "description": "A finite number primitive or object less than zero with a fractional component."
+                },
+                {
+                    "name": "positive_infinity",
+                    "category": "extended",
+                    "description": "A number primitive or object with the value of the JavaScript positive Infinity."
+                },
+                {
+                    "name": "negative_infinity",
+                    "category": "extended",
+                    "description": "A number primitive or object with the value of the JavaScript negative Infinity."
+                },
+                {
+                    "name": "non_positive_number",
+                    "category": "extended",
+                    "description": "A number primitive or object less than or equal to zero."
+                },
+                {
+                    "name": "non_negative_number",
+                    "category": "extended",
+                    "description": "A number primitive or object greater than or equal to zero."
+                },
+                {
+                    "name": "non_infinite_number",
+                    "category": "extended",
+                    "description": "A number primitive or object with a non-infinite value."
+                }
+            ]
+        },
+        
+        "booleanTypes": {
+            "name": "Boolean",
+            "types": [
+                {
+                    "name": "boolean",
+                    "category": "simple",
+                    "description": "A boolean primitive or object."
+                },
+                {
+                    "name": "true",
+                    "category": "extended",
+                    "description": "The boolean primitive or object that is true."
+                },
+                {
+                    "name": "false",
+                    "category": "extended",
+                    "description": "The boolean primitive or object that is false."
+                }
+            ]
+        },
+        
+       "groupTypes": {
+            "name": "Group",
+            "types": [
+                {
+                    "name": "primitive",
+                    "category": "extended",
+                    "description": "A primitive type other than null or undefined."
+                },
+                {
+                    "name": "nothing",
+                    "category": "extended",
+                    "description": "The null or undefined value."
+                },
+                {
+                    "name": "any",
+                    "category": "extended",
+                    "description": "Any type."
+                },
+                {
+                    "name": "none",
+                    "category": "extended",
+                    "description": "Not of any type."
+                }
+            ]
+        },
+    
+        "moreTypes": {
+            "name": "More",
+            "types": [
+                {
+                    "typeId": "<em>not applicable</em>",
+                    "name": "instance_types",
+                    "title": "Instance Types",
+                    "category": "instance",
+                    "derived": false,
+                    "description": "Any constructor function is an Instance type. Each constructor function is the Instance type for objects of that constructor.",
+                    "builtInType": false
+                },
+                {
+                    "typeId": "<em>not applicable</em>",
+                    "name": "self_validated_types",
+                    "title": "Self-Validated Types",
+                    "category": "self-validated",
+                    "derived": false,
+                    "description": "Self-validated types are user-defined types that provide an implementation of the arbitrary custom validation used in validating that type. Any number of self-validated types can be created and used like, and/or together with, all other types.",
+                    "builtInType": false
+                },
+                {
+                    "typeId": "<em>based on composition - only applicable for derivations using only built-in types</em>",
+                    "name": "derived_types",
+                    "title": "Derived Types",
+                    "category": "derived",
+                    "derived": true,
+                    "derivation": "<em>component types</em>",
+                    "description": "Derived types are types created from a combination of multiple types, and may be created to validate either on a match of all the component types, or of any of the component types.",
+                    "builtInType": false
+                }
+            ]
+        }
+    }
+}

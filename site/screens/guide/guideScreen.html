@@ -1,0 +1,52 @@
+<section id="guide-screen-content" class="screen-content" template-artifact="guide">
+    
+    <div class="screen-content-links">
+        <div class="cols-2" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="guideCategory in colGroup">
+                <h2><a screen-link=":{{guideCategory.name}}_guide">{{guideCategory.title}}</a></h2>
+                <ul>
+                    <li data-ng-repeat="guideItem in guideCategory.items">
+                        <a screen-link=":{{guideItem.attributes.name}}" data-ng-bind-html="guideItem.attributes.title"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="screen-content-body">        
+        <div class="colspan-80">
+            
+            <div id="{{guideCategory.name}}_guide" 
+                section-title="{{_guide.title}}" 
+                class="content-group" 
+                data-ng-repeat="guideCategory in guideCategoriesList">
+                
+                <a screen-link=":{{guideCategory.name}}_guide" class="content-group-title">{{guideCategory.title}}</a>
+                
+                <div class="content-item" 
+                    data-ng-repeat="guideItem in guideCategory.items">
+                    
+                    <div id="{{guideItem.attributes.name}}" section-title="{{guideItem.attributes.title}}">
+                        
+                        <div class="item-title">
+                            <a screen-link=":{{guideItem.attributes.name}}">{{guideItem.attributes.title}}</a>
+                        </div>
+                        
+                        <code-snippet code-item="guideItem" default-view="compact"></code-snippet>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <div class="colspan-20 right-nav-container">
+            <ul class="right-nav">
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>

@@ -1,0 +1,86 @@
+
+<content-wrapper code-artifact="overview">
+
+
+<content name="before_code">
+
+function searchEmployees(value) {
+    if (typeof value === 'string') {
+         if (value.trim().length > 1) {
+            return EmployeeDB.searchByName(value);
+        } else if (value.trim().length === 1) {
+            return EmployeeDB.searchByMiddleInitial(value);
+        } else {
+            return { error: 'Invalid search value supplied' };
+        }
+    } else if (typeof value === 'object' && value !== null) {
+        if (Object.keys(value).length === 1) {
+            return EmployeeDB.searchByFieldValuePair(value);
+        } else if (Object.keys(value).length > 1) {
+            return { error: 'Search by multiple fields not supported' };
+        } else {
+            return { error: 'Invalid search value supplied' };
+        }
+    } else if (typeof value === 'number') {
+        if (!isNaN(value) && isFinite(value) && value > 0 && value % 1 === 0) {
+            return EmployeeDB.searchByEmployeeNumber(value);
+        } else {
+            return { error: 'Invalid employee number supplied' };
+        }
+    } else if (typeof value === 'undefined' || value === null) {
+        return { error: 'No search value supplied' };
+    } else {
+        return { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+
+
+<content name="after_code">
+
+function searchEmployees(value) {
+    switch (xtype.which(value, '{{multi_char_string, single_char_string, positive_integer, single_prop_object, multi_prop_object, number, nothing}}')) {
+        case '{multi_char_string}':
+            return EmployeeDB.searchByName(value);
+        case '{single_char_string}':
+            return EmployeeDB.searchByMiddleInitial(value);
+        case '{positive_integer}':
+            return EmployeeDB.searchByEmployeeNumber(value);
+        case '{single_prop_object}':
+            return EmployeeDB.searchByFieldValuePair(value);
+        case '{multi_prop_object}':
+            return { error: 'Search by multiple fields not supported' };
+        case '{number}':
+            return { error: 'Invalid employee number supplied' };
+        case '{nothing}':
+            return { error: 'No search value supplied' };
+        default:
+            return { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+
+
+<content name="add_your_own_code">
+
+xtype.ext.registerType('ssn', {
+    validator: function(val) {
+        return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
+    }
+});
+
+function searchEmployees(value) {
+    switch (xtype.which(value, '{{positive_integer, ssn, multi_char_string}}')) {
+        case '{positive_integer}':
+            return EmployeeDB.searchByEmployeeNumber(value);
+        case 'ssn':
+            return EmployeeDB.searchBySSN(value);
+        case '{multi_char_string}':
+            return EmployeeDB.searchByName(value);
+        default:
+            return { error: 'Invalid search value supplied' };
+    }
+}
+</content>
+
+</content-wrapper>

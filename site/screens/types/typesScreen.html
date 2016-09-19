@@ -1,0 +1,100 @@
+<section id="types-screen-content" class="screen-content" template-artifact="types">
+    
+    <div class="screen-content-links">
+        <div class="cols-4" data-ng-repeat="colGroup in colGroups">
+            <div data-ng-repeat="typeGroup in colGroup">
+                <h2><a screen-link=":{{typeGroup.name | lowercase}}_types">{{typeGroup.name}}</a></h2>
+                <ul>
+                    <li data-ng-repeat="type in typeGroup.types">
+                        <a screen-link=":{{type.name}}">{{type.title || type.friendlyName}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="screen-content-body">        
+        <div class="colspan-70">
+            
+            <div id="{{typeGroup.name | lowercase}}_types" section-title="{{typeGroup.name}} Types" class="content-group" data-ng-repeat="typeGroup in typeGroups">
+            
+                <a screen-link=":{{typeGroup.name | lowercase}}_types" class="content-group-title">{{typeGroup.name}} Types</a>
+                
+                <div class="content-item"
+                    data-ng-repeat="type in typeGroup.types"
+                    data-ng-init="codeItem = codeContent[type.name]">
+                    
+                    <div id="{{type.name}}" section-title="{{type.title || type.name}}">
+                        
+                        <div class="item-title">
+                            <a screen-link=":{{type.name}}">{{type.title || type.name}}</a>                            
+                            <a screen-link=":{{type.name}}" class="title-label compact-label" data-ng-if="type.compactName"><code>{{type.compactName}}</code></a>
+                        </div>
+                        
+                        <p class="item-description" data-ng-bind-html="type.description"></p>
+                            
+                        <div class="item-detail">
+                            <div class="item-header">
+                                <div data-ng-if="type.typeId">
+                                   <span class="nowrap">type id</span>
+                                   <span>
+                                       <a data-ng-if="type.typeId.toLowerCase() === type.name.toLowerCase()"
+                                           screen-link=":{{type.name}}" 
+                                           class="type-label squeezed">
+                                           <code>xtype.{{type.typeId}}</code>
+                                       </a>
+                                       <span data-ng-if="type.typeId.toLowerCase() !== type.name.toLowerCase()"
+                                           data-ng-bind-html="type.typeId">
+                                       </span>
+                                   </span>
+                                </div>
+                                <div>
+                                   <span>category</span>
+                                   <span>{{type.category}} type</span>
+                                </div>
+                                <div>
+                                   <span>derived</span>
+                                   <span>{{(type.derived === true || type.derivation.length > 0) ? 'yes' : 'no'}}</span>
+                                </div>
+                                <div data-ng-if="AppUtils.isArray(type.derivation) ? type.derivation.length > 0 : type.derivation">
+                                    <span>derivation</span>
+                                    <span>
+                                        <span data-ng-if="!AppUtils.isArray(type.derivation)" data-ng-bind-html="type.derivation"></span>
+                                        <span data-ng-if="AppUtils.isArray(type.derivation)">
+                                            <span class="type-label title">
+                                                <code>Match Any:</code>
+                                            </span>
+                                            <a data-ng-repeat="compositeTypeName in type.derivation" 
+                                                screen-link=":{{compositeTypeName}}" 
+                                                class="type-label">
+                                                <code>{{compositeTypeName}}</code>
+                                            </a>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-subtitle" data-ng-if="codeItem.codeSamples">Example</div>
+                            
+                            <code-snippet code-item="codeItem" default-view="compact"></code-snippet>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div> 
+                
+        <div class="colspan-30 right-nav-container">
+            <ul class="right-nav">
+                <li data-ng-repeat="typeGroup in typeGroups" scroll-fixed>
+                    <a screen-link=":{{typeGroup.name | lowercase}}_types">{{typeGroup.name | lowercase}}</a>
+                </li>
+                <li><a screen-link=":menu" class="circle-button up active"></a></li>
+            </ul>
+        </div>
+        
+    </div>
+    
+    <div ui-view></div> <!-- dummy child view -->
+    
+</section>
