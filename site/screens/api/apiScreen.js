@@ -16,6 +16,7 @@ angular.module('xtypejsSite')
         
             $scope.colGroups = [
                 [methodsByCategory.validationMethods],
+                [methodsByCategory.setValidationMethods],
                 [methodsByCategory.typeMethods, methodsByCategory.extensionMethods],
                 [methodsByCategory.utilityMethods],
                 [methodsByCategory.optionsMethods, methodsByCategory.otherMethods]
@@ -23,6 +24,7 @@ angular.module('xtypejsSite')
             
             $scope.methodGroups = [
                 methodsByCategory.validationMethods, 
+                methodsByCategory.setValidationMethods, 
                 methodsByCategory.typeMethods, 
                 methodsByCategory.extensionMethods,
                 methodsByCategory.utilityMethods, 

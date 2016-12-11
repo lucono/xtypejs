@@ -39,8 +39,14 @@ a, a:visited, a:active {
     width: 50%;
     float: left;
 }
+
 .cols-4 {
     width: 25%;
+    float: left;
+}
+
+.cols-5 {
+    width: 20%;
     float: left;
 }
 
@@ -53,10 +59,12 @@ a, a:visited, a:active {
     width: 30%;
     float: left;
 }
+
 .colspan-70 {
     width: 70%;
     float: left;
 }
+
 .colspan-80 {
     width: 80%;
     float: left;

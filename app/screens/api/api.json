@@ -120,7 +120,7 @@
 						}
 					]
 				},
-				
+
 				{
 					"name": "is<em>Type</em>",
 					"interface": "",
@@ -146,6 +146,50 @@
 				},
 				
 				{
+					"name": "not.is",
+					"signature": "xtype.not.is({value}, {types})",
+					"description": "Checks that a value does not match the specified types.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value of which the type is to be checked."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+								},
+								{
+									"type": "number",
+									"description": "A single or OR'ed expression of several type Ids against which {value} is to be checked."
+								},
+								{
+									"type": "function",
+									"description": "A single instance type against which {value} is to be checked"
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, and must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or a bitwise expression of several type Ids."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if {value} does not match (any of) the type or types represented in the {types} parameter, or false otherwise."
+						}
+					]
+				},
+				
+				{
 					"name": "not.is<em>Type</em>",
 					"interface": "not",
 					"signature": "xtype.not.is<em>Type</em> ({value})",
@@ -165,6 +209,256 @@
 						{
 							"type": "boolean",
 							"description": "Returns true if {value} is not of the referenced type, or false otherwise."
+						}
+					]
+				},
+				
+				{
+					"name": "which",
+					"signature": "xtype.which({value}, {types})",
+					"description": "Gets the matching type of a value from a list of simple, extended and/or instance types.",
+					"arguments": [
+						{
+							"name": "value",
+							"types": [
+								{
+									"type": "any",
+									"description": "The value of which the type is to be matched."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be matched."
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the type names or Ids, type expression string or type Id expression, and/or instance types against which {value} is to be matched."
+								},
+								{
+									"type": "number *",
+									"description": "A single or OR'ed expression of several type Ids as a single combined type, against which {value} is to be matched."
+								},
+								{
+									"type": "function *",
+									"description": "A single instance type against which {value} is to be matched."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as a type name string in the {types} list argument, or the {none} type if there was no match."
+						},
+						{
+							"type": "number",
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as a type Id in the {types} argument, or the {none} type if there was no match."
+						},
+						{
+							"type": "function",
+							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as an instance type in the {types} argument, or the {none} type if there was no match."
+						}
+					],
+					"notes": "* Note that the single <em>number</em> and <em>function</em> forms of the {types} argument are treated not as a list of types, but as a single type against which {value} is to be matched, therefore either returning the value of the {types} argument if the type of {value} matches, or otherwise returning the {none} type. This is useful as a form of the <em>xtype.is</em> call, but which rather than returning a boolean {true} when there is a match, will return the actual type used instead. Likewise, rather than returning {false} when there is no match, it will return the {none} type instead."
+				}
+			]
+		},
+		
+		"setValidationMethods": {
+			"name": "Set Validation",
+			"methods": [
+				{
+					"name": "none.is",
+					"signature": "xtype.none.is ({values}, {types})",
+					"description": "Checks that none of a list of values are of the specified types.",
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+								},
+								{
+									"type": "number",
+									"description": "A single or OR'ed expression of several type Ids against which {value} is to be checked."
+								},
+								{
+									"type": "function",
+									"description": "A single instance type against which {value} is to be checked"
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, and must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or a bitwise expression of several type Ids."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if none of the values in {values} matches (any of) the type or types represented in the {types} parameter, or false otherwise."
+						}
+					]
+				},
+
+				{
+					"name": "any.is",
+					"signature": "xtype.any.is ({values}, {types})",
+					"description": "Checks if any of a list of values are of the specified types.",
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+								},
+								{
+									"type": "number",
+									"description": "A single or OR'ed expression of several type Ids against which {value} is to be checked."
+								},
+								{
+									"type": "function",
+									"description": "A single instance type against which {value} is to be checked"
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, and must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or a bitwise expression of several type Ids."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if one or more of the values in {values} matches (any of) the type or types represented in the {types} parameter, or false otherwise."
+						}
+					]
+				},
+
+				{
+					"name": "some.is",
+					"signature": "xtype.some.is ({values}, {types})",
+					"description": "Checks that some, but not all, of a list of values are of the specified types.",
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+								},
+								{
+									"type": "number",
+									"description": "A single or OR'ed expression of several type Ids against which {value} is to be checked."
+								},
+								{
+									"type": "function",
+									"description": "A single instance type against which {value} is to be checked"
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, and must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or a bitwise expression of several type Ids."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if only some, but not all, of the values in {values} matches (any of) the type or types represented in the {types} parameter, or false otherwise."
+						}
+					]
+				},
+
+				{
+					"name": "all.is",
+					"signature": "xtype.all.is ({values}, {types})",
+					"description": "Checks if all of a list of values are of the specified types.",
+					"arguments": [
+						{
+							"name": "values",
+							"types": [
+								{
+									"type": "array",
+									"description": "An array of the values to be checked."
+								},
+								{
+									"type": "arg list",
+									"description": "A list of arguments of the values to be checked."
+								}
+							]
+						},
+						{
+							"name": "types",
+							"types": [
+								{
+									"type": "string",
+									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+								},
+								{
+									"type": "number",
+									"description": "A single or OR'ed expression of several type Ids against which {value} is to be checked."
+								},
+								{
+									"type": "function",
+									"description": "A single instance type against which {value} is to be checked"
+								},
+								{
+									"type": "array",
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types against which {value} is to be checked. <strong>Note:</strong> Individual array entries of type names cannot be delimited strings of several type names, and must each correspond to exactly one type name. However, individual array entries of type Ids can each contain a single type Id or a bitwise expression of several type Ids."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "boolean",
+							"description": "Returns true if all of the values in {values} matches (any of) the type or types represented in the {types} parameter, or false otherwise."
 						}
 					]
 				},
@@ -279,59 +573,6 @@
 							"description": "Returns true if all of the values in {values} are of the referenced type, or false otherwise."
 						}
 					]
-				},
-				
-				{
-					"name": "which",
-					"signature": "xtype.which({value}, {types})",
-					"description": "Gets the matching type of a value from a list of simple, extended and/or instance types.",
-					"arguments": [
-						{
-							"name": "value",
-							"types": [
-								{
-									"type": "any",
-									"description": "The value of which the type is to be matched."
-								}
-							]
-						},
-						{
-							"name": "types",
-							"types": [
-								{
-									"type": "string",
-									"description": "A single or delimited list of several type names against which {value} is to be matched."
-								},
-								{
-									"type": "array",
-									"description": "An array of any combination of the type names or Ids, type expression string or type Id expression, and/or instance types against which {value} is to be matched."
-								},
-								{
-									"type": "number *",
-									"description": "A single or OR'ed expression of several type Ids as a single combined type, against which {value} is to be matched."
-								},
-								{
-									"type": "function *",
-									"description": "A single instance type against which {value} is to be matched."
-								}
-							]
-						}
-					],
-					"return": [
-						{
-							"type": "string",
-							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as a type name string in the {types} list argument, or the {none} type if there was no match."
-						},
-						{
-							"type": "number",
-							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as a type Id in the {types} argument, or the {none} type if there was no match."
-						},
-						{
-							"type": "function",
-							"description": "The first type in {types} that is a matching type for {value}, if the matching type was provided as an instance type in the {types} argument, or the {none} type if there was no match."
-						}
-					],
-					"notes": "* Note that the single <em>number</em> and <em>function</em> forms of the {types} argument are treated not as a list of types, but as a single type against which {value} is to be matched, therefore either returning the value of the {types} argument if the type of {value} matches, or otherwise returning the {none} type. This is useful as a form of the <em>xtype.is</em> call, but which rather than returning a boolean {true} when there is a match, will return the actual type used instead. Likewise, rather than returning {false} when there is no match, it will return the {none} type instead."
 				}
 			]
 		},
