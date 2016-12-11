@@ -502,6 +502,23 @@
             clearTypeListStringCache();
         }
         
+        function defineInterfacePackagesAndMethods(hostObj) {
+            hostObj.not = newObj();
+            hostObj.any = newObj();
+            hostObj.all = newObj();
+            hostObj.some = newObj();
+            hostObj.none = newObj();
+
+            hostObj.not.is = function(value, types) {
+                return !isType(value, types);
+            };
+
+            hostObj.any.is = getInterfaceFunction(isType, true, true, undefined, true);
+            hostObj.all.is = getInterfaceFunction(isType, true, undefined, true, false);
+            hostObj.some.is = getInterfaceFunction(isType, true, true, true, true);
+            hostObj.none.is = getInterfaceFunction(isType, true, true, undefined, false);
+        }
+        
         /**
          * Defines the typeId property and associated type check
          * and interface methods for the specified type.
@@ -530,22 +547,14 @@
             
             hostObj[typeMethodName] = typeCheckFunction;
             
-            hostObj.not = (hostObj.not || newObj());
             hostObj.not[typeMethodName] = function(value) {
                 return !typeCheckFunction(value);
             };
             
-            hostObj.any = (hostObj.any || newObj());
-            hostObj.any[typeMethodName] = getInterfaceFunction(typeCheckFunction, true, undefined, true);
-            
-            hostObj.all = (hostObj.all || newObj());
-            hostObj.all[typeMethodName] = getInterfaceFunction(typeCheckFunction, undefined, true, false);
-            
-            hostObj.some = (hostObj.some || newObj());
-            hostObj.some[typeMethodName] = getInterfaceFunction(typeCheckFunction, true, true, true);
-            
-            hostObj.none = (hostObj.none || newObj());
-            hostObj.none[typeMethodName] = getInterfaceFunction(typeCheckFunction, true, undefined, false);
+            hostObj.any[typeMethodName] = getInterfaceFunction(typeCheckFunction, false, true, undefined, true);
+            hostObj.all[typeMethodName] = getInterfaceFunction(typeCheckFunction, false, undefined, true, false);
+            hostObj.some[typeMethodName] = getInterfaceFunction(typeCheckFunction, false, true, true, true);
+            hostObj.none[typeMethodName] = getInterfaceFunction(typeCheckFunction, false, true, undefined, false);
         }
         
         /**
@@ -570,9 +579,9 @@
         /**
          * Creates an interface function using the specified parameters.
          */
-        function getInterfaceFunction(delegateFunction, trueCondition, falseCondition, terminationResult) {
-            return function(values) {
-                values = (arguments.length > 1 ? arraySlice.call(arguments)
+        function getInterfaceFunction(delegateFunction, withTypes, trueCondition, falseCondition, terminationResult) {
+            return function(values, types) {
+                values = (!withTypes && arguments.length > 1 ? arraySlice.call(arguments)
                         : isArray(values) ? values
                         : [values]);
     
@@ -581,7 +590,7 @@
                     valueIndex;
                 
                 for (valueIndex = 0; valueIndex < values.length; valueIndex++) {
-                    if (delegateFunction(values[valueIndex])) {
+                    if (delegateFunction(values[valueIndex], types)) {
                         trueResult = true;
                     } else {
                         falseResult = true;
@@ -819,6 +828,8 @@
             .forEach(function(objectType) {
                 objToStringToNameMapping['[object ' + objectType + ']'] = objectType.toLowerCase();
             });
+            
+            defineInterfacePackagesAndMethods(moduleExport);
             
             objKeys(TYPE_VALUE_MAPPING).forEach(function(typeName) {
                 defineType(typeName, TYPE_VALUE_MAPPING[typeName], moduleExport);
