@@ -291,7 +291,7 @@
 							"types": [
 								{
 									"type": "string",
-									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+									"description": "A single or delimited list of one or several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
 								},
 								{
 									"type": "number",
@@ -335,7 +335,7 @@
 							"types": [
 								{
 									"type": "string",
-									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+									"description": "A single or delimited list of one or several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
 								},
 								{
 									"type": "number",
@@ -379,7 +379,7 @@
 							"types": [
 								{
 									"type": "string",
-									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+									"description": "A single or delimited list of one or several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
 								},
 								{
 									"type": "number",
@@ -423,7 +423,7 @@
 							"types": [
 								{
 									"type": "string",
-									"description": "A single or delimited list of several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
+									"description": "A single or delimited list of one or several type names against which {value} is to be checked. By default, the delimiter is a comma, space or pipe character, with or without surrounding spaces."
 								},
 								{
 									"type": "number",
