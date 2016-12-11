@@ -282,10 +282,6 @@
 								{
 									"type": "array",
 									"description": "An array of the values to be checked."
-								},
-								{
-									"type": "arg list",
-									"description": "A list of arguments of the values to be checked."
 								}
 							]
 						},
@@ -330,10 +326,6 @@
 								{
 									"type": "array",
 									"description": "An array of the values to be checked."
-								},
-								{
-									"type": "arg list",
-									"description": "A list of arguments of the values to be checked."
 								}
 							]
 						},
@@ -378,10 +370,6 @@
 								{
 									"type": "array",
 									"description": "An array of the values to be checked."
-								},
-								{
-									"type": "arg list",
-									"description": "A list of arguments of the values to be checked."
 								}
 							]
 						},
@@ -426,10 +414,6 @@
 								{
 									"type": "array",
 									"description": "An array of the values to be checked."
-								},
-								{
-									"type": "arg list",
-									"description": "A list of arguments of the values to be checked."
 								}
 							]
 						},
