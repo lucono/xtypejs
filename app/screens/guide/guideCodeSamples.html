@@ -121,7 +121,7 @@ xtype.type({})                === '{object}';
 xtype.type(new Date())        === '{date}';
 xtype.type(function() {})     === '{function}';
 xtype.type(/ab+c/i)           === '{regexp}';
-xtype.type(new Error('No!')   === '{error}';
+xtype.type(new Error('No!'))  === '{error}';
 xtype.type(Symbol())          === '{symbol}';
 
 xtype.type('Hi')              === '{string}';
