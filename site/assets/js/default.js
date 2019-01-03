@@ -272,7 +272,7 @@
     angular.module('xtypejsSite', ['ui.router'])
     
     .run([
-        '$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', '$q', '$timeout',
+        '$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', '$q', '$timeout', '$transitions',
         function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service, $q, $timeout) {
         
         if (Object.keys($location.search()).length > 0) {
@@ -311,6 +311,7 @@
         $rootScope.screenTitle = 'xtypejs';
         $rootScope.sectionTitle = '';
         
+        /*
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
             $rootScope.previousState = fromState;
         });
@@ -319,6 +320,17 @@
             setTimeout(function() {
                 $('body').removeClass('page-loading');
             }, 100);
+        });
+        */
+
+        $transitions.onStart({}, function(transition) {
+            $rootScope.previousState = transition.from();
+
+            transition.promise.finally(function() {
+                setTimeout(function() {
+                    $('body').removeClass('page-loading');
+                }, 100);
+            });
         });
         
         $rootScope.navigateToItem = function(item, defer) {
