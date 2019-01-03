@@ -678,7 +678,7 @@
                             callback(serviceCache.apiData);
                             return;
                         }
-                        var apiData = Object.assign({}, apiDataResponse.data.data);
+                        var apiData = Object.assign({}, apiDataResponse.data);
                         
                         apiData.methodsByCategory.validationMethods.methods.forEach(function(typeInterfaceMethod) {
                             if (typeof typeInterfaceMethod.interface !== 'string') {
