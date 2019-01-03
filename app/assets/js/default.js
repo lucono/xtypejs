@@ -273,7 +273,7 @@
     
     .run([
         '$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', '$q', '$timeout', '$transitions',
-        function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service, $q, $timeout) {
+        function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service, $q, $timeout, $transitions) {
         
         if (Object.keys($location.search()).length > 0) {
             var screenPath = getScreenPathFromQueryUrl($location.absUrl(), '', 'menu');
