@@ -414,7 +414,7 @@
                             artifactContent = bundleContent[artifactName];
                         }
                         
-                        if (artifactContent) {                         
+                        if (artifactContent) {
                             (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
                         } else {
                             fetchTrackers.push(
@@ -578,7 +578,7 @@
         
         service.getTypeData = function(callback) {
             $http.get(appArtifacts.types.json, {
-                cache: true
+                cache: false
             }).then(function(typeDataResponse) {
                 if (serviceCache.typeData) {
                     callback(serviceCache.typeData);
@@ -672,13 +672,13 @@
         service.getApiData = function(callback) {
             service.getTypeData(function(typeData) {
                 $http.get(appArtifacts.api.json, {
-                        cache: true
+                        cache: false
                     }).then(function(apiDataResponse) {
                         if (serviceCache.apiData) {
                             callback(serviceCache.apiData);
                             return;
                         }
-                        var apiData = Object.assign({}, apiDataResponse.data);
+                        var apiData = Object.assign({}, apiDataResponse.data.data);
                         
                         apiData.methodsByCategory.validationMethods.methods.forEach(function(typeInterfaceMethod) {
                             if (typeof typeInterfaceMethod.interface !== 'string') {
