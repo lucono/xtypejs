@@ -578,7 +578,7 @@
         
         service.getTypeData = function(callback) {
             $http.get(appArtifacts.types.json, {
-                cache: false
+                cache: true
             }).then(function(typeDataResponse) {
                 if (serviceCache.typeData) {
                     callback(serviceCache.typeData);
@@ -672,7 +672,7 @@
         service.getApiData = function(callback) {
             service.getTypeData(function(typeData) {
                 $http.get(appArtifacts.api.json, {
-                        cache: false
+                        cache: true
                     }).then(function(apiDataResponse) {
                         if (serviceCache.apiData) {
                             callback(serviceCache.apiData);
