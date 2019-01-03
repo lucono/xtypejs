@@ -752,7 +752,7 @@
                     'mailto:?subject=' +
                     encodeURIComponent('Elegant, highly efficient data validation for JavaScript') +
                     '&body=' +
-                    encodeURIComponent('Checkout xtypejs - ' + $rootScope.libDescription + ' Find out more at http://xtype.js.org.'));
+                    encodeURIComponent('Checkout xtypejs - ' + $rootScope.libDescription + ' Find out more at https://xtype.js.org.'));
                 return;
             }
             var shareParams;
@@ -761,24 +761,24 @@
                 case 'g-plus':
                     shareParams = [
                         'https://plus.google.com/share?url=' + 
-                        encodeURIComponent('http://xtype.js.org'), 
+                        encodeURIComponent('https://xtype.js.org'), 
                         500, 520];
                     break;
                 case 'facebook':
                     shareParams = [
                         'https://www.facebook.com/sharer/sharer.php?u=' + 
-                        encodeURIComponent('http://xtype.js.org'), 
+                        encodeURIComponent('https://xtype.js.org'), 
                         580, 420];
                     break;
                 case 'twitter':
                     shareParams = [
                         'https://twitter.com/home?status=' + 
-                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript. http://xtype.js.org'), 
+                        encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript. https://xtype.js.org'), 
                         550, 420];
                     break;
                 case 'linkedin':
                     shareParams = [
-                        'https://www.linkedin.com/shareArticle?mini=true&url=http://xtype.js.org&title=' +
+                        'https://www.linkedin.com/shareArticle?mini=true&url=https://xtype.js.org&title=' +
                         encodeURIComponent('xtypejs - Elegant, highly efficient data validation for JavaScript'), 
                         550, 560];
                     break;

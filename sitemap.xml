@@ -2,21 +2,21 @@
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
-		<loc>http://xtype.js.org/</loc>
+		<loc>https://xtype.js.org/</loc>
 	</url>
 	<url>
-		<loc>http://xtype.js.org/?doc=types</loc>
+		<loc>https://xtype.js.org/?doc=types</loc>
 	</url>
 	<url>
-		<loc>http://xtype.js.org/?doc=guide</loc>
+		<loc>https://xtype.js.org/?doc=guide</loc>
 	</url>
     <url>
-        <loc>http://xtype.js.org/?doc=api</loc>
+        <loc>https://xtype.js.org/?doc=api</loc>
     </url>
     <url>
-        <loc>http://xtype.js.org/?doc=play</loc>
+        <loc>https://xtype.js.org/?doc=play</loc>
     </url>
     <url>
-        <loc>http://xtype.js.org/?doc=getit</loc>
+        <loc>https://xtype.js.org/?doc=getit</loc>
     </url>
 </urlset>

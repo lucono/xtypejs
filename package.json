@@ -5,7 +5,7 @@
     "name": "Lucas Ononiwu"
   },
   "license": "MIT",
-  "homepage": "http://xtype.js.org",
+  "homepage": "https://xtype.js.org",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-cli": "^1.2.0",
@@ -17,5 +17,8 @@
     "grunt-contrib-watch": "^1.0.0",
     "jshint": "^2.6.3",
     "jshint-html-reporter": "^0.2.3"
+  },
+  "scripts": {
+    "build": "grunt build"
   }
 }
