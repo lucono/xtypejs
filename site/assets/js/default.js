@@ -579,12 +579,13 @@
         service.getTypeData = function(callback) {
             $http.get(appArtifacts.types.json, {
                 cache: true
-            }).then(function(typeData) {
+            }).then(function(typeDataResponse) {
                 if (serviceCache.typeData) {
                     callback(serviceCache.typeData);
                     return;
                 }
-                var typesByName = {},
+                var typeData = Object.assign({}, typeDataResponse.data),
+                    typesByName = {},
                     compactTypeNames = getCompactTypeNames();
                 
                 $rootScope.AppUtils.keys(typeData.typesByCategory).forEach(function(typeCategoryName) {
@@ -672,11 +673,13 @@
             service.getTypeData(function(typeData) {
                 $http.get(appArtifacts.api.json, {
                         cache: true
-                    }).then(function(apiData) {
+                    }).then(function(apiDataResponse) {
                         if (serviceCache.apiData) {
                             callback(serviceCache.apiData);
                             return;
                         }
+                        var apiData = Object.assign({}, apiDataResponse.data);
+                        
                         apiData.methodsByCategory.validationMethods.methods.forEach(function(typeInterfaceMethod) {
                             if (typeof typeInterfaceMethod.interface !== 'string') {
                                 return true;
@@ -743,7 +746,7 @@
                                 }
                             });
                         });
-                        serviceCache.apiData = (serviceCache.apiData || {});
+                        //serviceCache.apiData = (serviceCache.apiData || {});
                         serviceCache.apiData = apiData;
                         callback(apiData);
                     }
