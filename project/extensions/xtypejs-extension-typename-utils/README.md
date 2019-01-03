@@ -64,10 +64,10 @@ If the extension script needs to be included before the xtypejs script, or the `
 
 For usage, see:
 
-* `xtype.util.nameToId` - *[doc](http://xtype.js.org/api/nameToId)*
-* `xtype.util.idToName` - *[doc](http://xtype.js.org/api/idToName)*
-* `xtype.util.typeNames` - *[doc](http://xtype.js.org/api/typeNames)*
-* `xtype.util.typeIds` - *[doc](http://xtype.js.org/api/typeIds)*
+* `xtype.util.nameToId` - *[doc](https://xtype.js.org/api/nameToId)*
+* `xtype.util.idToName` - *[doc](https://xtype.js.org/api/idToName)*
+* `xtype.util.typeNames` - *[doc](https://xtype.js.org/api/typeNames)*
+* `xtype.util.typeIds` - *[doc](https://xtype.js.org/api/typeIds)*
 
 ### Preventing name collisions
 

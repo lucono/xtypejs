@@ -41,4 +41,4 @@ HTML reports are generated under the `build` directory for the js linting result
 
 Visit the website for usage guide, examples, API documentation, and download.
 
-#### **[xtype.js.org](http://xtype.js.org/)**
+#### **[xtype.js.org](https://xtype.js.org/)**
