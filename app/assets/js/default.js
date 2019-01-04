@@ -420,8 +420,8 @@
                             fetchTrackers.push(
                                 $http.get(artifactAddress, {
                                     cache: true
-                                }).then(function(artifactContent) {
-                                    (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
+                                }).then(function(artifactResponse) {
+                                    (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactResponse.data);
                                 }));
                         }
                     }
@@ -571,8 +571,10 @@
                     callback(serviceCache.releaseData);
                     return;
                 }
-                serviceCache.releaseData = responseData;
-                callback(responseData);
+                
+                var releaseData = responseData.data;
+                serviceCache.releaseData = releaseData;
+                callback(releaseData);
             });
         };
         
@@ -584,7 +586,7 @@
                     callback(serviceCache.typeData);
                     return;
                 }
-                var typeData = Object.assign({}, typeDataResponse.data),
+                var typeData = Object.assign({}, typeDataResponse.data.data),
                     typesByName = {},
                     compactTypeNames = getCompactTypeNames();
                 
@@ -678,7 +680,7 @@
                             callback(serviceCache.apiData);
                             return;
                         }
-                        var apiData = Object.assign({}, apiDataResponse.data);
+                        var apiData = Object.assign({}, apiDataResponse.data.data);
                         
                         apiData.methodsByCategory.validationMethods.methods.forEach(function(typeInterfaceMethod) {
                             if (typeof typeInterfaceMethod.interface !== 'string') {
