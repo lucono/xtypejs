@@ -272,8 +272,8 @@
     angular.module('xtypejsSite', ['ui.router'])
     
     .run([
-        '$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', '$q', '$timeout', '$transitions',
-        function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service, $q, $timeout, $transitions) {
+        '$rootScope', '$location', '$http', '$templateCache', '$cacheFactory', '$sce', 'service', '$q', '$timeout',
+        function($rootScope, $location, $http, $templateCache, $cacheFactory, $sce, service, $q, $timeout) {
         
         if (Object.keys($location.search()).length > 0) {
             var screenPath = getScreenPathFromQueryUrl($location.absUrl(), '', 'menu');
@@ -311,7 +311,6 @@
         $rootScope.screenTitle = 'xtypejs';
         $rootScope.sectionTitle = '';
         
-        /*
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
             $rootScope.previousState = fromState;
         });
@@ -320,17 +319,6 @@
             setTimeout(function() {
                 $('body').removeClass('page-loading');
             }, 100);
-        });
-        */
-
-        $transitions.onStart({}, function(transition) {
-            $rootScope.previousState = transition.from();
-
-            transition.promise.finally(function() {
-                setTimeout(function() {
-                    $('body').removeClass('page-loading');
-                }, 100);
-            });
         });
         
         $rootScope.navigateToItem = function(item, defer) {
@@ -414,14 +402,14 @@
                             artifactContent = bundleContent[artifactName];
                         }
                         
-                        if (artifactContent) {
+                        if (artifactContent) {                         
                             (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
                         } else {
                             fetchTrackers.push(
                                 $http.get(artifactAddress, {
                                     cache: true
-                                }).then(function(artifactResponse) {
-                                    (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactResponse.data);
+                                }).then(function(artifactContent) {
+                                    (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
                                 }));
                         }
                     }
@@ -571,23 +559,20 @@
                     callback(serviceCache.releaseData);
                     return;
                 }
-                
-                var releaseData = responseData.data;
-                serviceCache.releaseData = releaseData;
-                callback(releaseData);
+                serviceCache.releaseData = responseData;
+                callback(responseData);
             });
         };
         
         service.getTypeData = function(callback) {
             $http.get(appArtifacts.types.json, {
                 cache: true
-            }).then(function(typeDataResponse) {
+            }).then(function(typeData) {
                 if (serviceCache.typeData) {
                     callback(serviceCache.typeData);
                     return;
                 }
-                var typeData = Object.assign({}, typeDataResponse.data.data),
-                    typesByName = {},
+                var typesByName = {},
                     compactTypeNames = getCompactTypeNames();
                 
                 $rootScope.AppUtils.keys(typeData.typesByCategory).forEach(function(typeCategoryName) {
@@ -675,13 +660,11 @@
             service.getTypeData(function(typeData) {
                 $http.get(appArtifacts.api.json, {
                         cache: true
-                    }).then(function(apiDataResponse) {
+                    }).then(function(apiData) {
                         if (serviceCache.apiData) {
                             callback(serviceCache.apiData);
                             return;
                         }
-                        var apiData = Object.assign({}, apiDataResponse.data.data);
-                        
                         apiData.methodsByCategory.validationMethods.methods.forEach(function(typeInterfaceMethod) {
                             if (typeof typeInterfaceMethod.interface !== 'string') {
                                 return true;
@@ -748,7 +731,7 @@
                                 }
                             });
                         });
-                        //serviceCache.apiData = (serviceCache.apiData || {});
+                        serviceCache.apiData = (serviceCache.apiData || {});
                         serviceCache.apiData = apiData;
                         callback(apiData);
                     }
