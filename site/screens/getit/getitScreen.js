@@ -6,7 +6,7 @@ angular.module('xtypejsSite')
         
         'use strict';
         
-        $scope.fallbackDownloadUrl = 'https://github.com/lucono/xtypejs/tree/master/dist';
+        $scope.fallbackDownloadUrl = 'https://github.com/lucono/xtypejs/tree/master/project/xtypejs/dist';
         
         service.getLatestRelease(function(releaseData) {
             $scope.latestVersion = releaseData.tag_name;
