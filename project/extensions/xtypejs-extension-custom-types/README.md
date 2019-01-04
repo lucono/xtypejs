@@ -55,7 +55,7 @@ If the extension script needs to be included before the xtypejs script, or the `
 
 ### Usage
 
-For usage details, see the xtypejs `registerType` API method *[documentation](http://xtype.js.org/api/registerType)*.
+For usage details, see the xtypejs `registerType` API method *[documentation](https://xtype.js.org/api/registerType)*.
 
 ### Preventing name collisions
 

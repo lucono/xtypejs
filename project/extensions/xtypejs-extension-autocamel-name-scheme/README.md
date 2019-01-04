@@ -82,8 +82,8 @@ xtype.which('g', 'appFlag') === 'appFlag';    // 'app_flag' type uses camel name
 
 For other related documentation for working with name schemes, also see:
 
-* [Switching back to the default name scheme](http://xtype.js.org/guide/switching_back_to_default_name_scheme)
-* [setNameScheme method](http://xtype.js.org/api/setNameScheme)
+* [Switching back to the default name scheme](https://xtype.js.org/guide/switching_back_to_default_name_scheme)
+* [setNameScheme method](https://xtype.js.org/api/setNameScheme)
 
 ### Preventing name collisions
 
