@@ -416,21 +416,26 @@
                 });
             });
             
-            $q.all(fetchTrackers).then(function() {
-                bundleLoadDeffered.resolve($templateCache);
-            });
+            return $q.all(fetchTrackers);
         }
 
+        var bundleLoadTrackers = [];
 
         ['/site/app-bundle.screens.html', '/site/app-bundle.screens.json']
         .forEach(function(bundleAddress) {
-            $http.get(bundleAddress, {
-                cache: true
-            }).success(function(bundleContent) {
-                processScreenBundle(bundleContent);
-            }).error(function() {
-                processScreenBundle(bundleAddress.endsWith('.html') ? '' : {});
-            });
+            bundleLoadTrackers.push(
+                $http.get(bundleAddress, {
+                    cache: true
+                }).success(function(bundleContent) {
+                    return processScreenBundle(bundleContent);
+                }).error(function() {
+                    return processScreenBundle(bundleAddress.endsWith('.html') ? '' : {});
+                })
+            );
+        });
+        
+        $q.all(bundleLoadTrackers).then(function() {
+            bundleLoadDeffered.resolve($templateCache);
         });
     }])
     
