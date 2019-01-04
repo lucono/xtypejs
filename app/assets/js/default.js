@@ -408,7 +408,7 @@
                             fetchTrackers.push(
                                 $http.get(artifactAddress, {
                                     cache: true
-                                }).then(function(artifactContent) {
+                                }).success(function(artifactContent) {
                                     (artifactType === 'template' ? $templateCache : httpCache).put(artifactAddress, artifactContent);
                                 }));
                         }
@@ -426,14 +426,11 @@
         .forEach(function(bundleAddress) {
             $http.get(bundleAddress, {
                 cache: true
-            }).then(
-                function(bundleContent) {
-                    processScreenBundle(bundleContent);
-                },
-                function() {
-                    processScreenBundle(bundleAddress.endsWith('.html') ? '' : {});
-                }
-            );
+            }).success(function(bundleContent) {
+                processScreenBundle(bundleContent);
+            }).error(function() {
+                processScreenBundle(bundleAddress.endsWith('.html') ? '' : {});
+            });
         });
     }])
     
@@ -554,7 +551,7 @@
         service.getLatestRelease = function(callback) {
             $http.get(appArtifacts.getit.json, {
                 cache: true
-            }).then(function(responseData) {
+            }).success(function(responseData) {
                 if (serviceCache.releaseData) {
                     callback(serviceCache.releaseData);
                     return;
@@ -567,7 +564,7 @@
         service.getTypeData = function(callback) {
             $http.get(appArtifacts.types.json, {
                 cache: true
-            }).then(function(typeData) {
+            }).success(function(typeData) {
                 if (serviceCache.typeData) {
                     callback(serviceCache.typeData);
                     return;
@@ -607,7 +604,7 @@
             service.getTypeData(function(typeData) {
                 $http.get(codeUrl, {
                         cache: true
-                    }).then(function(responseData) {
+                    }).success(function(responseData) {
                         if (serviceCache.codeContent && serviceCache.codeContent[codeUrl]) {
                             callback(serviceCache.codeContent[codeUrl]);
                             return;
@@ -660,7 +657,7 @@
             service.getTypeData(function(typeData) {
                 $http.get(appArtifacts.api.json, {
                         cache: true
-                    }).then(function(apiData) {
+                    }).success(function(apiData) {
                         if (serviceCache.apiData) {
                             callback(serviceCache.apiData);
                             return;
