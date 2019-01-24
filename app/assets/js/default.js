@@ -667,39 +667,35 @@
                             callback(serviceCache.apiData);
                             return;
                         }
-                        apiData.methodsByCategory.validationMethods.methods.forEach(function(typeInterfaceMethod) {
-                            if (typeof typeInterfaceMethod.interface !== 'string') {
-                                return true;
-                            }
-                            var methodEnumeration = {};
-                            
-                            $rootScope.AppUtils.keys(typeData.typesByCategory).forEach(function(typeCategoryName) {
-                                var methodCategory = {},
-                                    categoryMethods = [];
-                                    
-                                methodCategory.name = typeData.typesByCategory[typeCategoryName].name;
-                                methodCategory.methods = categoryMethods;
-                                
-                                typeData.typesByCategory[typeCategoryName].types.forEach(function(type) {
-                                    var methodName = getTypeMethodName(type.name),
-                                        methodInterface = (typeInterfaceMethod.interface !== '' ? '.' + typeInterfaceMethod.interface : '');
-                                        
-                                    categoryMethods.push($sce.trustAsHtml('xtype' + methodInterface + '.' + methodName));
-                                });
-                                methodEnumeration[methodCategory.name] = methodCategory;
-                            });
-                            typeInterfaceMethod.methodEnumeration = methodEnumeration;
-                        });
                         
                         $rootScope.AppUtils.keys(apiData.methodsByCategory).forEach(function(apiCategoryName) {
                             apiData.methodsByCategory[apiCategoryName].methods.forEach(function(method) {
-                                var plainMethodName = getLinkFriendlyForm(method.name);
+                                var methodEnumeration = {},
+                                    plainMethodName = getLinkFriendlyForm(method.name);
                                 
                                 method.plainName = plainMethodName;
                                 
                                 ['name', 'signature', 'description', 'notes'].forEach(function(prop) {
                                     method[prop] = $sce.trustAsHtml((method[prop] || '').replace(/{(.*?)}/g, '<code>$1</code>'));
                                 });
+                                if (typeof method.interface === 'string') {
+                                    $rootScope.AppUtils.keys(typeData.typesByCategory).forEach(function(typeCategoryName) {
+                                        var methodCategory = {},
+                                            categoryMethods = [];
+                                            
+                                        methodCategory.name = typeData.typesByCategory[typeCategoryName].name;
+                                        methodCategory.methods = categoryMethods;
+                                        
+                                        typeData.typesByCategory[typeCategoryName].types.forEach(function(type) {
+                                            var methodName = getTypeMethodName(type.name),
+                                                methodInterface = (method.interface !== '' ? '.' + method.interface : '');
+                                                
+                                            categoryMethods.push($sce.trustAsHtml('xtype' + methodInterface + '.' + methodName));
+                                        });
+                                        methodEnumeration[methodCategory.name] = methodCategory;
+                                    });
+                                    method.methodEnumeration = methodEnumeration;
+                                }
                                 if (method.arguments) {
                                     method.arguments.forEach(function(argument) {
                                         argument.name = $sce.trustAsHtml(argument.name.replace(/{(.*?)}/g, '<code>$1</code>'));
