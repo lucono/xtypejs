@@ -401,9 +401,9 @@ xtype.ext.registerType('social_security_number', {
     definition: {
         validator: function(val) {
             return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
-        },
-        schemeAliases: { compact: 'ssn' }
-    }
+        }
+    },
+    schemeAliases: { compact: 'ssn' }
 });
 
 xtype.isSocialSecurityNumber(value);
@@ -470,9 +470,9 @@ xtype.ext.registerType({
         definition: {
             validator: function(val) {
                 return typeof val === 'string' && /^\d{3}-\d{2}-\d{4}$/.test(val);
-            },
-            schemeAliases: { compact: 'ssn' }
-        }
+            }
+        },
+        schemeAliases: { compact: 'ssn' }
     },
     
     flag: 'positive_integer, single_char_string',       // Derived type: match any
