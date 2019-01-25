@@ -1,4 +1,4 @@
-/** @license | xtypejs-extension-custom-types v0.1.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs-extension-custom-types v0.1.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -29,7 +29,7 @@
 
     var LIB_NAME = 'xtypejsCustomTypesExtension',
         LIB_INTERFACE_NAME = 'ext',
-        LIB_VERSION = '0.1.0';
+        LIB_VERSION = '0.1.1';
 
     function init(xtype) {
 
