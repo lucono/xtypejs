@@ -187,9 +187,17 @@
          * Returns a friendly name for the specified type
          */
         function typeFriendlyName(type) {
-            var typeAlias = (typeof type !== 'string' ? typeIdToName(type) : type);
+            var friendlyNames = [],
+                types = (Array.isArray(type) ? type : [type]);
+
+            types.forEach(function(suppliedType) {
+                var typeAlias = (typeof suppliedType !== 'string' ? typeIdToName(suppliedType) : suppliedType),
+                    friendlyName = aliasToFriendlyNameMapping[typeAlias] || aliasToFriendlyNameMapping[typeIdToName(xtype.NONE)];
+                
+                friendlyNames.push(friendlyName);
+            });
             
-            return (aliasToFriendlyNameMapping[typeAlias] || aliasToFriendlyNameMapping[typeIdToName(xtype.NONE)]);
+            return friendlyNames.join(', ');
         }
 
 
