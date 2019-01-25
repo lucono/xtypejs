@@ -1,6 +1,6 @@
 # xtypejs Extension - Type Name Utilities
 
-This extension provides the xtypejs introspection API methods, which enables runtime inspection of built-in and custom types in xtypejs, and the ability to obtain various details about each type, which can be useful for some applications.
+This extension provides various functions that enable an application to produce friendly UI messages, user prompts, logs, error messages and more related to various data and user input validation scenarios, as well as many other scenarios generally related to type and validation reporting.
 
 The methods provided are:
 
