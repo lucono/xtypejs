@@ -104,10 +104,9 @@
         }
 
         function isCompositeType(typeId) {
-            if (typeof typeId === 'function') {
+            if (typeof typeId !== 'number') {
                 return false;
             }
-            else if (typeof typeId === 'number')
             var memberTypeCount;
                 
             for (memberTypeCount = 0; typeId !== 0; memberTypeCount++) {
