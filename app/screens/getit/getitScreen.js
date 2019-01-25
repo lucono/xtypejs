@@ -31,7 +31,7 @@ angular.module('xtypejsSite')
                 },
                 {
                     name: 'xtypejs-extension-introspection',
-                    description: 'Provides the xtypejs type name introspection API methods which provide a way to enumerate all available types in xtypejs by name or id, and to convert between them.'
+                    description: 'Provides various functions that make it easy to produce friendly UI messages, user prompts, logs, error messages and more related to various data and user input validation scenarios, as well as many other scenarios generally related to type and validation reporting.'
                 },
                 {
                     name: 'xtypejs-extension-autocamel-name-scheme',
