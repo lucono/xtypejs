@@ -4,9 +4,12 @@ This extension provides the xtypejs introspection API methods, which enables run
 
 The methods provided are:
 
+* `xtype.util.typeNames`
+* `xtype.util.typeFriendlyName`
+* `xtype.util.typeDefaultName`
+* `xtype.util.typeComposition`
 * `xtype.util.typeNameToId`
 * `xtype.util.typeIdToName`
-* `xtype.util.typeNames`
 * `xtype.util.typeIds`
 
 ### Installation with npm
@@ -65,11 +68,12 @@ If the extension script needs to be included before the xtypejs script, or the `
 For usage, see:
 
 * `xtype.util.typeNames` - *[doc](https://xtype.js.org/api/typeNames)*
-* `xtype.util.typeIds` - *[doc](https://xtype.js.org/api/typeIds)*
-* `xtype.util.typeComposition` - *[doc](https://xtype.js.org/api/typeComposition)*
+* `xtype.util.typeFriendlyName` - *[doc](https://xtype.js.org/api/typeFriendlyName)*
 * `xtype.util.typeDefaultName` - *[doc](https://xtype.js.org/api/typeDefaultName)*
+* `xtype.util.typeComposition` - *[doc](https://xtype.js.org/api/typeComposition)*
 * `xtype.util.typeNameToId` - *[doc](https://xtype.js.org/api/typeNameToId)*
 * `xtype.util.typeIdToName` - *[doc](https://xtype.js.org/api/typeIdToName)*
+* `xtype.util.typeIds` - *[doc](https://xtype.js.org/api/typeIds)*
 
 ### Preventing name collisions
 

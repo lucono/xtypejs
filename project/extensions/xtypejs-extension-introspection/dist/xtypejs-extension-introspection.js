@@ -29,7 +29,17 @@
 
     var LIB_NAME = 'xtypejsIntrospectionExtension',
         LIB_INTERFACE_NAME = 'introspect',
-        LIB_VERSION = '0.1.1';
+        LIB_VERSION = '0.1.1',
+        
+        FRIENDLY_NAME_SUBSTITUTIONS = {
+            elem: 'element',
+            prop: 'property',
+            multi: 'multiple',
+            char: 'character',
+            nan: 'not a number',
+            any: 'any type',
+            none: 'no type'
+        };
 
     function init(xtype) {
 
@@ -40,15 +50,30 @@
             typeMappingArray = [],
             aliasMappingArray = [],
             aliasToNameMapping = objCreate(null),
+            aliasToFriendlyNameMapping = objCreate(null),
 
             extensionInterface = this;
 
+
+        function getFriendlyName(typeName) {
+            var nameSegments = typeName.split('_');
+
+            objKeys(FRIENDLY_NAME_SUBSTITUTIONS).forEach(function(item) {
+                var itemIndex = nameSegments.indexOf(item);
+                if (itemIndex !== -1) {
+                    nameSegments[itemIndex] = FRIENDLY_NAME_SUBSTITUTIONS[item];
+                }
+            });
+
+            return nameSegments.join(' ');
+        }
 
         function buildNameMappings(nameScheme) {
             var typeDefinitions = extensionInterface.getTypeDefinitions(),
                 typeMappingArr = [],
                 aliasMappingArr = [],
                 aliasNameMapping = objCreate(null),
+                aliasFriendlyNameMapping = objCreate(null),
                 usedAliases = objCreate(null);
             
             objKeys(typeDefinitions).forEach(function(typeName) {
@@ -64,12 +89,14 @@
                 aliasMappingArr.push(aliasName);
                 typeMappingArr.push(typeValue);
                 aliasNameMapping[aliasName] = typeName;
+                aliasFriendlyNameMapping[aliasName] = getFriendlyName(typeName);
                 
                 usedAliases[aliasName] = typeName;
             });
             typeMappingArray = typeMappingArr;
             aliasMappingArray = aliasMappingArr;
             aliasToNameMapping = aliasNameMapping;
+            aliasToFriendlyNameMapping = aliasFriendlyNameMapping;
         }
 
         function rebuildNameMappings() {
@@ -147,10 +174,24 @@
             return composition;
         }
 
+        /**
+         * Returns the default scheme name for the specified type
+         */
         function typeDefaultName(type) {
             var typeAlias = (typeof type !== 'string' ? typeIdToName(type) : type);
-            return aliasToNameMapping[typeAlias];
+            
+            return (aliasToNameMapping[typeAlias] || aliasToNameMapping[typeIdToName(xtype.NONE)]);
         }
+
+        /**
+         * Returns a friendly name for the specified type
+         */
+        function typeFriendlyName(type) {
+            var typeAlias = (typeof type !== 'string' ? typeIdToName(type) : type);
+            
+            return (aliasToFriendlyNameMapping[typeAlias] || aliasToFriendlyNameMapping[typeIdToName(xtype.NONE)]);
+        }
+
 
         // -- Initialize --
 
@@ -169,6 +210,7 @@
         libInterface.typeIds = typeIds;
         libInterface.typeComposition = typeComposition;
         libInterface.typeDefaultName = typeDefaultName;
+        libInterface.typeFriendlyName = typeFriendlyName;
     }
     
     
