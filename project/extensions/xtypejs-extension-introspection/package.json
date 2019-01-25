@@ -1,7 +1,7 @@
 {
   "name": "xtypejs-extension-introspection",
   "version": "0.2.0",
-  "description": "xtypejs Extension - Type Name Utilities",
+  "description": "xtypejs Extension - Type Introspection",
   "main": "dist/xtypejs-extension-introspection",
   "keywords": [
     "type",

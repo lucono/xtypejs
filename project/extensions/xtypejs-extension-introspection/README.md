@@ -1,4 +1,4 @@
-# xtypejs Extension - Type Name Utilities
+# xtypejs Extension - Type Introspection
 
 This extension provides various functions that enable an application to produce friendly UI messages, user prompts, logs, error messages and more related to various data and user input validation scenarios, as well as many other scenarios generally related to type and validation reporting.
 
@@ -24,11 +24,11 @@ npm install xtypejs-extension-introspection --save
 var xtype = require('xtypejs');
 var xtypejsIntrospectionExtension = require('xtypejs-extension-introspection');
 
-// The type name utility methods are NOT available here
+// The type introspection methods are NOT available here
 
 xtype.ext.registerExtension(xtypejsIntrospectionExtension);
 
-// The type name utility methods are now available here
+// The type introspection methods are now available here
 ```
 
 ### HTML script tag import and setup
@@ -40,7 +40,7 @@ xtype.ext.registerExtension(xtypejsIntrospectionExtension);
 <script src="path/to/xtypejs-extension-introspection.js"></script>
 
 <script>
-    // The type name utility methods are available here
+    // The type introspection methods are available here
 </script>
 ```
 
@@ -59,7 +59,7 @@ If the extension script needs to be included before the xtypejs script, or the `
     // Assume xtypejs later available here in variable 'myXtype'
     myXtype.ext.registerExtension(xtypejsIntrospectionExtension);
 
-    // The type name utility methods are now available here
+    // The type introspection methods are now available here
 </script>
 ```
 
