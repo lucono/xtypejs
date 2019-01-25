@@ -2,7 +2,7 @@ process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function(config) {
   var cfg = {
-    basePath: '../',
+    basePath: '../../',
     frameworks: ['jasmine'],
     browsers: ['ChromeHeadless', 'FirefoxHeadless'],
     singleRun: true,
