@@ -4,12 +4,19 @@ node_js:
   - "9"
   - "10"
   - "11"
-before_script:
+addons:
+  chrome: latest
+  firefox: latest
+before_install:
   - export CHROME_BIN=chromium-browser
   - npm install -g grunt-cli
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 env:
+  # ---------
+  # PROJECTS
+  # ---------
+  # xtypejs
   - PROJECT_DIR=project/xtypejs
   # xtypejs extensions
   - PROJECT_DIR=project/extensions/xtypejs-extension-custom-types
