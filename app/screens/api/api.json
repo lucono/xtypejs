@@ -579,10 +579,11 @@
 				},
 				
 				{
-					"name": "typeComposition",
+					"name": "typeFriendlyName",
 					"extension": "xtypejs-extension-introspection",
-					"signature": "xtype.introspect.typeComposition({type})",
-					"description": "Gets the constituent types that make up the specified type.",
+					"signature": "xtype.introspect.typeFriendlyName({type})",
+					"description": "Gets a friendly name for the specified type that is based on, but friendlier than its default name scheme.",
+					"new": true,
 					"arguments": [
 						{
 							"name": "type",
@@ -593,19 +594,19 @@
 								},					
 								{
 									"type": "string",
-									"description": "The name of a single simple or extended type."
+									"description": "The name of a single simple or extended type, specified in the currently active name scheme."
 								},					
 								{
 									"type": "function",
-									"description": "The constructor function of an instance type."
+									"description": "The constructor function of an instance type that has previously been registered with a specific name."
 								}
 							]
 						}
 					],
 					"return": [
 						{
-							"type": "array",
-							"description": "An array containing the string names of the constituent extended types that make up the specified type. Or, if an instance type was specified, then this will only contain that instance type as instance types are not derived, and are therefore only ever composed of themselves."
+							"type": "string",
+							"description": "A friendly name for the specified type."
 						}
 					]
 				},
@@ -615,6 +616,7 @@
 					"extension": "xtypejs-extension-introspection",
 					"signature": "xtype.introspect.typeDefaultName({type})",
 					"description": "Gets the name in the default name scheme for the specified type regardless of whether a different name scheme is currently active.",
+					"new": true,
 					"arguments": [
 						{
 							"name": "type",
@@ -638,6 +640,39 @@
 						{
 							"type": "string",
 							"description": "The name in the default name scheme for the specified type."
+						}
+					]
+				},
+				
+				{
+					"name": "typeComposition",
+					"extension": "xtypejs-extension-introspection",
+					"signature": "xtype.introspect.typeComposition({type})",
+					"description": "Gets the constituent types that make up the specified type.",
+					"new": true,
+					"arguments": [
+						{
+							"name": "type",
+							"types": [					
+								{
+									"type": "number",
+									"description": "The type Id/constant of a single simple or extended type."
+								},					
+								{
+									"type": "string",
+									"description": "The name of a single simple or extended type."
+								},					
+								{
+									"type": "function",
+									"description": "The constructor function of an instance type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "array",
+							"description": "An array containing the string names of the constituent extended types that make up the specified type. Or, if an instance type was specified, then this will only contain that instance type as instance types are not derived, and are therefore only ever composed of themselves."
 						}
 					]
 				},

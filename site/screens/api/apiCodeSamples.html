@@ -523,6 +523,17 @@ xtype.introspect.typeDefaultName(xtype(5)) === 'positive_integer';
 
 
 
+
+<content name="typeFriendlyName">
+xtype([1, 2]) === '{multi_elem_array}';
+
+// However:
+
+xtype.introspect.typeFriendlyName(xtype([1, 2])) === 'multiple element array';
+</content>
+
+
+
 </content-wrapper>
 
 
