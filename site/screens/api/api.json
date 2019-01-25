@@ -582,7 +582,7 @@
 					"name": "typeFriendlyName",
 					"extension": "xtypejs-extension-introspection",
 					"signature": "xtype.introspect.typeFriendlyName({type})",
-					"description": "Gets a friendly name for the specified type that is based on, but friendlier than its default name scheme.",
+					"description": "Gets a friendly name for the specified type that is based on, but typically friendlier than the default scheme type names.",
 					"new": true,
 					"arguments": [
 						{
@@ -599,6 +599,10 @@
 								{
 									"type": "function",
 									"description": "The constructor function of an instance type that has previously been registered with a specific name."
+								},					
+								{
+									"type": "array",
+									"description": "An array of any combination of the simple or extended type names or Ids, and/or instance types for which to get friendly names."
 								}
 							]
 						}
@@ -606,7 +610,7 @@
 					"return": [
 						{
 							"type": "string",
-							"description": "A friendly name for the specified type."
+							"description": "A friendly name for the specified type. Or, in the case that an array of types was supplied, then a comma-separated string of the friendly names of the various types in the array."
 						}
 					]
 				},
