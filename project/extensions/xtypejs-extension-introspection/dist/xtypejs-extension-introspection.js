@@ -1,4 +1,4 @@
-/** @license | xtypejs-extension-introspection v0.1.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs-extension-introspection v0.2.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -29,7 +29,7 @@
 
     var LIB_NAME = 'xtypejsIntrospectionExtension',
         LIB_INTERFACE_NAME = 'introspect',
-        LIB_VERSION = '0.1.1',
+        LIB_VERSION = '0.2.0',
         
         FRIENDLY_NAME_SUBSTITUTIONS = {
             elem: 'element',
