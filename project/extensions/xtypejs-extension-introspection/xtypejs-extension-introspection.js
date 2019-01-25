@@ -1,4 +1,4 @@
-/** @license | xtypejs-extension-typename-utils v{{ LIB_VERSION }} | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs-extension-introspection v{{ LIB_VERSION }} | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -27,7 +27,8 @@
     
     'use strict';
 
-    var LIB_NAME = 'xtypejsTypeNameUtilsExtension',
+    var LIB_NAME = 'xtypejsIntrospectionExtension',
+        LIB_INTERFACE_NAME = 'introspect',
         LIB_VERSION = '{{ LIB_VERSION }}';
 
     function init(xtype) {
@@ -35,19 +36,19 @@
         var Object = ({}).constructor || Object,
             objCreate = Object.create,
             objKeys = Object.keys,
-            
-            typeToAliasMapping = objCreate(null),
-            aliasToTypeMapping = objCreate(null),
-            nameToAliasMapping = objCreate(null),
+
+            typeMappingArray = [],
+            aliasMappingArray = [],
+            aliasToNameMapping = objCreate(null),
 
             extensionInterface = this;
 
 
         function buildNameMappings(nameScheme) {
             var typeDefinitions = extensionInterface.getTypeDefinitions(),
-                typeAliasMapping = objCreate(null),
-                aliasTypeMapping = objCreate(null),
-                nameAliasMapping = objCreate(null),
+                typeMappingArr = [],
+                aliasMappingArr = [],
+                aliasNameMapping = objCreate(null),
                 usedAliases = objCreate(null);
             
             objKeys(typeDefinitions).forEach(function(typeName) {
@@ -59,61 +60,97 @@
                     throwError('Type name conflict: "' + aliasName + '" is aliased to "' + 
                             typeName + '" and "' + usedAliases[aliasName] + '"');
                 }
-                if (typeof typeValue === 'number') {
-                    typeAliasMapping[typeValue] = aliasName;     // Type Ids used only for built-in simple and extended types (with numeric Ids) 
-                }
-                aliasTypeMapping[aliasName] = typeValue;
-                nameAliasMapping[typeName] = aliasName;
+                //aliasTypeMapping[aliasName] = typeValue;
+                aliasMappingArr.push(aliasName);
+                typeMappingArr.push(typeValue);
+                aliasNameMapping[aliasName] = typeName;
                 
                 usedAliases[aliasName] = typeName;
             });
-            typeToAliasMapping = typeAliasMapping;
-            aliasToTypeMapping = aliasTypeMapping;
-            nameToAliasMapping = nameAliasMapping;
+            typeMappingArray = typeMappingArr;
+            aliasMappingArray = aliasMappingArr;
+            aliasToNameMapping = aliasNameMapping;
         }
 
         function rebuildNameMappings() {
             buildNameMappings(extensionInterface.getActiveNameScheme());
+        }
+
+        function isCompositeType(typeId) {
+            if (typeof typeId === 'function') {
+                return false;
+            }
+            else if (typeof typeId === 'number')
+            var memberTypeCount;
+                
+            for (memberTypeCount = 0; typeId !== 0; memberTypeCount++) {
+                typeId &= (typeId - 1);
+            }
+            return (memberTypeCount > 1);
         }
         
 
         /**
          * Returns the associated type Id for the specified type name.
          */
-        function nameToId(type) {
-            var typeId = (typeof type === 'string' ? aliasToTypeMapping[type] : xtype.NONE);
-            
-            return (typeof type === 'function' ? type
-                    : (typeof typeId === 'number') ? typeId   // type name
-                    : xtype.NONE);
+        function typeNameToId(typeName) {
+            var typeNameIndex = aliasMappingArray.indexOf(typeName);
+
+            return (typeNameIndex !== -1 ? typeMappingArray[typeNameIndex] : xtype.NONE);
         }
         
         /**
          * Returns the associated name for the specified type Id.
          */
-        function idToName(type) {
-            return (typeof type === 'function' ? type
-                    : typeof type === 'number' ? (typeToAliasMapping[type] || typeToAliasMapping[xtype.NONE])
-                    : typeToAliasMapping[xtype.NONE]);
+        function typeIdToName(typeId) {
+            var typeIdIndex = typeMappingArray.indexOf(typeId);
+
+            if (typeIdIndex === -1) {
+                typeIdIndex = typeMappingArray.indexOf(xtype.NONE);
+            }
+
+            return aliasMappingArray[typeIdIndex];
         }
         
         /**
          * Returns a list of the names of all types.
          */
         function typeNames() {
-            return objKeys(aliasToTypeMapping);
+            return aliasMappingArray.slice();
         }
         
         /**
          * Returns a list of the type ids of all types.
          */
         function typeIds() {
-            var typeIdList = [];
+            return typeMappingArray.slice();
+        }
+
+        /**
+         * Reurns a list of the component types for the specified type.
+         * Applicable only to built-in and custom derived types.
+         */
+        function typeComposition(type) {
+            var typeId = (typeof type === 'string' ? typeNameToId(type) : type),
+                composition = [];
+
+            if (typeof typeId === 'function') {    // instance type
+                composition.push(typeId);
+            }
+            else if (typeof typeId === 'number') {
+                typeIds().forEach(function(candidateTypeId) {
+                    if (!isCompositeType(candidateTypeId) && (typeId & candidateTypeId) > 0) {                        
+                        composition.push(typeIdToName(candidateTypeId));
+                    }
+                });
+            }
+            return composition;
+        }
+
+        function typeDefaultName(type) {
+            var typeAlias = (typeof type !== 'string' ? typeIdToName(type) : type);
             
-            objKeys(aliasToTypeMapping).forEach(function(alias) {
-                typeIdList.push(aliasToTypeMapping[alias]);
-            });
-            return typeIdList;
+            return (aliasToNameMapping[typeAlias] || aliasToNameMapping[typeIdToName(xtype.NONE)]);
         }
 
         // -- Initialize --
@@ -124,12 +161,15 @@
 
         // -- Attach plugin functions --
 
-        xtype.util = (xtype.util || objCreate(null));
+        var libInterface = xtype[LIB_INTERFACE_NAME] || objCreate(null);
+        xtype[LIB_INTERFACE_NAME] = libInterface;
 
-        xtype.util.nameToId = nameToId;
-        xtype.util.idToName = idToName;
-        xtype.util.typeNames = typeNames;
-        xtype.util.typeIds = typeIds;
+        libInterface.typeNameToId = typeNameToId;
+        libInterface.typeIdToName = typeIdToName;
+        libInterface.typeNames = typeNames;
+        libInterface.typeIds = typeIds;
+        libInterface.typeComposition = typeComposition;
+        libInterface.typeDefaultName = typeDefaultName;
     }
     
     

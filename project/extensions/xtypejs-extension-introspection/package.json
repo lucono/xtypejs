@@ -1,8 +1,8 @@
 {
-  "name": "xtypejs-extension-typename-utils",
+  "name": "xtypejs-extension-introspection",
   "version": "0.1.1",
   "description": "xtypejs Extension - Type Name Utilities",
-  "main": "dist/xtypejs-extension-typename-utils",
+  "main": "dist/xtypejs-extension-introspection",
   "keywords": [
     "type",
     "xtype",

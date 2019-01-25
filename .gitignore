@@ -3,3 +3,5 @@
 /.settings/
 /.vscode/
 /wip/
+**/tmp/
+**/node_modules/

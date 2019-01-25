@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     jshint: {
       all: [
         "Gruntfile.js",
-        "dist/xtypejs-extension-typename-utils.js",
+        "dist/xtypejs-extension-introspection.js",
         "test/**/*-spec.js"
       ],
       options: {
@@ -21,14 +21,14 @@ module.exports = function (grunt) {
       },
       source_lib: {
         files: [
-          { src: ['build/shared/test/test-util.js', 'build/shared/xtype.js', 'dist/xtypejs-extension-typename-utils.js', 'test/**/*-spec.js'] }
+          { src: ['build/shared/test/test-util.js', 'build/shared/xtype.js', 'dist/xtypejs-extension-introspection.js', 'test/**/*-spec.js'] }
         ],
         reporters: ['progress', 'spec', 'coverage', 'html'],
         htmlReporter: {
           outputDir: 'build/test-reports-source-lib',
           focusOnFailures: true,
           namedFiles: true,
-          pageTitle: 'xtypejs-extension-typename-utils - Source Lib Test Report',
+          pageTitle: 'xtypejs-extension-introspection - Source Lib Test Report',
           urlFriendlyName: true,
           preserveDescribeNesting: true,
           foldAll: true
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
           }
         },
         preprocessors: {
-          'dist/xtypejs-extension-typename-utils.js': ['coverage']
+          'dist/xtypejs-extension-introspection.js': ['coverage']
         }
       },
       minified_lib: {
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
           outputDir: 'build/test-reports-minified-lib',
           focusOnFailures: true,
           namedFiles: true,
-          pageTitle: 'xtypejs-extension-typename-utils - Minified Lib Test Report',
+          pageTitle: 'xtypejs-extension-introspection - Minified Lib Test Report',
           urlFriendlyName: true,
           preserveDescribeNesting: true,
           foldAll: true
@@ -70,11 +70,11 @@ module.exports = function (grunt) {
       main: {
         options: {
           sourceMap: true,
-          sourceMapName: 'dist/xtypejs-extension-typename-utils.js.map',
+          sourceMapName: 'dist/xtypejs-extension-introspection.js.map',
           preserveComments: 'some'
         },
         files: {
-          'dist/xtypejs-extension-typename-utils.min.js': ['dist/xtypejs-extension-typename-utils.js']
+          'dist/xtypejs-extension-introspection.min.js': ['dist/xtypejs-extension-introspection.js']
         }
       }
     },
@@ -89,7 +89,7 @@ module.exports = function (grunt) {
           },
           {
             expand: true,
-            src: ['xtypejs-extension-typename-utils.js'],
+            src: ['xtypejs-extension-introspection.js'],
             flatten: true,
             dest: 'dist/',
             filter: 'isFile'
@@ -110,13 +110,13 @@ module.exports = function (grunt) {
         ].join('&&')
       },
       jasmine_node_test: {
-        command: './node_modules/jasmine/bin/jasmine.js test/xtypejs-extension-typename-utils-spec.js JASMINE_CONFIG_PATH=test/jasmine.json'
+        command: './node_modules/jasmine/bin/jasmine.js test/xtypejs-extension-introspection-spec.js JASMINE_CONFIG_PATH=test/jasmine.json'
       }
     },
     'string-replace': {
       version: {
         files: {
-          'dist/': ['dist/xtypejs-extension-typename-utils.js']
+          'dist/': ['dist/xtypejs-extension-introspection.js']
         },
         options: {
           replacements: [

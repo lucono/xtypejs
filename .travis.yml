@@ -12,7 +12,7 @@ env:
   - PROJECT_DIR=project/xtypejs
   # xtypejs extensions
   - PROJECT_DIR=project/extensions/xtypejs-extension-custom-types
-  - PROJECT_DIR=project/extensions/xtypejs-extension-typename-utils
+  - PROJECT_DIR=project/extensions/xtypejs-extension-introspection
   - PROJECT_DIR=project/extensions/xtypejs-extension-autocamel-name-scheme
   # xtypejs name schemes
   - PROJECT_DIR=project/name-schemes/xtypejs-name-scheme-compact

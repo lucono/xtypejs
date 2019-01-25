@@ -100,10 +100,10 @@
     if (typeof Symbol === 'function') {         // Add symbol type only if implemented in test VM
         allNonInstanceTypes.push('symbol');
     }
-    
+
     var expectedTypeCount = (allNonInstanceTypes.length + (typeof Symbol === 'function' ? 0 : 1));  // Add 1 to account for uncounted 'symbol' type
+      
     
-        
     var allInstanceTypes = [
         String, Number, Boolean, Function, Object,
         Array, Date, Error, RegExp,
@@ -113,7 +113,48 @@
     if (typeof Symbol === 'function') {         // Add symbol instance type only if implemented in test VM
         allInstanceTypes.push(Symbol);
     }
-        
+
+
+    var compositeTypes = {
+        string: ['empty_string', 'whitespace', 'single_char_string', 'multi_char_string'],
+        blank_string: ['empty_string', 'whitespace'],
+        non_empty_string: ['whitespace', 'single_char_string', 'multi_char_string'],
+        non_blank_string: ['single_char_string', 'multi_char_string'],
+        number: ['zero', 'positive_integer', 'positive_float', 'positive_infinity',
+                'negative_integer', 'negative_float', 'negative_infinity'],
+        integer: ['zero', 'positive_integer', 'negative_integer'],
+        float: ['positive_float', 'negative_float'],
+        positive_number: ['positive_integer', 'positive_float', 'positive_infinity'],
+        negative_number: ['negative_integer', 'negative_float', 'negative_infinity'],
+        infinite_number: ['positive_infinity', 'negative_infinity'],
+        non_zero_number: ['positive_integer', 'positive_float', 'positive_infinity',
+                'negative_integer', 'negative_float', 'negative_infinity'],
+        non_positive_number: ['zero', 'negative_integer', 'negative_float', 'negative_infinity'],
+        non_negative_number: ['zero', 'positive_integer', 'positive_float', 'positive_infinity'],
+        non_infinite_number: ['zero', 'positive_integer', 'positive_float', 'negative_integer', 'negative_float'],
+        object: ['empty_object', 'single_prop_object', 'multi_prop_object'],
+        non_empty_object: ['single_prop_object', 'multi_prop_object'],
+        array: ['empty_array', 'single_elem_array', 'multi_elem_array'],
+        non_empty_array: ['single_elem_array', 'multi_elem_array'],
+        boolean: ['true', 'false'],
+        primitive: ['true', 'false',
+                'empty_string', 'whitespace', 'single_char_string', 'multi_char_string',
+                'zero', 'positive_integer', 'positive_float', 'positive_infinity',
+                'negative_integer', 'negative_float', 'negative_infinity',
+                'symbol'],
+        nothing: ['null', 'undefined'],
+        any: ['null', 'undefined', 'nan', 'true', 'false',
+                'empty_string', 'whitespace', 'single_char_string', 'multi_char_string',
+                'zero', 'positive_integer', 'positive_float', 'positive_infinity',
+                'negative_integer', 'negative_float', 'negative_infinity',
+                'empty_array', 'single_elem_array', 'multi_elem_array',
+                'empty_object', 'single_prop_object', 'multi_prop_object',
+                'symbol', 'function', 'date', 'error', 'regexp'],
+        none: []
+
+    };
+
+    var nonCompositeTypes = subtractList(allNonInstanceTypes, Object.keys(compositeTypes));
         
     var allTestTypes = allNonInstanceTypes.concat(allInstanceTypes),    
         
@@ -640,13 +681,14 @@
     });
 
 
-
     var EXPORT_NAME = 'xtypejsTestUtil',
     
         moduleExport = {
             data: {
                 allInstanceTypes: allInstanceTypes,
                 allNonInstanceTypes: allNonInstanceTypes,
+                compositeTypes: compositeTypes,
+                nonCompositeTypes: nonCompositeTypes,
                 allTestTypes: allTestTypes,
                 testData: testData,
                 matchingTestValuesByType: matchingTestValuesByType,
