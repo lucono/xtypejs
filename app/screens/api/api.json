@@ -561,13 +561,91 @@
 			]
 		},
 		
-		"utilityMethods": {
-			"name": "Utility",
+		"introspectionMethods": {
+			"name": "Introspection",
 			"methods": [
 				{
-					"name": "nameToId",
-					"extension": "xtypejs-extension-typename-utils",
-					"signature": "xtype.util.nameToId({type})",
+					"name": "typeNames",
+					"extension": "xtypejs-extension-introspection",
+					"signature": "xtype.introspect.typeNames()",
+					"description": "Gets a list of the names of all types in the active name scheme, including all built-in and custom types.",
+					"arguments": [],
+					"return": [
+						{
+							"type": "array",
+							"description": "An array containing the string names of all types."
+						}
+					]
+				},
+				
+				{
+					"name": "typeComposition",
+					"extension": "xtypejs-extension-introspection",
+					"signature": "xtype.introspect.typeComposition({type})",
+					"description": "Gets the constituent types that make up the specified type.",
+					"arguments": [
+						{
+							"name": "type",
+							"types": [					
+								{
+									"type": "number",
+									"description": "The type Id/constant of a single simple or extended type."
+								},					
+								{
+									"type": "string",
+									"description": "The name of a single simple or extended type."
+								},					
+								{
+									"type": "function",
+									"description": "The constructor function of an instance type."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "array",
+							"description": "An array containing the string names of the constituent extended types that make up the specified type. Or, if an instance type was specified, then this will only contain that instance type as instance types are not derived, and are therefore only ever composed of themselves."
+						}
+					]
+				},
+				
+				{
+					"name": "typeDefaultName",
+					"extension": "xtypejs-extension-introspection",
+					"signature": "xtype.introspect.typeDefaultName({type})",
+					"description": "Gets the name in the default name scheme for the specified type regardless of whether a different name scheme is currently active.",
+					"arguments": [
+						{
+							"name": "type",
+							"types": [					
+								{
+									"type": "number",
+									"description": "The type Id/constant of a single simple or extended type."
+								},					
+								{
+									"type": "string",
+									"description": "The name of a single simple or extended type, specified in the currently active name scheme."
+								},					
+								{
+									"type": "function",
+									"description": "The constructor function of an instance type that has previously been registered with a specific name."
+								}
+							]
+						}
+					],
+					"return": [
+						{
+							"type": "string",
+							"description": "The name in the default name scheme for the specified type."
+						}
+					]
+				},
+				
+				{
+					"name": "typeNameToId",
+					"extension": "xtypejs-extension-introspection",
+					"signature": "xtype.introspect.typeNameToId({type})",
 					"description": "Gets the type Id/constant corresponding to the specific type name in the active name scheme.",
 					"arguments": [
 						{
@@ -589,9 +667,9 @@
 				},
 				
 				{
-					"name": "idToName",
-					"extension": "xtypejs-extension-typename-utils",
-					"signature": "xtype.util.idToName({type})",
+					"name": "typeIdToName",
+					"extension": "xtypejs-extension-introspection",
+					"signature": "xtype.introspect.typeIdToName({type})",
 					"description": "Gets the type name in the active name scheme corresponding to the specified type Id.",
 					"arguments": [
 						{
@@ -613,23 +691,9 @@
 				},
 				
 				{
-					"name": "typeNames",
-					"extension": "xtypejs-extension-typename-utils",
-					"signature": "xtype.util.typeNames()",
-					"description": "Gets a list of the names of all types.",
-					"arguments": [],
-					"return": [
-						{
-							"type": "array",
-							"description": "An array containing the string names of all types."
-						}
-					]
-				},
-				
-				{
 					"name": "typeIds",
-					"extension": "xtypejs-extension-typename-utils",
-					"signature": "xtype.util.typeIds()",
+					"extension": "xtypejs-extension-introspection",
+					"signature": "xtype.introspect.typeIds()",
 					"description": "Gets a list of the type Ids of all types.",
 					"arguments": [],
 					"return": [

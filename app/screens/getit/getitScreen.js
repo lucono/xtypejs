@@ -30,8 +30,8 @@ angular.module('xtypejsSite')
                     description: 'Provides the \'xtype.ext.registerType\' xtypejs API method which provides the xtypejs custom types functionality.'
                 },
                 {
-                    name: 'xtypejs-extension-typename-utils',
-                    description: 'Provides the xtypejs type name utility API methods which provide a way to enumerate all available types in xtypejs by name or id, and to convert between them.'
+                    name: 'xtypejs-extension-introspection',
+                    description: 'Provides the xtypejs type name introspection API methods which provide a way to enumerate all available types in xtypejs by name or id, and to convert between them.'
                 },
                 {
                     name: 'xtypejs-extension-autocamel-name-scheme',

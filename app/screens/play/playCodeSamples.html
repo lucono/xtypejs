@@ -70,10 +70,10 @@ xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
 var xtype = require('xtypejs');
 
 var customTypes = require('xtypejs-extension-custom-types');
-var typeNameUtils = require('xtypejs-extension-typename-utils');
+var introspection = require('xtypejs-extension-introspection');
 var autoCamel = require('xtypejs-extension-autocamel-name-scheme');
 
-xtype.ext.registerExtension(customTypes, typeNameUtils, autoCamel);
+xtype.ext.registerExtension(customTypes, introspection, autoCamel);
 
 var compactScheme = require('xtypejs-name-scheme-compact');
 var camelScheme = require('xtypejs-name-scheme-camel');
