@@ -1,4 +1,4 @@
-/** @license | xtypejs v0.7.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs v0.7.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -34,7 +34,7 @@
     */
     
     var LIB_NAME = 'xtype',
-        LIB_VERSION = '0.7.0',
+        LIB_VERSION = '0.7.1',
         
         TYPE_DELIMITER_DEFAULT_PATTERN = '[|, ]',
         NAME_SCHEME_DEFAULT_OPTION_VALUE = 'default',

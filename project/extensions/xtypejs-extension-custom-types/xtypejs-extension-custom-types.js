@@ -28,6 +28,7 @@
     'use strict';
 
     var LIB_NAME = 'xtypejsCustomTypesExtension',
+        LIB_INTERFACE_NAME = 'ext',
         LIB_VERSION = '{{ LIB_VERSION }}';
 
     function init(xtype) {
@@ -323,9 +324,10 @@
 
         // -- Attach plugin functions --
 
-        xtype.ext = (xtype.ext || objCreate(null));
+        var libInterface = (xtype[LIB_INTERFACE_NAME] || objCreate(null));
+        xtype[LIB_INTERFACE_NAME] = libInterface;
 
-        xtype.ext.registerType = registerType;
+        libInterface.registerType = registerType;
     }
     
     

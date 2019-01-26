@@ -1,18 +1,26 @@
 language: node_js
 node_js:
-  - "0.10"
-  - "0.12"
-  - "6.9.2"
-before_script:
+  - "6"
+  - "9"
+  - "10"
+  - "11"
+addons:
+  chrome: stable
+  firefox: latest
+before_install:
   - export CHROME_BIN=chromium-browser
   - npm install -g grunt-cli
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 env:
+  # ---------
+  # PROJECTS
+  # ---------
+  # xtypejs
   - PROJECT_DIR=project/xtypejs
   # xtypejs extensions
   - PROJECT_DIR=project/extensions/xtypejs-extension-custom-types
-  - PROJECT_DIR=project/extensions/xtypejs-extension-typename-utils
+  - PROJECT_DIR=project/extensions/xtypejs-extension-introspection
   - PROJECT_DIR=project/extensions/xtypejs-extension-autocamel-name-scheme
   # xtypejs name schemes
   - PROJECT_DIR=project/name-schemes/xtypejs-name-scheme-compact

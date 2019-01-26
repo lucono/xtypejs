@@ -1,4 +1,4 @@
-/** @license | xtypejs-extension-autocamel-name-scheme v0.1.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs-extension-autocamel-name-scheme v0.1.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
@@ -28,7 +28,7 @@
     'use strict';
 
     var LIB_NAME = 'xtypejsAutoCamelNameSchemeExtension',
-        LIB_VERSION = '0.1.0',
+        LIB_VERSION = '0.1.1',
         
         schemeName = 'auto-camel';
 

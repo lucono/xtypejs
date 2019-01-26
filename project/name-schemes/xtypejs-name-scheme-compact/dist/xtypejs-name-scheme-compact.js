@@ -1,4 +1,4 @@
-/** @license | xtypejs-name-scheme-compact v0.1.0 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs-name-scheme-compact v0.1.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**

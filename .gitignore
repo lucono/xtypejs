@@ -3,3 +3,6 @@
 /.settings/
 /.vscode/
 /wip/
+**/tmp/
+**/node_modules/
+**/package-lock.json
