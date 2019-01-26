@@ -7,53 +7,31 @@
     'use strict';
     
     /**
-     * =================
-     * UTILITY FUNCTIONS
-     * =================
+     * =======================
+     * INTROSPECTION FUNCTIONS
+     * =======================
      */
      
     function getTypeComposition(typeName) {
-        var composition = [];
-        
-        if (!isCompositeType(typeName)) {
-            return composition;
-        }
-        
-        var typeId = xtype.util.nameToId(typeName);
-        
-        xtype.util.typeNames().forEach(function(candidateType) {
-            if (candidateType !== typeName && !isCompositeType(candidateType) && (typeId & xtype.util.nameToId(candidateType)) > 0) {                        
-                composition.push(candidateType);
-            }
-        });
-        return composition;
-    }
-
-    function isCompositeType(typeName) {
-        var typeId = xtype.util.nameToId(typeName),
-            memberTypeCount;
-            
-        for (memberTypeCount = 0; typeId !== 0; memberTypeCount++) {
-            typeId &= (typeId - 1);
-        }
-        return (memberTypeCount > 1);
+        var typeComposition = xtype.introspect.typeComposition(typeName);
+        return (typeComposition.length > 1 ? typeComposition : []);
     }
     
     function getCompactTypeNames() {        
-        var typeIds = xtype.util.typeIds(),
+        var typeIds = xtype.introspect.typeIds(),
             compactTypeNames = {},
             compactNameMapping = {};
         
         xtype.options.set({nameScheme:'compact'});
         
         typeIds.forEach(function (typeId) {
-            compactTypeNames[typeId] = xtype.util.idToName(typeId);
+            compactTypeNames[typeId] = xtype.introspect.typeIdToName(typeId);
         });
         
         xtype.options.set({nameScheme:'default'});
         
         typeIds.forEach(function (typeId) {
-            compactNameMapping[xtype.util.idToName(typeId)] = compactTypeNames[typeId];
+            compactNameMapping[xtype.introspect.typeIdToName(typeId)] = compactTypeNames[typeId];
         });
         return compactNameMapping;
     }

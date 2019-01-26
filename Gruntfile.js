@@ -19,7 +19,7 @@ module.exports = function (grunt) {
           'site/app-bundle.min.js': [
             'vendor/js/**/*.js',
             'lib/xtype.js',
-            'lib/xtypejs-extension-typename-utils.js',
+            'lib/xtypejs-extension-introspection.js',
             'lib/xtypejs-name-scheme-compact.js',
             'app/assets/**/*.js',
             'app/components/**/*.js',

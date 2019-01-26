@@ -482,15 +482,56 @@ xtype.ext.registerType({
 
 
 
-<content name="idToName">
-xtype.util.idToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
+<content name="typeIdToName">
+xtype.introspect.typeIdToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
 </content>
 
 
 
 
-<content name="nameToId">
-xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
+<content name="typeNameToId">
+xtype.introspect.typeNameToId('{positive_integer}') === xtype.POSITIVE_INTEGER;
+</content>
+
+
+
+
+<content name="typeComposition">
+xtype.introspect.typeComposition('{blank_string}') === ['{empty_string}', '{whitespace}'];
+</content>
+
+
+
+
+<content name="typeDefaultName">
+// When a name scheme other than the default scheme is active
+
+xtype.setNameScheme('compact');
+xtype(5) === 'int+';
+
+// We can easily lookup the more descriptive default name
+// scheme equivalent of a type in the active name scheme:
+
+xtype.introspect.typeDefaultName('int+') === 'positive_integer';
+
+// Useful for example, for a single value check,
+// to get the more descriptive default name without
+// switching out of the compact name scheme:
+
+xtype.introspect.typeDefaultName(xtype(5)) === 'positive_integer';
+</content>
+
+
+
+
+<content name="typeFriendlyName">
+xtype(5/'a') === '{nan}';
+xtype('abc') === '{multi_char_string}';
+
+// However:
+
+xtype.introspect.typeFriendlyName(xtype(5/'a')) === 'not a number';
+xtype.introspect.typeFriendlyName(xtype('abc')) === 'multiple character string';
 </content>
 
 

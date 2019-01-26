@@ -829,6 +829,65 @@ xtype.isNan(boxedNanValue)    === true;          // Boxed NaN Number also identi
 
 
 <content 
+    name="using_type_introspection" 
+    title="Using type introspection"
+    category="more_topics"
+    description="
+    xtypejs type introspection provides various functions that make it easy for 
+    an application to produce friendly UI messages, user prompts, logs, error messages
+    and more related to various data and user input validation scenarios, as well as 
+    many other scenarios generally related to type and validation reporting. Introspection
+    can be even more impactful when working with derived custom types, as well as other 
+    custom types.">
+
+// Some configured validation type
+var allowedInputType = '{integer}';
+
+// Get user or other input to be validated
+var inputValue = getUserInput();
+
+/*
+ * -----------------------------
+ * VALIDATE USER-SUPPLIED INPUT:
+ * -----------------------------
+ */
+
+// --- WITHOUT Introspection ---
+
+if (xtype.not.is(inputValue, allowedInputType)) {
+    showMessage('Input must be ' + allowedInputType);
+
+    // shows: 'Input must be {integer}'
+}
+
+
+// --- WITH Introspection ---
+
+var allowedSubTypes = xtype.introspect.typeComposition(allowedInputType),
+    friendlyTypeDescription = xtype.introspect.typeFriendlyName(allowedSubTypes);
+
+
+if (xtype.not.is(inputValue, allowedInputType)) {
+    showMessage('Input must be either ' + friendlyTypeDescription);
+
+    // shows: 'Input must be either zero, positive integer, negative integer'
+    // (Type information is more descriptive and informative for the user)
+}
+
+
+/*
+ * ----------------------------------------------------------
+ * This kind of introspection is even more impactful when
+ * working with derived or other custom types. See more of 
+ * the introspection functions under the API tab.
+ * ----------------------------------------------------------
+ */
+</content>
+
+
+
+
+<content 
     name="prevent_name_collisions" 
     title="Preventing name collisions"
     category="more_topics"

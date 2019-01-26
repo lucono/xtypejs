@@ -485,15 +485,56 @@ xtype.ext.registerType({
 
 
 
-<content name="idToName">
-xtype.util.idToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
+<content name="typeIdToName">
+xtype.introspect.typeIdToName(xtype.POSITIVE_INTEGER) === '{positive_integer}';
 </content>
 
 
 
 
-<content name="nameToId">
-xtype.util.idToName('{positive_integer}') === xtype.POSITIVE_INTEGER;
+<content name="typeNameToId">
+xtype.introspect.typeNameToId('{positive_integer}') === xtype.POSITIVE_INTEGER;
+</content>
+
+
+
+
+<content name="typeComposition">
+xtype.introspect.typeComposition('{blank_string}') === ['{empty_string}', '{whitespace}'];
+</content>
+
+
+
+
+<content name="typeDefaultName">
+// When a name scheme other than the default scheme is active
+
+xtype.setNameScheme('compact');
+xtype(5) === 'int+';
+
+// We can easily lookup the more descriptive default name
+// scheme equivalent of a type in the active name scheme:
+
+xtype.introspect.typeDefaultName('int+') === 'positive_integer';
+
+// Useful for example, for a single value check,
+// to get the more descriptive default name without
+// switching out of the compact name scheme:
+
+xtype.introspect.typeDefaultName(xtype(5)) === 'positive_integer';
+</content>
+
+
+
+
+<content name="typeFriendlyName">
+xtype(5/'a') === '{nan}';
+xtype('abc') === '{multi_char_string}';
+
+// However:
+
+xtype.introspect.typeFriendlyName(xtype(5/'a')) === 'not a number';
+xtype.introspect.typeFriendlyName(xtype('abc')) === 'multiple character string';
 </content>
 
 
@@ -1654,6 +1695,65 @@ xtype.isNan(boxedNanValue)    === true;          // Boxed NaN Number also identi
 
 
 <content 
+    name="using_type_introspection" 
+    title="Using type introspection"
+    category="more_topics"
+    description="
+    xtypejs type introspection provides various functions that make it easy for 
+    an application to produce friendly UI messages, user prompts, logs, error messages
+    and more related to various data and user input validation scenarios, as well as 
+    many other scenarios generally related to type and validation reporting. Introspection
+    can be even more impactful when working with derived custom types, as well as other 
+    custom types.">
+
+// Some configured validation type
+var allowedInputType = '{integer}';
+
+// Get user or other input to be validated
+var inputValue = getUserInput();
+
+/*
+ * -----------------------------
+ * VALIDATE USER-SUPPLIED INPUT:
+ * -----------------------------
+ */
+
+// --- WITHOUT Introspection ---
+
+if (xtype.not.is(inputValue, allowedInputType)) {
+    showMessage('Input must be ' + allowedInputType);
+
+    // shows: 'Input must be {integer}'
+}
+
+
+// --- WITH Introspection ---
+
+var allowedSubTypes = xtype.introspect.typeComposition(allowedInputType),
+    friendlyTypeDescription = xtype.introspect.typeFriendlyName(allowedSubTypes);
+
+
+if (xtype.not.is(inputValue, allowedInputType)) {
+    showMessage('Input must be either ' + friendlyTypeDescription);
+
+    // shows: 'Input must be either zero, positive integer, negative integer'
+    // (Type information is more descriptive and informative for the user)
+}
+
+
+/*
+ * ----------------------------------------------------------
+ * This kind of introspection is even more impactful when
+ * working with derived or other custom types. See more of 
+ * the introspection functions under the API tab.
+ * ----------------------------------------------------------
+ */
+</content>
+
+
+
+
+<content 
     name="prevent_name_collisions" 
     title="Preventing name collisions"
     category="more_topics"
@@ -2001,10 +2101,10 @@ xtype.ext.registerNameScheme('shortenedCamel', shortCamelScheme);
 var xtype = require('xtypejs');
 
 var customTypes = require('xtypejs-extension-custom-types');
-var typeNameUtils = require('xtypejs-extension-typename-utils');
+var introspection = require('xtypejs-extension-introspection');
 var autoCamel = require('xtypejs-extension-autocamel-name-scheme');
 
-xtype.ext.registerExtension(customTypes, typeNameUtils, autoCamel);
+xtype.ext.registerExtension(customTypes, introspection, autoCamel);
 
 var compactScheme = require('xtypejs-name-scheme-compact');
 var camelScheme = require('xtypejs-name-scheme-camel');
