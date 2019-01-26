@@ -1,6 +1,6 @@
 {
   "name": "xtypejs-name-scheme-camel",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "xtypejs Camel name scheme",
   "main": "dist/xtypejs-name-scheme-camel",
   "keywords": [

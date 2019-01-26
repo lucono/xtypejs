@@ -1,4 +1,4 @@
-/** @license | xtypejs-name-scheme-camel v0.1.1 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
+/** @license | xtypejs-name-scheme-camel v0.1.3 | (c) 2015, Lucas Ononiwu | MIT license, xtype.js.org/license.txt
  */
 
 /**
