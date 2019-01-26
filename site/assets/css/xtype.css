@@ -517,6 +517,18 @@ ul.right-nav.fixed {
     border-radius: 3px;
 }
 
+.title-label-small {
+    display: inline-block;
+    margin-left: 12px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 2px 8px 4px 8px;
+    vertical-align: middle;
+    border: #bfd4e7 1px solid;
+    border-radius: 3px;
+}
+
 .new-label {
     color: #2CC185;
     border-color: #2CC185;

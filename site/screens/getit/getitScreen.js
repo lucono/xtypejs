@@ -31,7 +31,8 @@ angular.module('xtypejsSite')
                 },
                 {
                     name: 'xtypejs-extension-introspection',
-                    description: 'Provides various functions that make it easy to produce friendly UI messages, user prompts, logs, error messages and more related to various data and user input validation scenarios, as well as many other scenarios generally related to type and validation reporting.'
+                    description: 'Provides various functions that make it easy to produce friendly UI messages, user prompts, logs, error messages and more related to various data and user input validation scenarios, as well as many other scenarios generally related to type and validation reporting.',
+                    new: true
                 },
                 {
                     name: 'xtypejs-extension-autocamel-name-scheme',
