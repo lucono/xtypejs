@@ -906,7 +906,6 @@
 					"name": "registerExtension",
 					"signature": "xtype.ext.registerExtension({extensionModule})",
 					"description": "Applies an xtypejs extension, enhancing xtypejs with the extension's functionality.",
-					"new": true,
 					"arguments": [
 						{
 							"name": "extensionModule",
