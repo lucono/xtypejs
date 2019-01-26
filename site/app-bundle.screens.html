@@ -549,7 +549,7 @@ xtype.introspect.typeFriendlyName(xtype('abc')) === 'multiple character string';
     <div class="screen-content-links">
         <div class="cols-5" data-ng-repeat="colGroup in colGroups">
             <div data-ng-repeat="methodGroup in colGroup">
-                <h2><a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name}}</a></h2>
+                <h2><a screen-link=":{{methodGroup.name | spaceToUnderscore | lowercase}}_api">{{methodGroup.name}}</a></h2>
                 <ul>
                     <li data-ng-repeat="method in methodGroup.methods" data-ng-if="!method.deprecated">
                         <a screen-link=":{{method.plainName}}" data-ng-bind-html="method.name"></a>
@@ -562,12 +562,12 @@ xtype.introspect.typeFriendlyName(xtype('abc')) === 'multiple character string';
     <div class="screen-content-body">    
         <div class="colspan-70">
             
-            <div id="{{methodGroup.name | lowercase}}_api" 
+            <div id="{{methodGroup.name | spaceToUnderscore | lowercase}}_api" 
                 section-title="{{methodGroup.name}} API" 
                 class="content-group" 
                 data-ng-repeat="methodGroup in methodGroups">
                 
-                <a screen-link=":{{methodGroup.name | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
+                <a screen-link=":{{methodGroup.name | spaceToUnderscore | lowercase}}_api" class="content-group-title">{{methodGroup.name}} API</a>
                 
                 <div class="content-item" 
                     data-ng-repeat="method in methodGroup.methods" 
@@ -677,7 +677,7 @@ xtype.introspect.typeFriendlyName(xtype('abc')) === 'multiple character string';
         <div class="colspan-30 right-nav-container">
             <ul class="right-nav">
                 <li data-ng-repeat="methodGroup in methodGroups" scroll-fixed>
-                    <a screen-link=":{{methodGroup.name | lowercase}}_api">{{methodGroup.name | lowercase}}</a>
+                    <a screen-link=":{{methodGroup.name | spaceToUnderscore | lowercase}}_api">{{methodGroup.name | lowercase}}</a>
                 </li>
                 <li><a screen-link=":menu" class="circle-button up active"></a></li>
             </ul>

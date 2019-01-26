@@ -797,7 +797,19 @@
                 event.preventDefault();
             });
         };
-    }]);
+    }])
+
+    /*
+     * =======
+     * FILTERS
+     * =======
+    */
+
+    .filter('spaceToUnderscore', function () {
+        return function (value) {
+            return (!value) ? '' : value.replace(/[ ]+/g, '_');
+        };
+    });
     
     
     $(document).ready(function() {
