@@ -528,13 +528,21 @@ xtype.introspect.typeDefaultName(xtype(5)) === 'positive_integer';
 
 
 <content name="typeFriendlyName">
-xtype(5/'a') === '{nan}';
-xtype('abc') === '{multi_char_string}';
+// Normally:
 
-// However:
+xtype('abc') === '{multi_char_string}';
+xtype.introspect.typeDefaultName(xtype('abc')) === 'multi_char_string';
+
+// But with friendly name:
+
+xtype.introspect.typeFriendlyName(xtype('abc')) === 'multiple character string';
+
+// Another example:
+
+xtype(5/'a') === '{nan}';
+xtype.introspect.typeDefaultName(xtype(5/'a')) === 'nan';
 
 xtype.introspect.typeFriendlyName(xtype(5/'a')) === 'not a number';
-xtype.introspect.typeFriendlyName(xtype('abc')) === 'multiple character string';
 </content>
 
 
