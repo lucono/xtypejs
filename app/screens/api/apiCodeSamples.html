@@ -528,9 +528,15 @@ xtype.introspect.typeDefaultName(xtype(5)) === 'positive_integer';
 // Normally:
 
 xtype('abc') === '{multi_char_string}';
+
+// The type names from the default name scheme are
+// friendlier, but still not very user-friendly:
+
 xtype.introspect.typeDefaultName(xtype('abc')) === 'multi_char_string';
 
-// But with friendly name:
+// But using introspection's friendly names 
+// produces much friendlier type descriptions
+// for user messaging and reporting:
 
 xtype.introspect.typeFriendlyName(xtype('abc')) === 'multiple character string';
 
